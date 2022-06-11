@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "cave_enhancements:rose_quartz_block",
+    "cave_enhancements:jagged_rose_quartz",
+    "cave_enhancements:polished_rose_quartz",
+    "cave_enhancements:polished_rose_quartz_stairs",
+    "cave_enhancements:polished_rose_quartz_slab",
+    "cave_enhancements:polished_rose_quartz_wall",
+    "cave_enhancements:rose_quartz_tiles",
+    "cave_enhancements:rose_quartz_tile_slab",
+    "cave_enhancements:rose_quartz_tile_stairs",
+    "cave_enhancements:rose_quartz_tile_wall",
+    "cave_enhancements:rose_quartz_chimes"
+  ]
+}

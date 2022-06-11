@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "cave_enhancements:redstone_receiver",
+    "cave_enhancements:waxed_redstone_receiver",
+    "cave_enhancements:exposed_redstone_receiver",
+    "cave_enhancements:waxed_exposed_redstone_receiver",
+    "cave_enhancements:weathered_redstone_receiver",
+    "cave_enhancements:waxed_weathered_redstone_receiver",
+    "cave_enhancements:oxidized_redstone_receiver",
+    "cave_enhancements:waxed_oxidized_redstone_receiver"
+  ]
+}

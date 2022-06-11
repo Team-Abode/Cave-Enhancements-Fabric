@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S  ",
+    "SS ",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "cave_enhancements:polished_rose_quartz"
+    }
+  },
+  "result": {
+    "item": "cave_enhancements:polished_rose_quartz_stairs",
+    "count": 4
+  }
+}

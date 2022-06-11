@@ -1,0 +1,120 @@
+{
+  "item.cave_enhancements.glow_paste": "Glow Paste",
+
+  "item.cave_enhancements.amethyst_flute": "Amethyst Flute",
+  "item.cave_enhancements.harmonic_arrow": "Harmonic Arrow",
+
+  "item.cave_enhancements.goop": "Goop",
+  "item.cave_enhancements.goop_bucket": "Bucket of Goop",
+  "item.cave_enhancements.goop_banner_pattern": "Banner Pattern",
+  "item.cave_enhancements.goop_banner_pattern.desc": "Dye Splotch",
+
+  "block.cave_enhancements.spectacle_candle": "Spectacle Candle",
+  "block.cave_enhancements.goop_block": "Goop Block",
+  "block.cave_enhancements.goop_splat": "Goop",
+  "block.cave_enhancements.dripping_goop": "Dripping Goop",
+  "block.cave_enhancements.goop_trap": "Goop Trap",
+
+  "block.cave_enhancements.lightning_anchor": "Lightning Anchor",
+  "block.cave_enhancements.charged_lightning_anchor": "Charged Lightning Anchor",
+
+  "block.cave_enhancements.redstone_receiver": "Redstone Receiver",
+  "block.cave_enhancements.waxed_redstone_receiver": "Waxed Redstone Receiver",
+  "block.cave_enhancements.exposed_redstone_receiver": "Exposed Redstone Receiver",
+  "block.cave_enhancements.waxed_exposed_redstone_receiver": "Waxed Exposed Redstone Receiver",
+  "block.cave_enhancements.weathered_redstone_receiver": "Weathered Redstone Receiver",
+  "block.cave_enhancements.waxed_weathered_redstone_receiver": "Waxed Weathered Redstone Receiver",
+  "block.cave_enhancements.oxidized_redstone_receiver": "Oxidized Redstone Receiver",
+  "block.cave_enhancements.waxed_oxidized_redstone_receiver": "Waxed Oxidized Redstone Receiver",
+
+  "block.cave_enhancements.rose_quartz_block": "Rose Quartz Block",
+  "block.cave_enhancements.jagged_rose_quartz": "Jagged Rose Quartz",
+
+  "block.cave_enhancements.polished_rose_quartz": "Polished Rose Quartz",
+  "block.cave_enhancements.polished_rose_quartz_slab": "Polished Rose Quartz Slab",
+  "block.cave_enhancements.polished_rose_quartz_stairs": "Polished Rose Quartz Stairs",
+  "block.cave_enhancements.polished_rose_quartz_wall": "Polished Rose Quartz Wall",
+
+  "block.cave_enhancements.rose_quartz_tiles": "Rose Quartz Tiles",
+  "block.cave_enhancements.rose_quartz_tile_slab": "Rose Quartz Tile Slab",
+  "block.cave_enhancements.rose_quartz_tile_stairs": "Rose Quartz Tile Stairs",
+  "block.cave_enhancements.rose_quartz_tile_wall": "Rose Quartz Tile Wall",
+
+  "block.cave_enhancements.rose_quartz_chimes": "Rose Quartz Chimes",
+  "block.cave_enhancements.rose_quartz_lamp": "Rose Quartz Lamp",
+  "block.cave_enhancements.soul_rose_quartz_lamp": "Soul Rose Quartz Lamp",
+
+
+  "effect.cave_enhancements.easing": "Easing",
+
+  "block.minecraft.banner.cave_enhancements.goop.black": "Black Dye Splotch",
+  "block.minecraft.banner.cave_enhancements.goop.red": "Red Dye Splotch",
+  "block.minecraft.banner.cave_enhancements.goop.green": "Green Dye Splotch",
+  "block.minecraft.banner.cave_enhancements.goop.brown": "Brown Dye Splotch",
+  "block.minecraft.banner.cave_enhancements.goop.blue": "Blue Dye Splotch",
+  "block.minecraft.banner.cave_enhancements.goop.purple": "Purple Dye Splotch",
+  "block.minecraft.banner.cave_enhancements.goop.cyan": "Cyan Dye Splotch",
+  "block.minecraft.banner.cave_enhancements.goop.light_gray": "Light Gray Dye Splotch",
+  "block.minecraft.banner.cave_enhancements.goop.gray": "Gray Dye Splotch",
+  "block.minecraft.banner.cave_enhancements.goop.pink": "Pink Dye Splotch",
+  "block.minecraft.banner.cave_enhancements.goop.lime": "Lime Dye Splotch",
+  "block.minecraft.banner.cave_enhancements.goop.yellow": "Yellow Dye Splotch",
+  "block.minecraft.banner.cave_enhancements.goop.light_blue": "Light Dye Splotch",
+  "block.minecraft.banner.cave_enhancements.goop.magenta": "Magenta Dye Splotch",
+  "block.minecraft.banner.cave_enhancements.goop.orange": "Orange Dye Splotch",
+  "block.minecraft.banner.cave_enhancements.goop.white": "White Dye Splotch",
+
+  "item.cave_enhancements.goop_spawn_egg": "Goop Spawn Egg",
+  "item.cave_enhancements.dripstone_tortoise_spawn_egg": "Dripstone Tortoise Spawn Egg",
+  "item.cave_enhancements.cruncher_spawn_egg": "Cruncher Spawn Egg",
+
+
+
+  "item.cave_enhancements.rose_quartz": "Rose Quartz",
+
+
+  "item.glow_paste.place": "Block placed",
+  "block.rose_quartz.break": "Block broken",
+
+  "subtitles.entity.goop.hurt": "Goop hurts",
+  "subtitles.entity.goop.death": "Goop dies",
+
+  "subtitles.entity.dripstone_tortoise.hurt": "Dripstone Tortoise hurts",
+  "subtitles.entity.dripstone_tortoise.death": "Dripstone Tortoise dies",
+  "subtitles.entity.dripstone_tortoise.step": "Dripstone Tortoise steps",
+  "subtitles.entity.dripstone_tortoise.idle": "Dripstone Tortoise sighs",
+
+  "advancements.underground.root.title": "The Underground",
+  "advancements.underground.root.description": "The deeper you go, the more you can find.",
+
+  "advancements.adventure.find_mountain_shrine.title": "Shrine of the Relic",
+  "advancements.adventure.find_mountain_shrine.description": "Find the mountain shrine in the meadows.",
+
+  "advancements.underground.spyglass_at_goop.title": "A Gooey Discovery!",
+  "advancements.underground.spyglass_at_goop.description": "Look at a goop through a spyglass.",
+
+  "advancements.underground.stuck_in_goop_trap.title": "Sticky Situation!",
+  "advancements.underground.stuck_in_goop_trap.description": "Get stuck in a goop trap.",
+
+  "advancements.underground.place_glow_paste.title": "A Splotch of Glow!",
+  "advancements.underground.place_glow_paste.description": "Light up an area using glow paste.",
+
+  "advancements.underground.collect_rose_quartz.title": "Undersea Minerals!",
+  "advancements.underground.collect_rose_quartz.description": "Collect some rose quartz.",
+
+  "advancements.underground.cave_explorer.title": "A True Spelunker!",
+  "advancements.underground.cave_explorer.description": "Discover every cave biome.",
+
+  "advancements.underground.below_zero.title": "Below Zero",
+  "advancements.underground.below_zero.description": "Enter the deepslate layer.",
+
+  "gameplay.unobtainable": "§eUnreleased Content",
+
+  "entity.cave_enhancements.goop": "Goop",
+  "entity.cave_enhancements.dripstone_tortoise": "Dripstone Tortoise",
+  "entity.cave_enhancements.cruncher": "Cruncher",
+  "entity.cave_enhancements.big_goop_drip": "Big Goop Drip",
+
+  "biome.cave_enhancements.goop_caves": "Goop Caves",
+  "biome.cave_enhancements.rose_quartz_caves": "Rose Quartz Caves"
+}

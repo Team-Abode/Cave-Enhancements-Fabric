@@ -1,0 +1,50 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"particle": "cave_enhancements:entity/amethyst_flute"
+	},
+	"elements": [
+		{
+			"name": "flute",
+			"from": [-1.5, 0, -8],
+			"to": [1.5, 3, 8],
+			"faces": {
+				"north": {"uv": [4, 4, 4.75, 4.75], "texture": "#particle"},
+				"east": {"uv": [0, 4, 4, 4.75], "texture": "#particle"},
+				"south": {"uv": [8.75, 4, 9.5, 4.75], "texture": "#particle"},
+				"west": {"uv": [4.75, 4, 8.75, 4.75], "texture": "#particle"},
+				"up": {"uv": [4.75, 4, 4, 0], "texture": "#particle"},
+				"down": {"uv": [5.5, 0, 4.75, 4], "texture": "#particle"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [-19, -89, -2],
+			"translation": [-8.25, 9, 5.5]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [69, 89, -85],
+			"translation": [9.5, 8.5, 5.5]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 0, 8],
+			"translation": [28, 0.75, -8],
+			"scale": [2, 2, 2]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 0, 8],
+			"translation": [-4.5, 0, -4],
+			"scale": [2, 2, 2]
+		}
+	},
+	"groups": [
+		{
+			"name": "flute",
+			"origin": [0, 1.5, 0],
+			"color": 0,
+			"children": [0]
+		}
+	]
+}

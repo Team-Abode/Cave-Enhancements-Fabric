@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.exdrill.cave_enhancements.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "BrewingRecipeRegistryMixin",
+    "CreeperEntityMixin",
+    "DispenserBehaviorMixin",
+    "EnchantmentMixin",
+    "LivingEntityMixin",
+    "PhantomEntityMixin",
+    "RedstoneWireBlockMixin",
+    "UnbreakingEnchantmentMixin",
+    "VanillaBiomeParametersMixin"
+  ],
+  "client": [
+    "ItemRendererMixin",
+    "ModelLoaderMixin",
+    "WorldRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

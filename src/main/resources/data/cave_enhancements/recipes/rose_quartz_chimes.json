@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sss",
+    "tgt",
+    "r r"
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:stone_bricks"
+    },
+    "t": {
+      "item": "minecraft:string"
+    },
+    "g": {
+      "item": "cave_enhancements:goop"
+    },
+    "r": {
+      "item": "cave_enhancements:rose_quartz"
+    }
+  },
+  "result": {
+    "item": "cave_enhancements:rose_quartz_chimes",
+    "count": 1
+  }
+}

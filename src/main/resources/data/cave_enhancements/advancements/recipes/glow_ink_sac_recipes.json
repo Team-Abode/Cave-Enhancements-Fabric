@@ -1,0 +1,28 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "obtained_glow_ink_sac": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:glow_ink_sac"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "obtained_glow_ink_sac"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "cave_enhancements:glow_paste",
+      "cave_enhancements:spectacle_candle"
+    ]
+  }
+}

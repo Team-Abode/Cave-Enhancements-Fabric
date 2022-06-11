@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "cave_enhancements:goop_splat",
+        "Properties": {
+          "down": "true",
+          "up": "false",
+          "north": "false",
+          "south": "false",
+          "west": "false",
+          "east": "false"
+        }
+      }
+    }
+  }
+}
