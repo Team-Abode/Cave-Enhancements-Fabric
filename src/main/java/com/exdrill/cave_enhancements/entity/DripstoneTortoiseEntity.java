@@ -2,46 +2,51 @@ package com.exdrill.cave_enhancements.entity;
 
 import com.exdrill.cave_enhancements.registry.ModEntities;
 import com.exdrill.cave_enhancements.registry.ModSounds;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.AnimationState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.ai.pathing.Path;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.Angerable;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.LightType;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.UUID;
 
-public class DripstoneTortoiseEntity extends PathAwareEntity implements Angerable {
-    private static final TrackedData<Integer> ANGER = DataTracker.registerData(DripstoneTortoiseEntity.class, TrackedDataHandlerRegistry.INTEGER);
+public class DripstoneTortoiseEntity extends PathfinderMob implements NeutralMob {
+    private static final EntityDataAccessor<Integer> ANGER = SynchedEntityData.defineId(DripstoneTortoiseEntity.class, EntityDataSerializers.INT);
 
-    private static final TrackedData<Boolean> SHOULD_STOMP = DataTracker.registerData(DripstoneTortoiseEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> SHOULD_STOMP = SynchedEntityData.defineId(DripstoneTortoiseEntity.class, EntityDataSerializers.BOOLEAN);
 
     public final AnimationState stompingAnimationState = new AnimationState();
 
@@ -52,41 +57,41 @@ public class DripstoneTortoiseEntity extends PathAwareEntity implements Angerabl
     @Nullable
     private UUID angryAt;
 
-    public DripstoneTortoiseEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
+    public DripstoneTortoiseEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
-        this.experiencePoints = 30;
+        this.xpReward = 30;
     }
 
     //NBT
-    protected void initDataTracker() {
-        super.initDataTracker();
+    protected void defineSynchedData() {
+        super.defineSynchedData();
 
-        this.dataTracker.startTracking(ANGER, 0);
-        this.dataTracker.startTracking(SHOULD_STOMP, false);
+        this.entityData.define(ANGER, 0);
+        this.entityData.define(SHOULD_STOMP, false);
     }
 
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
+    public void addAdditionalSaveData(CompoundTag nbt) {
+        super.addAdditionalSaveData(nbt);
 
         nbt.putBoolean("shouldStomp", getShouldStomp());
 
-        writeAngerToNbt(nbt);
+        addPersistentAngerSaveData(nbt);
     }
 
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
+    public void readAdditionalSaveData(CompoundTag nbt) {
+        super.readAdditionalSaveData(nbt);
 
         setShouldStomp(nbt.getBoolean("shouldStomp"));
 
-        readAngerFromNbt(this.world, nbt);
+        readPersistentAngerSaveData(this.level, nbt);
     }
 
     public void setShouldStomp(boolean shouldStomp){
-        dataTracker.set(SHOULD_STOMP, shouldStomp);
+        entityData.set(SHOULD_STOMP, shouldStomp);
     }
 
     public boolean getShouldStomp(){
-        return dataTracker.get(SHOULD_STOMP);
+        return entityData.get(SHOULD_STOMP);
     }
 
     // Sounds
@@ -115,38 +120,38 @@ public class DripstoneTortoiseEntity extends PathAwareEntity implements Angerabl
     }
 
     //AI
-    protected void initGoals() {
-        this.targetSelector.add(1, (new DripstoneTortoiseRevengeGoal(this)).setGroupRevenge(new Class[0]));
-        this.targetSelector.add(3, new ActiveTargetGoal(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
-        this.goalSelector.add(4, new SpikeAttackGoal(this, 1.5D, true));
-        this.goalSelector.add(5, new WanderAroundGoal(this, 1.5D));
-        this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 8F));
-        this.goalSelector.add(6, new LookAroundGoal(this));
-        this.targetSelector.add(6, new RandomSpikeGoal());
+    protected void registerGoals() {
+        this.targetSelector.addGoal(1, (new DripstoneTortoiseRevengeGoal(this)).setAlertOthers(new Class[0]));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Player.class, 10, true, false, this::shouldAngerAt));
+        this.goalSelector.addGoal(4, new SpikeAttackGoal(this, 1.5D, true));
+        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1.5D));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8F));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+        this.targetSelector.addGoal(6, new RandomSpikeGoal());
     }
 
-    public static DefaultAttributeContainer.Builder createDripstoneTortoiseAttributes() {
-        return PathAwareEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.125D)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 40)
-                .add(EntityAttributes.GENERIC_ARMOR, 5)
-                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 2)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.6)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3);
+    public static AttributeSupplier.Builder createDripstoneTortoiseAttributes() {
+        return PathfinderMob.createMobAttributes()
+                .add(Attributes.MOVEMENT_SPEED, 0.125D)
+                .add(Attributes.MAX_HEALTH, 40)
+                .add(Attributes.ARMOR, 5)
+                .add(Attributes.ARMOR_TOUGHNESS, 2)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.6)
+                .add(Attributes.ATTACK_DAMAGE, 3);
     }
 
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
-        if(damageSource == DamageSource.STALAGMITE || damageSource == DamageSource.FALLING_STALACTITE || damageSource.isProjectile() || damageSource.getAttacker() instanceof DripstoneTortoiseEntity) return true;
+        if(damageSource == DamageSource.STALAGMITE || damageSource == DamageSource.FALLING_STALACTITE || damageSource.isProjectile() || damageSource.getEntity() instanceof DripstoneTortoiseEntity) return true;
 
         return super.isInvulnerableTo(damageSource);
     }
 
     public boolean shouldAngerAt(Object entity) {
-        if (!this.canTarget((LivingEntity)entity)) {
+        if (!this.canAttack((LivingEntity)entity)) {
             return false;
         } else {
-            return ((LivingEntity) entity).getType() == EntityType.PLAYER && this.isUniversallyAngry(((LivingEntity) entity).world) || ((LivingEntity) entity).getUuid().equals(this.getAngryAt());
+            return ((LivingEntity) entity).getType() == EntityType.PLAYER && this.isAngryAtAllPlayers(((LivingEntity) entity).level) || ((LivingEntity) entity).getUUID().equals(this.getPersistentAngerTarget());
         }
     }
 
@@ -154,9 +159,9 @@ public class DripstoneTortoiseEntity extends PathAwareEntity implements Angerabl
 
     @Override
     public void tick() {
-        if (this.world.isClient) {
+        if (this.level.isClientSide) {
             if (this.getShouldStomp()) {
-                this.stompingAnimationState.startIfNotRunning(this.age);
+                this.stompingAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.stompingAnimationState.stop();
             }
@@ -167,48 +172,48 @@ public class DripstoneTortoiseEntity extends PathAwareEntity implements Angerabl
 
 
     @Override
-    public boolean canBeLeashedBy(PlayerEntity player) {
+    public boolean canBeLeashed(Player player) {
         return false;
     }
 
     @Override
-    protected void pushOutOfBlocks(double x, double y, double z) {
-        super.pushOutOfBlocks(x, y, z);
+    protected void moveTowardsClosestSpace(double x, double y, double z) {
+        super.moveTowardsClosestSpace(x, y, z);
     }
 
     //Anger
-    public int getAngerTime() {
-        return this.dataTracker.get(ANGER);
+    public int getRemainingPersistentAngerTime() {
+        return this.entityData.get(ANGER);
     }
 
-    public void setAngerTime(int angerTime) {
-        this.dataTracker.set(ANGER, angerTime);
+    public void setRemainingPersistentAngerTime(int angerTime) {
+        this.entityData.set(ANGER, angerTime);
     }
 
-    public void chooseRandomAngerTime() {
-        this.setAngerTime(400);
+    public void startPersistentAngerTimer() {
+        this.setRemainingPersistentAngerTime(400);
     }
 
     @Nullable
-    public UUID getAngryAt() {
+    public UUID getPersistentAngerTarget() {
         return this.angryAt;
     }
 
-    public void setAngryAt(@Nullable UUID angryAt) {
+    public void setPersistentAngerTarget(@Nullable UUID angryAt) {
         this.angryAt = angryAt;
     }
 
     public void sooth(){
         soothed = 2;
-        setAngryAt(null);
-        setAngerTime(0);
+        setPersistentAngerTarget(null);
+        setRemainingPersistentAngerTime(0);
     }
 
     //Tick
     @Override
-    protected void mobTick() {
-        if (!this.world.isClient) {
-            this.tickAngerLogic((ServerWorld)this.world, false);
+    protected void customServerAiStep() {
+        if (!this.level.isClientSide) {
+            this.updatePersistentAnger((ServerLevel)this.level, false);
 
             stompTimer--;
 
@@ -220,66 +225,66 @@ public class DripstoneTortoiseEntity extends PathAwareEntity implements Angerabl
         }
     }
 
-    public static boolean isSpawnDark(ServerWorldAccess world, BlockPos pos, Random random) {
-        if (world.getLightLevel(LightType.SKY, pos) > random.nextInt(32)) {
+    public static boolean isSpawnDark(ServerLevelAccessor world, BlockPos pos, RandomSource random) {
+        if (world.getBrightness(LightLayer.SKY, pos) > random.nextInt(32)) {
             return false;
-        } else if (world.getLightLevel(LightType.BLOCK, pos) > 0) {
+        } else if (world.getBrightness(LightLayer.BLOCK, pos) > 0) {
             return false;
         } else {
-            int i = world.toServerWorld().isThundering() ? world.getLightLevel(pos, 10) : world.getLightLevel(pos);
+            int i = world.getLevel().isThundering() ? world.getMaxLocalRawBrightness(pos, 10) : world.getMaxLocalRawBrightness(pos);
             return i <= random.nextInt(8);
         }
     }
 
-    public static boolean canSpawnInDark(EntityType<? extends PathAwareEntity> type, ServerWorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        return world.getDifficulty() != Difficulty.PEACEFUL && isSpawnDark(world, pos, random) && canMobSpawn(type, world, spawnReason, pos, random);
+    public static boolean canSpawnInDark(EntityType<? extends PathfinderMob> type, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
+        return world.getDifficulty() != Difficulty.PEACEFUL && isSpawnDark(world, pos, random) && checkMobSpawnRules(type, world, spawnReason, pos, random);
     }
 
 
     //Goals
-    private class DripstoneTortoiseRevengeGoal extends RevengeGoal {
+    private class DripstoneTortoiseRevengeGoal extends HurtByTargetGoal {
         DripstoneTortoiseRevengeGoal(DripstoneTortoiseEntity dripstoneTortoise) {
             super(dripstoneTortoise);
         }
 
-        public boolean shouldContinue() {
-            return hasAngerTime() && super.shouldContinue();
+        public boolean canContinueToUse() {
+            return isAngry() && super.canContinueToUse();
         }
 
-        protected void setMobEntityTarget(MobEntity mob, LivingEntity target) {
-            if (mob instanceof DripstoneTortoiseEntity && mob.canSee(target)) {
+        protected void alertOther(Mob mob, LivingEntity target) {
+            if (mob instanceof DripstoneTortoiseEntity && mob.hasLineOfSight(target)) {
                 mob.setTarget(target);
             }
 
         }
     }
 
-    public void summonPike(Vec3d pos){
-        float y = (float) pos.getY();
+    public void summonPike(Vec3 pos){
+        float y = (float) pos.y();
 
-        BlockPos blockDownPos = new BlockPos(pos.getX(), y - 1, pos.getZ());
+        BlockPos blockDownPos = new BlockPos(pos.x(), y - 1, pos.z());
 
-        while(y < world.getTopY() && !world.getBlockState(blockDownPos).isSolidSurface(world, blockDownPos, this, Direction.UP)){
+        while(y < level.getMaxBuildHeight() && !level.getBlockState(blockDownPos).entityCanStandOnFace(level, blockDownPos, this, Direction.UP)){
             y -= 0.1F;
 
             blockDownPos = new BlockPos(blockDownPos.getX(), y, blockDownPos.getZ());
         }
 
-        if(y >= world.getTopY()){
-            y = (float) pos.getY();
+        if(y >= level.getMaxBuildHeight()){
+            y = (float) pos.y();
         }
 
-        DripstonePikeEntity spellPart = new DripstonePikeEntity(ModEntities.DRIPSTONE_PIKE, world);
+        DripstonePikeEntity spellPart = new DripstonePikeEntity(ModEntities.DRIPSTONE_PIKE, level);
 
-        spellPart.setPos(pos.getX(), y, pos.getZ());
+        spellPart.setPosRaw(pos.x(), y, pos.z());
 
         spellPart.owner = this;
 
-        world.spawnEntity(spellPart);
+        level.addFreshEntity(spellPart);
     }
 
     private class SpikeAttackGoal extends Goal {
-        protected final PathAwareEntity mob;
+        protected final PathfinderMob mob;
         private final double speed;
         private final boolean pauseWhenMobIdle;
         private Path path;
@@ -298,31 +303,31 @@ public class DripstoneTortoiseEntity extends PathAwareEntity implements Angerabl
             double d = getSquaredMaxAttackDistance(target);
             if (squaredDistance <= d && this.cooldown <= 0) {
                 this.resetCooldown();
-                Vec3d targetPos = target.getPos();
+                Vec3 targetPos = target.position();
 
                 for(int i = 0; i < 10; i++){
-                    summonPike(new Vec3d(random.nextBetween((int) -1.5F, (int) 1.5F) + targetPos.getX(),  targetPos.getY(), random.nextBetween((int) -1.5F, (int) 1.5F)  + targetPos.getZ()));
+                    summonPike(new Vec3(random.nextIntBetweenInclusive((int) -1.5F, (int) 1.5F) + targetPos.x(),  targetPos.y(), random.nextIntBetweenInclusive((int) -1.5F, (int) 1.5F)  + targetPos.z()));
                 }
 
                 setShouldStomp(true);
 
                 stompTimer = 10;
 
-                world.playSound(null, new BlockPos(getPos()), SoundEvents.BLOCK_DRIPSTONE_BLOCK_BREAK, SoundCategory.HOSTILE, 1F, 1F);
+                level.playSound(null, new BlockPos(position()), SoundEvents.DRIPSTONE_BLOCK_BREAK, SoundSource.HOSTILE, 1F, 1F);
             }
         }
 
 
 
-        public SpikeAttackGoal(PathAwareEntity mob, double speed, boolean pauseWhenMobIdle) {
+        public SpikeAttackGoal(PathfinderMob mob, double speed, boolean pauseWhenMobIdle) {
             this.mob = mob;
             this.speed = speed;
             this.pauseWhenMobIdle = pauseWhenMobIdle;
-            this.setControls(EnumSet.of(Control.MOVE, Control.LOOK));
+            this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         }
 
-        public boolean canStart() {
-            long l = this.mob.world.getTime();
+        public boolean canUse() {
+            long l = this.mob.level.getGameTime();
             if (l - this.lastUpdateTime < 20L) {
                 return false;
             } else {
@@ -333,17 +338,17 @@ public class DripstoneTortoiseEntity extends PathAwareEntity implements Angerabl
                 } else if (!livingEntity.isAlive()) {
                     return false;
                 } else {
-                    this.path = this.mob.getNavigation().findPathTo(livingEntity, 0);
+                    this.path = this.mob.getNavigation().createPath(livingEntity, 0);
                     if (this.path != null) {
                         return true;
                     } else {
-                        return this.getSquaredMaxAttackDistance(livingEntity) >= this.mob.squaredDistanceTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
+                        return this.getSquaredMaxAttackDistance(livingEntity) >= this.mob.distanceToSqr(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
                     }
                 }
             }
         }
 
-        public boolean shouldContinue() {
+        public boolean canContinueToUse() {
             if(soothed > 0) return false;
 
             LivingEntity livingEntity = this.mob.getTarget();
@@ -353,17 +358,17 @@ public class DripstoneTortoiseEntity extends PathAwareEntity implements Angerabl
             } else if (!livingEntity.isAlive()) {
                 return false;
             } else if (!this.pauseWhenMobIdle) {
-                return !this.mob.getNavigation().isIdle();
-            } else if (!this.mob.isInWalkTargetRange(livingEntity.getBlockPos())) {
+                return !this.mob.getNavigation().isDone();
+            } else if (!this.mob.isWithinRestriction(livingEntity.blockPosition())) {
                 return false;
             } else {
-                return !(livingEntity instanceof PlayerEntity) || !livingEntity.isSpectator() && !((PlayerEntity)livingEntity).isCreative();
+                return !(livingEntity instanceof Player) || !livingEntity.isSpectator() && !((Player)livingEntity).isCreative();
             }
         }
 
         public void start() {
-            this.mob.getNavigation().startMovingAlong(this.path, this.speed);
-            this.mob.setAttacking(true);
+            this.mob.getNavigation().moveTo(this.path, this.speed);
+            this.mob.setAggressive(true);
             this.updateCountdownTicks = 0;
             this.cooldown = 0;
         }
@@ -371,25 +376,25 @@ public class DripstoneTortoiseEntity extends PathAwareEntity implements Angerabl
         public void stop() {
             LivingEntity livingEntity = this.mob.getTarget();
 
-            if (!EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(livingEntity)) {
+            if (!EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(livingEntity)) {
                 this.mob.setTarget(null);
             }
 
-            this.mob.setAttacking(false);
+            this.mob.setAggressive(false);
             this.mob.getNavigation().stop();
         }
 
-        public boolean shouldRunEveryTick() {
+        public boolean requiresUpdateEveryTick() {
             return true;
         }
 
         public void tick() {
             LivingEntity livingEntity = this.mob.getTarget();
             if (livingEntity != null) {
-                this.mob.getLookControl().lookAt(livingEntity, 30.0F, 30.0F);
-                double d = this.mob.squaredDistanceTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
+                this.mob.getLookControl().setLookAt(livingEntity, 30.0F, 30.0F);
+                double d = this.mob.distanceToSqr(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
                 this.updateCountdownTicks = Math.max(this.updateCountdownTicks - 1, 0);
-                if ((this.pauseWhenMobIdle || this.mob.getVisibilityCache().canSee(livingEntity)) && this.updateCountdownTicks <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || livingEntity.squaredDistanceTo(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.mob.getRandom().nextFloat() < 0.05F)) {
+                if ((this.pauseWhenMobIdle || this.mob.getSensing().hasLineOfSight(livingEntity)) && this.updateCountdownTicks <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || livingEntity.distanceToSqr(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.mob.getRandom().nextFloat() < 0.05F)) {
                     this.targetX = livingEntity.getX();
                     this.targetY = livingEntity.getY();
                     this.targetZ = livingEntity.getZ();
@@ -400,11 +405,11 @@ public class DripstoneTortoiseEntity extends PathAwareEntity implements Angerabl
                         this.updateCountdownTicks += 5;
                     }
 
-                    if (!this.mob.getNavigation().startMovingTo(livingEntity, this.speed)) {
+                    if (!this.mob.getNavigation().moveTo(livingEntity, this.speed)) {
                         this.updateCountdownTicks += 15;
                     }
 
-                    this.updateCountdownTicks = this.getTickCount(this.updateCountdownTicks);
+                    this.updateCountdownTicks = this.adjustedTickDelay(this.updateCountdownTicks);
                 }
 
                 this.cooldown = Math.max(this.cooldown - 1, 0);
@@ -424,26 +429,26 @@ public class DripstoneTortoiseEntity extends PathAwareEntity implements Angerabl
         protected void spike() {
             if (this.cooldown <= 0) {
                 this.resetCooldown();
-                Vec3d targetPos = getPos();
+                Vec3 targetPos = position();
 
                 for(int i = 0; i < 10; i++){
-                    summonPike(new Vec3d(random.nextBetween((int) -1.5F, (int) 1.5F) + targetPos.getX(),  targetPos.getY(), random.nextBetween( (int) -1.5F,  (int) 1.5F)  + targetPos.getZ()));
+                    summonPike(new Vec3(random.nextIntBetweenInclusive((int) -1.5F, (int) 1.5F) + targetPos.x(),  targetPos.y(), random.nextIntBetweenInclusive( (int) -1.5F,  (int) 1.5F)  + targetPos.z()));
                 }
 
                 setShouldStomp(true);
 
                 stompTimer = 10;
 
-                world.playSound(null, new BlockPos(getPos()), SoundEvents.BLOCK_DRIPSTONE_BLOCK_BREAK, SoundCategory.HOSTILE, 1F, 1F);
+                level.playSound(null, new BlockPos(position()), SoundEvents.DRIPSTONE_BLOCK_BREAK, SoundSource.HOSTILE, 1F, 1F);
             }
         }
 
         public RandomSpikeGoal() {}
 
-        public boolean canStart() {
-            if(isAttacking()) return false;
+        public boolean canUse() {
+            if(isAggressive()) return false;
 
-            long l = world.getTime();
+            long l = level.getGameTime();
             if (l - this.lastUpdateTime < 20L) {
                 return false;
             } else {
@@ -453,8 +458,8 @@ public class DripstoneTortoiseEntity extends PathAwareEntity implements Angerabl
             }
         }
 
-        public boolean shouldContinue() {
-            return !isAttacking();
+        public boolean canContinueToUse() {
+            return !isAggressive();
         }
 
         public void start() {
@@ -464,7 +469,7 @@ public class DripstoneTortoiseEntity extends PathAwareEntity implements Angerabl
         public void stop() {
         }
 
-        public boolean shouldRunEveryTick() {
+        public boolean requiresUpdateEveryTick() {
             return true;
         }
 

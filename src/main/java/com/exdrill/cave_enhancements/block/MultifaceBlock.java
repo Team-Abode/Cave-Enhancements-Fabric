@@ -1,27 +1,26 @@
 package com.exdrill.cave_enhancements.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LichenGrower;
-import net.minecraft.block.MultifaceGrowthBlock;
-import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.MultifaceSpreader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.PushReaction;
 
-public class MultifaceBlock extends MultifaceGrowthBlock {
-    public MultifaceBlock(Settings settings) {
+public class MultifaceBlock extends net.minecraft.world.level.block.MultifaceBlock {
+    public MultifaceBlock(Properties settings) {
         super(settings);
     }
 
     @Override
-    public LichenGrower getGrower() {
+    public MultifaceSpreader getSpreader() {
         return null;
     }
 
-    public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos) { return true; }
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter world, BlockPos pos) { return true; }
 
     @Override
-    public PistonBehavior getPistonBehavior(BlockState state) {
-        return PistonBehavior.DESTROY;
+    public PushReaction getPistonPushReaction(BlockState state) {
+        return PushReaction.DESTROY;
     }
 
 }

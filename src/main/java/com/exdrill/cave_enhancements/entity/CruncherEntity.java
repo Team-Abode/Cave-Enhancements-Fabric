@@ -1,39 +1,43 @@
 package com.exdrill.cave_enhancements.entity;
 
 import com.exdrill.cave_enhancements.entity.ai.goal.EatBlockGoal;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.ItemStackParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
-
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.Vec3;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class CruncherEntity extends PathAwareEntity {
-    private static final TrackedData<Boolean> IS_EATING_BLOCK = DataTracker.registerData(CruncherEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> IS_SHEARED = DataTracker.registerData(CruncherEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+public class CruncherEntity extends PathfinderMob {
+    private static final EntityDataAccessor<Boolean> IS_EATING_BLOCK = SynchedEntityData.defineId(CruncherEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> IS_SHEARED = SynchedEntityData.defineId(CruncherEntity.class, EntityDataSerializers.BOOLEAN);
     private static final Ingredient TEMPTING_ITEMS;
     public long lastEatTick;
     public int eatingTicks = 0;
@@ -41,32 +45,32 @@ public class CruncherEntity extends PathAwareEntity {
     public int eatingTime;
     public boolean hasItem;
 
-    public CruncherEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
+    public CruncherEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
 
         this.setCanPickUpLoot(true);
-        this.experiencePoints = 5;
+        this.xpReward = 5;
     }
 
 
     // NBT Data
-    public void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(IS_EATING_BLOCK, false);
-        this.dataTracker.startTracking(IS_SHEARED, false);
+    public void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(IS_EATING_BLOCK, false);
+        this.entityData.define(IS_SHEARED, false);
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
+    public void addAdditionalSaveData(CompoundTag nbt) {
+        super.addAdditionalSaveData(nbt);
         nbt.putLong("lastEatTick", this.lastEatTick);
         nbt.putInt("eatingTicks", this.eatingTicks);
         nbt.putBoolean("isEatingBlock", this.isEating());
         nbt.putBoolean("isSheared", this.hasBeenSheared());
     }
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
+    public void readAdditionalSaveData(CompoundTag nbt) {
+        super.readAdditionalSaveData(nbt);
         this.lastEatTick = nbt.getLong("lastEatTick");
         this.eatingTicks = nbt.getInt("eatingTicks");
         isEatingBlock(nbt.getBoolean("isEatingBlock"));
@@ -75,27 +79,27 @@ public class CruncherEntity extends PathAwareEntity {
 
     // Eating Block NBT
     public void isEatingBlock(boolean isEating) {
-        this.dataTracker.set(IS_EATING_BLOCK, isEating);
+        this.entityData.set(IS_EATING_BLOCK, isEating);
     }
 
     public boolean isEating() {
-        return this.dataTracker.get(IS_EATING_BLOCK);
+        return this.entityData.get(IS_EATING_BLOCK);
     }
 
     // Sheared NBT
     public void isSheared(boolean isSheared) {
-        this.dataTracker.set(IS_SHEARED, isSheared);
+        this.entityData.set(IS_SHEARED, isSheared);
     }
 
     public boolean hasBeenSheared() {
-        return this.dataTracker.get(IS_SHEARED);
+        return this.entityData.get(IS_SHEARED);
     }
 
 
     // Ticking
     @Override
     public void tick() {
-        ItemStack itemStack = this.getEquippedStack(EquipmentSlot.MAINHAND);
+        ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
         if (this.eatingTicks > 0) {
             this.eatingTicks--;
         }
@@ -109,7 +113,7 @@ public class CruncherEntity extends PathAwareEntity {
             this.eatingAnimation = 0;
             this.isEatingBlock(false);
         }
-        if (itemStack.isOf(Items.GLOW_BERRIES) && !hasItem) {
+        if (itemStack.is(Items.GLOW_BERRIES) && !hasItem) {
             hasItem = true;
         }
         if (itemStack.isEmpty() && hasItem) {
@@ -122,186 +126,186 @@ public class CruncherEntity extends PathAwareEntity {
     }
 
     public int tickTimer() {
-        return age;
+        return tickCount;
     }
 
     @Override
-    protected boolean shouldSwimInFluids() {
+    protected boolean isAffectedByFluids() {
         return true;
     }
 
     // Goals
-    protected void initGoals() {
-        this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(5, new WanderAroundFarGoal(this, 1.0D));
-        this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 8F));
-        this.goalSelector.add(6, new LookAroundGoal(this));
-        this.goalSelector.add(0, new EatBlockGoal(this));
-        this.goalSelector.add(3, new TemptGoal(this, 1.25, TEMPTING_ITEMS, false));
-        this.goalSelector.add(2, new CruncherEntity.PickupItemGoal());
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8F));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(0, new EatBlockGoal(this));
+        this.goalSelector.addGoal(3, new TemptGoal(this, 1.25, TEMPTING_ITEMS, false));
+        this.goalSelector.addGoal(2, new CruncherEntity.PickupItemGoal());
     }
 
     // Interactions
-    public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        ItemStack itemStack = player.getStackInHand(hand);
-        ItemEntity itemEntity = new ItemEntity(this.world, this.getX(), this.getY(), this.getZ(), Items.MOSS_CARPET.getDefaultStack());
-        if (itemStack.isOf(Items.SHEARS) && !this.hasBeenSheared() && this.isAlive()) {
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+        ItemEntity itemEntity = new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), Items.MOSS_CARPET.getDefaultInstance());
+        if (itemStack.is(Items.SHEARS) && !this.hasBeenSheared() && this.isAlive()) {
             this.isSheared(true);
-            itemStack.damage(1, player, (playerx) -> playerx.sendToolBreakStatus(hand));
-            this.world.spawnEntity(itemEntity);
-            this.world.playSoundFromEntity(null, this, SoundEvents.ENTITY_SHEEP_SHEAR, SoundCategory.PLAYERS, 1.0F, 1.0F);
-            this.emitGameEvent(GameEvent.SHEAR, player);
-            return ActionResult.SUCCESS;
+            itemStack.hurtAndBreak(1, player, (playerx) -> playerx.broadcastBreakEvent(hand));
+            this.level.addFreshEntity(itemEntity);
+            this.level.playSound(null, this, SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1.0F, 1.0F);
+            this.gameEvent(GameEvent.SHEAR, player);
+            return InteractionResult.SUCCESS;
         }
-        if (itemStack.isOf(Items.GLOW_BERRIES) && this.eatingTicks == 0) {
-            if (!this.world.isClient) {
+        if (itemStack.is(Items.GLOW_BERRIES) && this.eatingTicks == 0) {
+            if (!this.level.isClientSide) {
                 this.eatingTicks = 1200;
-                itemStack.decrement(1);
-                this.emitGameEvent(GameEvent.ENTITY_INTERACT, player);
-                return ActionResult.SUCCESS;
+                itemStack.shrink(1);
+                this.gameEvent(GameEvent.ENTITY_INTERACT, player);
+                return InteractionResult.SUCCESS;
             } else {
-                return ActionResult.CONSUME;
+                return InteractionResult.CONSUME;
             }
         } else {
-            return super.interactMob(player, hand);
+            return super.mobInteract(player, hand);
         }
     }
 
 
     // Leash
-    public Vec3d getLeashOffset() {
-        return new Vec3d(0.0D, 0.6F * this.getStandingEyeHeight(), this.getWidth() * 0.4F);
+    public Vec3 getLeashOffset() {
+        return new Vec3(0.0D, 0.6F * this.getEyeHeight(), this.getBbWidth() * 0.4F);
     }
 
     @Override
-    public boolean canBeLeashedBy(PlayerEntity player) {
+    public boolean canBeLeashed(Player player) {
         return true;
     }
 
     // Attributes
-    public static DefaultAttributeContainer.Builder createCruncherAttributes() {
-        return HostileEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.15D)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 15);
+    public static AttributeSupplier.Builder createCruncherAttributes() {
+        return Monster.createMobAttributes()
+                .add(Attributes.MOVEMENT_SPEED, 0.15D)
+                .add(Attributes.MAX_HEALTH, 15);
     }
 
     // Can Pick Up Items
-    public boolean canPickupItem(ItemStack stack) {
-        ItemStack itemStack = this.getEquippedStack(EquipmentSlot.MAINHAND);
-        return itemStack.isEmpty() && this.eatingTime > 0 && this.eatingTicks == 0 && stack.isOf(Items.GLOW_BERRIES);
+    public boolean canHoldItem(ItemStack stack) {
+        ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        return itemStack.isEmpty() && this.eatingTime > 0 && this.eatingTicks == 0 && stack.is(Items.GLOW_BERRIES);
     }
 
     boolean wantsToPickupItem() {
-        ItemStack itemStack = this.getEquippedStack(EquipmentSlot.MAINHAND);
-        return itemStack.isOf(Items.GLOW_BERRIES);
+        ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        return itemStack.is(Items.GLOW_BERRIES);
     }
 
     private boolean canEat(ItemStack stack) {
-        return stack.getItem().isFood() && this.onGround;
+        return stack.getItem().isEdible() && this.onGround;
     }
     // Can Drop Items
     private void spit(ItemStack stack) {
-        if (!stack.isEmpty() && !this.world.isClient) {
-            ItemEntity itemEntity = new ItemEntity(this.world, this.getX() + this.getRotationVector().x, this.getY() + 1.0D, this.getZ() + this.getRotationVector().z, stack);
-            itemEntity.setPickupDelay(40);
-            itemEntity.setThrower(this.getUuid());
-            this.world.spawnEntity(itemEntity);
+        if (!stack.isEmpty() && !this.level.isClientSide) {
+            ItemEntity itemEntity = new ItemEntity(this.level, this.getX() + this.getLookAngle().x, this.getY() + 1.0D, this.getZ() + this.getLookAngle().z, stack);
+            itemEntity.setPickUpDelay(40);
+            itemEntity.setThrower(this.getUUID());
+            this.level.addFreshEntity(itemEntity);
         }
     }
     private void dropItem(ItemStack stack) {
-        ItemEntity itemEntity = new ItemEntity(this.world, this.getX(), this.getY(), this.getZ(), stack);
-        this.world.spawnEntity(itemEntity);
+        ItemEntity itemEntity = new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), stack);
+        this.level.addFreshEntity(itemEntity);
     }
 
-    protected void loot(ItemEntity item) {
-        ItemStack itemStack = item.getStack();
-        if (this.canPickupItem(itemStack)) {
+    protected void pickUpItem(ItemEntity item) {
+        ItemStack itemStack = item.getItem();
+        if (this.canHoldItem(itemStack)) {
             int i = itemStack.getCount();
             if (i > 1) {
                 this.dropItem(itemStack.split(i - 1));
             }
 
-            this.spit(this.getEquippedStack(EquipmentSlot.MAINHAND));
-            this.triggerItemPickedUpByEntityCriteria(item);
-            this.equipStack(EquipmentSlot.MAINHAND, itemStack.split(1));
-            this.handDropChances[EquipmentSlot.MAINHAND.getEntitySlotId()] = 2.0F;
-            this.sendPickup(item, itemStack.getCount());
+            this.spit(this.getItemBySlot(EquipmentSlot.MAINHAND));
+            this.onItemPickup(item);
+            this.setItemSlot(EquipmentSlot.MAINHAND, itemStack.split(1));
+            this.handDropChances[EquipmentSlot.MAINHAND.getIndex()] = 2.0F;
+            this.take(item, itemStack.getCount());
             item.discard();
             this.eatingTime = 0;
         }
 
     }
 
-    public void tickMovement() {
-        if (!this.world.isClient && this.isAlive() && this.canMoveVoluntarily()) {
+    public void aiStep() {
+        if (!this.level.isClientSide && this.isAlive() && this.isEffectiveAi()) {
             ++this.eatingTime;
-            ItemStack itemStack = this.getEquippedStack(EquipmentSlot.MAINHAND);
+            ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
             if (this.canEat(itemStack)) {
                 if (this.eatingTime > 600) {
-                    ItemStack itemStack2 = itemStack.finishUsing(this.world, this);
+                    ItemStack itemStack2 = itemStack.finishUsingItem(this.level, this);
                     if (!itemStack2.isEmpty()) {
-                        this.equipStack(EquipmentSlot.MAINHAND, itemStack2);
+                        this.setItemSlot(EquipmentSlot.MAINHAND, itemStack2);
                     }
 
                     this.eatingTime = 0;
                 } else if (this.eatingTime > 560 && this.random.nextFloat() < 0.1F) {
-                    this.playSound(this.getEatSound(itemStack), 1.0F, 1.0F);
-                    this.world.sendEntityStatus(this, (byte)45);
+                    this.playSound(this.getEatingSound(itemStack), 1.0F, 1.0F);
+                    this.level.broadcastEntityEvent(this, (byte)45);
                 }
             }
         }
-        super.tickMovement();
+        super.aiStep();
     }
 
     class PickupItemGoal extends Goal {
         public PickupItemGoal() {
-            this.setControls(EnumSet.of(Control.MOVE));
+            this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
-        public boolean canStart() {
-            if (!CruncherEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
+        public boolean canUse() {
+            if (!CruncherEntity.this.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty()) {
                 return false;
             } else {
                 if (!CruncherEntity.this.wantsToPickupItem()) {
                     return false;
-                } else if (CruncherEntity.this.getRandom().nextInt(toGoalTicks(10)) != 0) {
+                } else if (CruncherEntity.this.getRandom().nextInt(reducedTickDelay(10)) != 0) {
                     return false;
                 } else {
-                    List<ItemEntity> list = CruncherEntity.this.world.getEntitiesByClass(ItemEntity.class, CruncherEntity.this.getBoundingBox().expand(8.0D, 8.0D, 8.0D), CruncherEntity.PICKABLE_DROP_FILTER);
-                    return !list.isEmpty() && CruncherEntity.this.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty();
+                    List<ItemEntity> list = CruncherEntity.this.level.getEntitiesOfClass(ItemEntity.class, CruncherEntity.this.getBoundingBox().inflate(8.0D, 8.0D, 8.0D), CruncherEntity.PICKABLE_DROP_FILTER);
+                    return !list.isEmpty() && CruncherEntity.this.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty();
                 }
             }
         }
 
         public void tick() {
-            List<ItemEntity> list = CruncherEntity.this.world.getEntitiesByClass(ItemEntity.class, CruncherEntity.this.getBoundingBox().expand(8.0D, 8.0D, 8.0D), CruncherEntity.PICKABLE_DROP_FILTER);
-            ItemStack itemStack = CruncherEntity.this.getEquippedStack(EquipmentSlot.MAINHAND);
+            List<ItemEntity> list = CruncherEntity.this.level.getEntitiesOfClass(ItemEntity.class, CruncherEntity.this.getBoundingBox().inflate(8.0D, 8.0D, 8.0D), CruncherEntity.PICKABLE_DROP_FILTER);
+            ItemStack itemStack = CruncherEntity.this.getItemBySlot(EquipmentSlot.MAINHAND);
             if (itemStack.isEmpty() && !list.isEmpty()) {
-                CruncherEntity.this.getNavigation().startMovingTo(list.get(0), 1.0D);
+                CruncherEntity.this.getNavigation().moveTo(list.get(0), 1.0D);
             }
 
         }
 
         public void start() {
-            List<ItemEntity> list = CruncherEntity.this.world.getEntitiesByClass(ItemEntity.class, CruncherEntity.this.getBoundingBox().expand(8.0D, 8.0D, 8.0D), CruncherEntity.PICKABLE_DROP_FILTER);
+            List<ItemEntity> list = CruncherEntity.this.level.getEntitiesOfClass(ItemEntity.class, CruncherEntity.this.getBoundingBox().inflate(8.0D, 8.0D, 8.0D), CruncherEntity.PICKABLE_DROP_FILTER);
             if (!list.isEmpty()) {
-                CruncherEntity.this.getNavigation().startMovingTo(list.get(0), 1.0D);
+                CruncherEntity.this.getNavigation().moveTo(list.get(0), 1.0D);
             }
 
         }
     }
 
-    public void handleStatus(byte status) {
+    public void handleEntityEvent(byte status) {
         if (status == 45) {
-            ItemStack itemStack = this.getEquippedStack(EquipmentSlot.MAINHAND);
+            ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
             if (!itemStack.isEmpty()) {
                 for(int i = 0; i < 8; ++i) {
-                    Vec3d vec3d = (new Vec3d(((double)this.random.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D)).rotateX(-this.getPitch() * 0.017453292F).rotateY(-this.getYaw() * 0.017453292F);
-                    this.world.addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack), this.getX() + this.getRotationVector().x / 2.0D, this.getY(), this.getZ() + this.getRotationVector().z / 2.0D, vec3d.x, vec3d.y + 0.05D, vec3d.z);
+                    Vec3 vec3d = (new Vec3(((double)this.random.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D)).xRot(-this.getXRot() * 0.017453292F).yRot(-this.getYRot() * 0.017453292F);
+                    this.level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, itemStack), this.getX() + this.getLookAngle().x / 2.0D, this.getY(), this.getZ() + this.getLookAngle().z / 2.0D, vec3d.x, vec3d.y + 0.05D, vec3d.z);
                 }
             }
         } else {
-            super.handleStatus(status);
+            super.handleEntityEvent(status);
         }
 
     }
@@ -309,7 +313,7 @@ public class CruncherEntity extends PathAwareEntity {
     static final Predicate<ItemEntity> PICKABLE_DROP_FILTER;
 
     static {
-        TEMPTING_ITEMS = Ingredient.ofItems(Items.GLOW_BERRIES);
-        PICKABLE_DROP_FILTER = (item) -> !item.cannotPickup() && item.isAlive() && item.getStack().getItem() == Items.GLOW_BERRIES;
+        TEMPTING_ITEMS = Ingredient.of(Items.GLOW_BERRIES);
+        PICKABLE_DROP_FILTER = (item) -> !item.hasPickUpDelay() && item.isAlive() && item.getItem().getItem() == Items.GLOW_BERRIES;
     }
 }

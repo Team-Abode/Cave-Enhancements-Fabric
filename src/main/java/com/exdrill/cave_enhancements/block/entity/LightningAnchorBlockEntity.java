@@ -1,15 +1,14 @@
 package com.exdrill.cave_enhancements.block.entity;
 
 import com.exdrill.cave_enhancements.registry.ModBlocks;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LightningEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.world.World;
-
 import java.util.List;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 public class LightningAnchorBlockEntity extends BlockEntity {
     public int ticksTillActivate = 30;
@@ -18,22 +17,22 @@ public class LightningAnchorBlockEntity extends BlockEntity {
         super(ModBlocks.LIGHTNING_ANCHOR_BLOCK_ENTITY, pos, state);
     }
 
-    public static void tick(World world, BlockPos pos, BlockState state, LightningAnchorBlockEntity entity) {
-        if(world.isClient()) return;
+    public static void tick(Level world, BlockPos pos, BlockState state, LightningAnchorBlockEntity entity) {
+        if(world.isClientSide()) return;
 
         if(entity.ticksTillActivate > 0){
             entity.ticksTillActivate--;
         }
 
-        Box box = new Box(pos).expand(1.5);
+        AABB box = new AABB(pos).inflate(1.5);
 
-        List<Entity> list = world.getEntitiesByClass(Entity.class, box, (e) -> true);
+        List<Entity> list = world.getEntitiesOfClass(Entity.class, box, (e) -> true);
 
         Entity otherEntity;
         for (Entity value : list) {
             otherEntity = value;
-            if (otherEntity.getClass() == LightningEntity.class && entity.ticksTillActivate <= 0) {
-                world.setBlockState(pos, ModBlocks.CHARGED_LIGHTNING_ANCHOR.getDefaultState());
+            if (otherEntity.getClass() == LightningBolt.class && entity.ticksTillActivate <= 0) {
+                world.setBlockAndUpdate(pos, ModBlocks.CHARGED_LIGHTNING_ANCHOR.defaultBlockState());
                 return;
             }
         }

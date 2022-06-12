@@ -1,36 +1,44 @@
 package com.exdrill.cave_enhancements.entity;
 
 import com.exdrill.cave_enhancements.registry.ModTags;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.*;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.CreeperEntity;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Arm;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DripstonePikeEntity extends MobEntity {
+public class DripstonePikeEntity extends Mob {
 
     public int dieTimer = 20;
     public int damageDelay = 4;
@@ -40,64 +48,68 @@ public class DripstonePikeEntity extends MobEntity {
 
     public final AnimationState risingAnimationState = new AnimationState();
 
-    private static final TrackedData<Boolean> INVULNERABLE = DataTracker.registerData(DripstonePikeEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> INVULNERABLE = SynchedEntityData.defineId(DripstonePikeEntity.class, EntityDataSerializers.BOOLEAN);
 
-    public DripstonePikeEntity(EntityType<? extends DripstonePikeEntity> entityType, World world) {
+    public DripstonePikeEntity(EntityType<? extends DripstonePikeEntity> entityType, Level world) {
         super(entityType, world);
 
-        noClip = true;
+        noPhysics = true;
     }
 
-    public void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(INVULNERABLE, true);
+    public void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(INVULNERABLE, true);
     }
 
+    @Override
+    @ParametersAreNonnullByDefault
     public boolean isInvulnerableTo(DamageSource damageSource) {
         return damageSource != DamageSource.OUT_OF_WORLD;
     }
 
+    @Override
+
     public boolean isInvulnerable() {
-        return this.dataTracker.get(INVULNERABLE);
+        return this.entityData.get(INVULNERABLE);
     }
 
     @Override
-    public Iterable<ItemStack> getArmorItems() {
+    public Iterable<ItemStack> getArmorSlots() {
         return new ArrayList<ItemStack>() {};
     }
 
     @Override
-    public ItemStack getEquippedStack(EquipmentSlot slot) {
+    public ItemStack getItemBySlot(EquipmentSlot slot) {
         return new ItemStack(Items.DIAMOND, 0);
     }
 
     @Override
-    public void equipStack(EquipmentSlot slot, ItemStack stack) {
+    public void setItemSlot(EquipmentSlot slot, ItemStack stack) {
 
     }
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt) {
 
 
 
-        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+        return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
     @Override
-    public Arm getMainArm() {
-        return Arm.RIGHT;
+    public HumanoidArm getMainArm() {
+        return HumanoidArm.RIGHT;
     }
 
-    public static DefaultAttributeContainer.Builder createDripstonePikeAttributes() {
-        return HostileEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 1)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1);
+    public static AttributeSupplier.Builder createDripstonePikeAttributes() {
+        return Monster.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 1)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1);
     }
 
     @Override
-    public boolean hasNoGravity() {
+    public boolean isNoGravity() {
         return true;
     }
 
@@ -105,16 +117,16 @@ public class DripstonePikeEntity extends MobEntity {
     public void tick() {
         super.tick();
 
-        if (this.age == 5) {
+        if (this.tickCount == 5) {
             BlockPos pos = new BlockPos(this.getX(), this.getY(), this.getZ());
-            Random random = world.getRandom();
+            RandomSource random = level.getRandom();
 
             if (!(random.nextFloat() < 0.9f)) {
-                if (world.getBlockState(pos.up()).isIn(ModTags.PIKE_DESTROYABLES) || world.getBlockState(pos.down()).isIn(ModTags.PIKE_DESTROYABLES)) {
-                    world.playSound(null, pos, SoundEvents.BLOCK_POINTED_DRIPSTONE_LAND, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                    ItemEntity itemEntity = new ItemEntity(this.world, this.getX(), this.getY(), this.getZ(), Items.POINTED_DRIPSTONE.getDefaultStack());
-                    this.world.syncWorldEvent(2001, pos, Block.getRawIdFromState(Blocks.POINTED_DRIPSTONE.getDefaultState()));
-                    this.world.spawnEntity(itemEntity);
+                if (level.getBlockState(pos.above()).is(ModTags.PIKE_DESTROYABLES) || level.getBlockState(pos.below()).is(ModTags.PIKE_DESTROYABLES)) {
+                    level.playSound(null, pos, SoundEvents.POINTED_DRIPSTONE_LAND, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    ItemEntity itemEntity = new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), Items.POINTED_DRIPSTONE.getDefaultInstance());
+                    this.level.levelEvent(2001, pos, Block.getId(Blocks.POINTED_DRIPSTONE.defaultBlockState()));
+                    this.level.addFreshEntity(itemEntity);
                     this.discard();
                 }
             }
@@ -122,14 +134,14 @@ public class DripstonePikeEntity extends MobEntity {
         }
 
 
-        if (this.world.isClient) {
-            this.risingAnimationState.startIfNotRunning(this.age);
+        if (this.level.isClientSide) {
+            this.risingAnimationState.startIfStopped(this.tickCount);
         }
-        if(!world.isClient()) {
+        if(!level.isClientSide()) {
             if(!checkedSight){
                 checkedSight = true;
 
-                if(owner != null && !canSee(owner)){
+                if(owner != null && !hasLineOfSight(owner)){
                     discard();
                 }
             }
@@ -139,19 +151,19 @@ public class DripstonePikeEntity extends MobEntity {
             if(!didDamage && damageDelay <= 0){
                 didDamage = true;
 
-                Box box = new Box(new BlockPos(getPos().getX(), getPos().getY(), getPos().getZ())).expand(.1);
+                AABB box = new AABB(new BlockPos(position().x(), position().y(), position().z())).inflate(.1);
 
-                List<Entity> list = world.getEntitiesByClass(Entity.class, box, (e) -> LivingEntity.class.isAssignableFrom(e.getClass()));
+                List<Entity> list = level.getEntitiesOfClass(Entity.class, box, (e) -> LivingEntity.class.isAssignableFrom(e.getClass()));
 
                 Entity otherEntity;
 
                 for (Entity entity : list) {
                     otherEntity = entity;
 
-                    otherEntity.damage(DamageSource.mobProjectile(this, owner), 8);
+                    otherEntity.hurt(DamageSource.indirectMobAttack(this, owner), 8);
 
-                    if (otherEntity instanceof CreeperEntity) {
-                        otherEntity.damage(DamageSource.mobProjectile(this, owner), 20);
+                    if (otherEntity instanceof Creeper) {
+                        otherEntity.hurt(DamageSource.indirectMobAttack(this, owner), 20);
                     }
                 }
             }

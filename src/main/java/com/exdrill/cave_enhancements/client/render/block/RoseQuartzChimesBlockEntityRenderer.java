@@ -2,26 +2,32 @@ package com.exdrill.cave_enhancements.client.render.block;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
 import com.exdrill.cave_enhancements.block.entity.RoseQuartzChimesBlockEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory.Context;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.texture.SpriteAtlasTexture;
-import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
-
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import java.util.Objects;
 
 public class RoseQuartzChimesBlockEntityRenderer implements BlockEntityRenderer<RoseQuartzChimesBlockEntity> {
 
-    public static final SpriteIdentifier TEXTURE = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(CaveEnhancements.MODID, "entity/rose_quartz_chimes/chime"));
+    public static final Material TEXTURE = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(CaveEnhancements.MODID, "entity/rose_quartz_chimes/chime"));
 
-    public static final EntityModelLayer LAYER_LOCATION = new EntityModelLayer(new Identifier(CaveEnhancements.MODID, "rose_quartz_chimes"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(CaveEnhancements.MODID, "rose_quartz_chimes"), "main");
     private final ModelPart chimes;
     private final ModelPart chime0;
     private final ModelPart chime1;
@@ -31,7 +37,7 @@ public class RoseQuartzChimesBlockEntityRenderer implements BlockEntityRenderer<
     private final ModelPart chime5;
 
     public RoseQuartzChimesBlockEntityRenderer(Context ctx) {
-        ModelPart modelPart = ctx.getLayerModelPart(LAYER_LOCATION);
+        ModelPart modelPart = ctx.bakeLayer(LAYER_LOCATION);
         this.chimes = modelPart.getChild("chimes");
         this.chime0 = this.chimes.getChild("chime0");
         this.chime1 = this.chimes.getChild("chime1");
@@ -41,63 +47,63 @@ public class RoseQuartzChimesBlockEntityRenderer implements BlockEntityRenderer<
         this.chime5 = this.chimes.getChild("chime5");
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData meshdefinition = new ModelData();
-        ModelPartData partdefinition = meshdefinition.getRoot();
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
 
-        ModelPartData chimes = partdefinition.addChild("chimes", ModelPartBuilder.create(), ModelTransform.pivot(8.0F, 12.0F, 8.0F));
+        PartDefinition chimes = partdefinition.addOrReplaceChild("chimes", CubeListBuilder.create(), PartPose.offset(8.0F, 12.0F, 8.0F));
 
-        ModelPartData chime0 = chimes.addChild("chime0", ModelPartBuilder.create().uv(0, 0).cuboid(-1.0F, 2.0F, -1.0F, 2.0F, 10.0F, 2.0F, new Dilation(0.0F))
-                .uv(1, 13).cuboid(0.0F, 0.0F, -0.5F, 0.0F, 2.0F, 1.0F, new Dilation(0.0F))
-                .uv(1, 13).cuboid(-0.5F, 0.0F, 0.0F, 1.0F, 2.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(-5.0F, 0.0F, -5.0F));
+        PartDefinition chime0 = chimes.addOrReplaceChild("chime0", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, 2.0F, -1.0F, 2.0F, 10.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(1, 13).addBox(0.0F, 0.0F, -0.5F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(1, 13).addBox(-0.5F, 0.0F, 0.0F, 1.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-5.0F, 0.0F, -5.0F));
 
-        ModelPartData chime1 = chimes.addChild("chime1", ModelPartBuilder.create().uv(0, 0).cuboid(-1.0F, 2.0F, -1.0F, 2.0F, 10.0F, 2.0F, new Dilation(0.0F))
-                .uv(1, 13).cuboid(0.0F, 0.0F, -0.5F, 0.0F, 2.0F, 1.0F, new Dilation(0.0F))
-                .uv(1, 13).cuboid(-0.5F, 0.0F, 0.0F, 1.0F, 2.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(-5.0F, 0.0F, 0.0F));
+        PartDefinition chime1 = chimes.addOrReplaceChild("chime1", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, 2.0F, -1.0F, 2.0F, 10.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(1, 13).addBox(0.0F, 0.0F, -0.5F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(1, 13).addBox(-0.5F, 0.0F, 0.0F, 1.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-5.0F, 0.0F, 0.0F));
 
-        ModelPartData chime2 = chimes.addChild("chime2", ModelPartBuilder.create().uv(0, 0).cuboid(-1.0F, 2.0F, -1.0F, 2.0F, 10.0F, 2.0F, new Dilation(0.0F))
-                .uv(1, 13).cuboid(0.0F, 0.0F, -0.5F, 0.0F, 2.0F, 1.0F, new Dilation(0.0F))
-                .uv(1, 13).cuboid(-0.5F, 0.0F, 0.0F, 1.0F, 2.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(-5.0F, 0.0F, 5.0F));
+        PartDefinition chime2 = chimes.addOrReplaceChild("chime2", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, 2.0F, -1.0F, 2.0F, 10.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(1, 13).addBox(0.0F, 0.0F, -0.5F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(1, 13).addBox(-0.5F, 0.0F, 0.0F, 1.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-5.0F, 0.0F, 5.0F));
 
-        ModelPartData chime3 = chimes.addChild("chime3", ModelPartBuilder.create().uv(0, 0).cuboid(-1.0F, 2.0F, -1.0F, 2.0F, 10.0F, 2.0F, new Dilation(0.0F))
-                .uv(1, 13).cuboid(0.0F, 0.0F, -0.5F, 0.0F, 2.0F, 1.0F, new Dilation(0.0F))
-                .uv(1, 13).cuboid(-0.5F, 0.0F, 0.0F, 1.0F, 2.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(5.0F, 0.0F, -5.0F));
+        PartDefinition chime3 = chimes.addOrReplaceChild("chime3", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, 2.0F, -1.0F, 2.0F, 10.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(1, 13).addBox(0.0F, 0.0F, -0.5F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(1, 13).addBox(-0.5F, 0.0F, 0.0F, 1.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(5.0F, 0.0F, -5.0F));
 
-        ModelPartData chime4 = chimes.addChild("chime4", ModelPartBuilder.create().uv(0, 0).cuboid(-1.0F, 2.0F, -1.0F, 2.0F, 10.0F, 2.0F, new Dilation(0.0F))
-                .uv(1, 13).cuboid(0.0F, 0.0F, -0.5F, 0.0F, 2.0F, 1.0F, new Dilation(0.0F))
-                .uv(1, 13).cuboid(-0.5F, 0.0F, 0.0F, 1.0F, 2.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(5.0F, 0.0F, 0.0F));
+        PartDefinition chime4 = chimes.addOrReplaceChild("chime4", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, 2.0F, -1.0F, 2.0F, 10.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(1, 13).addBox(0.0F, 0.0F, -0.5F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(1, 13).addBox(-0.5F, 0.0F, 0.0F, 1.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(5.0F, 0.0F, 0.0F));
 
-        ModelPartData chime5 = chimes.addChild("chime5", ModelPartBuilder.create().uv(0, 0).cuboid(-1.0F, 2.0F, -1.0F, 2.0F, 10.0F, 2.0F, new Dilation(0.0F))
-                .uv(1, 13).cuboid(0.0F, 0.0F, -0.5F, 0.0F, 2.0F, 1.0F, new Dilation(0.0F))
-                .uv(1, 13).cuboid(-0.5F, 0.0F, 0.0F, 1.0F, 2.0F, 0.0F, new Dilation(0.0F)), ModelTransform.pivot(5.0F, 0.0F, 5.0F));
+        PartDefinition chime5 = chimes.addOrReplaceChild("chime5", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, 2.0F, -1.0F, 2.0F, 10.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(1, 13).addBox(0.0F, 0.0F, -0.5F, 0.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(1, 13).addBox(-0.5F, 0.0F, 0.0F, 1.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(5.0F, 0.0F, 5.0F));
 
-        return TexturedModelData.of(meshdefinition, 16, 16);
+        return LayerDefinition.create(meshdefinition, 16, 16);
     }
 
     @Override
-    public void render(RoseQuartzChimesBlockEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        this.chimes.pitch = 3.141592653589793F;
+    public void render(RoseQuartzChimesBlockEntity entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
+        this.chimes.xRot = 3.141592653589793F;
         float intensity;
         float g = entity.ticking + tickDelta;
 
-        if (Objects.requireNonNull(entity.getWorld()).isRaining()) {
+        if (Objects.requireNonNull(entity.getLevel()).isRaining()) {
             intensity = 3.1415927F * 2 ;
         } else {
             intensity = 3.1415927F * 4;
         }
 
-        float rot = MathHelper.sin(g / intensity) / 10.0F;
+        float rot = Mth.sin(g / intensity) / 10.0F;
 
-        this.chime0.roll = rot;
-        this.chime1.roll = rot;
-        this.chime2.roll = rot;
-        this.chime3.roll = rot;
-        this.chime4.roll = rot;
-        this.chime5.roll = rot;
+        this.chime0.zRot = rot;
+        this.chime1.zRot = rot;
+        this.chime2.zRot = rot;
+        this.chime3.zRot = rot;
+        this.chime4.zRot = rot;
+        this.chime5.zRot = rot;
 
 
 
-        VertexConsumer vertexConsumer = TEXTURE.getVertexConsumer(vertexConsumers, RenderLayer::getEntityCutout);
+        VertexConsumer vertexConsumer = TEXTURE.buffer(vertexConsumers, RenderType::entityCutout);
         this.chimes.render(matrices, vertexConsumer, light, overlay);
     }
 }

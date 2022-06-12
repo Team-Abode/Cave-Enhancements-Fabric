@@ -1,30 +1,30 @@
 package com.exdrill.cave_enhancements.item;
 
 import com.exdrill.cave_enhancements.entity.CustomBucketable;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FluidFillable;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.LiquidBlockContainer;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 
 public class GoopBucketItem extends BucketItem {
@@ -32,56 +32,56 @@ public class GoopBucketItem extends BucketItem {
     private final EntityType<?> entityType;
     private final SoundEvent emptyingSound;
 
-    public GoopBucketItem(EntityType<?> type, Fluid fluid, SoundEvent emptyingSound, Settings settings) {
+    public GoopBucketItem(EntityType<?> type, Fluid fluid, SoundEvent emptyingSound, Properties settings) {
         super(fluid, settings);
         this.fluid = fluid;
         this.entityType = type;
         this.emptyingSound = emptyingSound;
     }
 
-    public void onEmptied(@Nullable PlayerEntity player, World world, ItemStack stack, BlockPos pos) {
-        if (world instanceof ServerWorld) {
-            this.spawnEntity((ServerWorld)world, stack, pos);
-            world.emitGameEvent(player, GameEvent.ENTITY_PLACE, pos);
-            this.playEmptyingSound(null, world, pos);
+    public void checkExtraContent(@Nullable Player player, Level world, ItemStack stack, BlockPos pos) {
+        if (world instanceof ServerLevel) {
+            this.spawnEntity((ServerLevel)world, stack, pos);
+            world.gameEvent(player, GameEvent.ENTITY_PLACE, pos);
+            this.playEmptySound(null, world, pos);
         }
 
     }
 
-    protected void playEmptyingSound(@Nullable PlayerEntity player, WorldAccess world, BlockPos pos) {
-        world.playSound(player, pos, this.emptyingSound, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+    protected void playEmptySound(@Nullable Player player, LevelAccessor world, BlockPos pos) {
+        world.playSound(player, pos, this.emptyingSound, SoundSource.NEUTRAL, 1.0F, 1.0F);
     }
 
-    private void spawnEntity(ServerWorld world, ItemStack stack, BlockPos pos) {
-        Entity entity = this.entityType.spawnFromItemStack(world, stack, null, pos, SpawnReason.BUCKET, true, false);
+    private void spawnEntity(ServerLevel world, ItemStack stack, BlockPos pos) {
+        Entity entity = this.entityType.spawn(world, stack, null, pos, MobSpawnType.BUCKET, true, false);
         if (entity instanceof CustomBucketable bucketable) {
-            bucketable.copyDataFromNbt(stack.getOrCreateNbt());
+            bucketable.copyDataFromNbt(stack.getOrCreateTag());
             bucketable.setFromBucket(true);
         }
 
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ItemStack itemStack = user.getStackInHand(hand);
-        BlockHitResult blockHitResult = raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
+    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+        ItemStack itemStack = user.getItemInHand(hand);
+        BlockHitResult blockHitResult = getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY);
         if (blockHitResult.getType() == HitResult.Type.MISS) {
-            return TypedActionResult.pass(itemStack);
+            return InteractionResultHolder.pass(itemStack);
         } else if (blockHitResult.getType() != HitResult.Type.BLOCK) {
-            return TypedActionResult.pass(itemStack);
+            return InteractionResultHolder.pass(itemStack);
         } else {
             BlockState blockState;
             BlockPos blockPos = blockHitResult.getBlockPos();
-            Direction direction = blockHitResult.getSide();
-            BlockPos blockPos2 = blockPos.offset(direction);
+            Direction direction = blockHitResult.getDirection();
+            BlockPos blockPos2 = blockPos.relative(direction);
             blockState = world.getBlockState(blockPos);
-            BlockPos blockPos3 = blockState.getBlock() instanceof FluidFillable && this.fluid == Fluids.EMPTY ? blockPos : blockPos2;
-            if (world.canPlayerModifyAt(user, blockPos) && user.canPlaceOn(blockPos2, direction, itemStack)) {
-                this.onEmptied(user, world, itemStack, blockPos3);
-                user.incrementStat(Stats.USED.getOrCreateStat(this));
-                return TypedActionResult.success(getEmptiedStack(itemStack, user), world.isClient());
+            BlockPos blockPos3 = blockState.getBlock() instanceof LiquidBlockContainer && this.fluid == Fluids.EMPTY ? blockPos : blockPos2;
+            if (world.mayInteract(user, blockPos) && user.mayUseItemAt(blockPos2, direction, itemStack)) {
+                this.checkExtraContent(user, world, itemStack, blockPos3);
+                user.awardStat(Stats.ITEM_USED.get(this));
+                return InteractionResultHolder.sidedSuccess(getEmptySuccessItem(itemStack, user), world.isClientSide());
             } else {
-                return TypedActionResult.fail(itemStack);
+                return InteractionResultHolder.fail(itemStack);
             }
         }
     }

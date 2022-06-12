@@ -2,19 +2,19 @@ package com.exdrill.cave_enhancements.client.render.entity;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
 import com.exdrill.cave_enhancements.entity.HarmonicArrowEntity;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.ProjectileEntityRenderer;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.entity.ArrowRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 
-public class JingleArrowEntityRenderer extends ProjectileEntityRenderer<HarmonicArrowEntity> {
-    public static final Identifier TEXTURE = new Identifier(CaveEnhancements.MODID, "textures/entity/harmonic_arrow.png");
+public class JingleArrowEntityRenderer extends ArrowRenderer<HarmonicArrowEntity> {
+    public static final ResourceLocation TEXTURE = new ResourceLocation(CaveEnhancements.MODID, "textures/entity/harmonic_arrow.png");
 
-    public JingleArrowEntityRenderer(EntityRendererFactory.Context context) {
+    public JingleArrowEntityRenderer(EntityRendererProvider.Context context) {
         super(context);
     }
 
     @Override
-    public Identifier getTexture(HarmonicArrowEntity entity) {
+    public ResourceLocation getTextureLocation(HarmonicArrowEntity entity) {
         return TEXTURE;
     }
 }

@@ -2,41 +2,41 @@ package com.exdrill.cave_enhancements.entity;
 
 import com.exdrill.cave_enhancements.registry.ModItems;
 import com.exdrill.cave_enhancements.registry.ModSounds;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityGroup;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
-public class GoopEntity extends HostileEntity implements CustomBucketable {
-    private static final TrackedData<Boolean> FROM_BUCKET = DataTracker.registerData(GoopEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> STICKING_UP = DataTracker.registerData(GoopEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+public class GoopEntity extends Monster implements CustomBucketable {
+    private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(GoopEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> STICKING_UP = SynchedEntityData.defineId(GoopEntity.class, EntityDataSerializers.BOOLEAN);
 
-    public World world;
+    public Level level;
 
-    public GoopEntity(EntityType<? extends GoopEntity> entityType, World world) {
+    public GoopEntity(EntityType<? extends GoopEntity> entityType, Level world) {
         super(entityType, world);
-        this.experiencePoints = 5;
-        this.world = world;
+        this.xpReward = 5;
+        this.level = world;
     }
 
     // Sounds
@@ -49,35 +49,35 @@ public class GoopEntity extends HostileEntity implements CustomBucketable {
     }
 
     // Attributes
-    public static DefaultAttributeContainer.Builder createGoopAttributes() {
-        return HostileEntity.createHostileAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.0D)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 15)
-                .add(EntityAttributes.GENERIC_ARMOR, 2);
+    public static AttributeSupplier.Builder createGoopAttributes() {
+        return Monster.createMonsterAttributes()
+                .add(Attributes.MOVEMENT_SPEED, 0.0D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
+                .add(Attributes.MAX_HEALTH, 15)
+                .add(Attributes.ARMOR, 2);
     }
 
     // Mob Group
-    public EntityGroup getGroup() {
-        return EntityGroup.DEFAULT;
+    public MobType getMobType() {
+        return MobType.UNDEFINED;
     }
 
     // Nbt Related Stuff
-    public void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(FROM_BUCKET, false);
-        this.dataTracker.startTracking(STICKING_UP, false);
+    public void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(FROM_BUCKET, false);
+        this.entityData.define(STICKING_UP, false);
     }
 
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
+    public void addAdditionalSaveData(CompoundTag nbt) {
+        super.addAdditionalSaveData(nbt);
 
         nbt.putBoolean("FromBucket", this.isFromBucket());
         nbt.putBoolean("StickingUp", this.isStickingUp());
     }
 
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
+    public void readAdditionalSaveData(CompoundTag nbt) {
+        super.readAdditionalSaveData(nbt);
 
         setFromBucket(nbt.getBoolean("FromBucket"));
         setStickingUp(nbt.getBoolean("StickingUp"));
@@ -85,11 +85,11 @@ public class GoopEntity extends HostileEntity implements CustomBucketable {
 
     public void copyDataToStack(ItemStack stack) {
         CustomBucketable.copyDataToStack(this, stack);
-        NbtCompound nbtCompound = stack.getOrCreateNbt();
+        CompoundTag nbtCompound = stack.getOrCreateTag();
     }
 
     @Override
-    public void copyDataFromNbt(NbtCompound nbt) {
+    public void copyDataFromNbt(CompoundTag nbt) {
         CustomBucketable.copyDataFromNbt(this, nbt);
 
         if (nbt.contains("StickingUp")) {
@@ -98,22 +98,22 @@ public class GoopEntity extends HostileEntity implements CustomBucketable {
     }
 
     public boolean isFromBucket() {
-        return this.dataTracker.get(FROM_BUCKET);
+        return this.entityData.get(FROM_BUCKET);
     }
     public boolean isStickingUp() {
-        return this.dataTracker.get(STICKING_UP);
+        return this.entityData.get(STICKING_UP);
     }
 
     public void setFromBucket(boolean fromBucket) {
-        this.dataTracker.set(FROM_BUCKET, fromBucket);
+        this.entityData.set(FROM_BUCKET, fromBucket);
     }
 
     public void setStickingUp(boolean stickingUp) {
-        this.dataTracker.set(STICKING_UP, stickingUp);
+        this.entityData.set(STICKING_UP, stickingUp);
     }
 
     // Components
-    public boolean canBreatheInWater() {
+    public boolean canBreatheUnderwater() {
         return false;
     }
 
@@ -123,86 +123,86 @@ public class GoopEntity extends HostileEntity implements CustomBucketable {
     }
 
     // Bucket Components
-    public ActionResult interactMob(PlayerEntity player, Hand hand) {
-        return CustomBucketable.tryBucket(player, hand, this).orElse(super.interactMob(player, hand));
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        return CustomBucketable.tryBucket(player, hand, this).orElse(super.mobInteract(player, hand));
     }
     public ItemStack getBucketItem() {
         return new ItemStack(ModItems.GOOP_BUCKET);
     }
 
     public SoundEvent getBucketedSound() {
-        return SoundEvents.ITEM_BUCKET_FILL;
+        return SoundEvents.BUCKET_FILL;
     }
 
     // Despawn Components
-    public boolean cannotDespawn() {
-        return super.cannotDespawn() || this.isFromBucket();
+    public boolean requiresCustomPersistence() {
+        return super.requiresCustomPersistence() || this.isFromBucket();
     }
 
-    public boolean canImmediatelyDespawn(double distanceSquared) {
+    public boolean removeWhenFarAway(double distanceSquared) {
         return !this.isFromBucket() && !this.hasCustomName();
     }
 
 
     //Spawn Event
-    public EntityData initialize(ServerWorldAccess serverWorld, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        world = serverWorld.toServerWorld();
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverWorld, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt) {
+        level = serverWorld.getLevel();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
         double origY = y;
         BlockPos blockUpPos = new BlockPos(x, y + 1, z);
-        if (spawnReason != SpawnReason.NATURAL) {
-            if (serverWorld.getBlockState(blockUpPos).isSolidSurface(world, blockUpPos, this, Direction.DOWN)) {
+        if (spawnReason != MobSpawnType.NATURAL) {
+            if (serverWorld.getBlockState(blockUpPos).entityCanStandOnFace(level, blockUpPos, this, Direction.DOWN)) {
                 setStickingUp(true);
             }
         }
-        if (spawnReason == SpawnReason.NATURAL) {
-            if (!world.isClient()) {
-                while(y < world.getTopY() && !serverWorld.getBlockState(blockUpPos).isSolidSurface(world, blockUpPos, this, Direction.DOWN)){
+        if (spawnReason == MobSpawnType.NATURAL) {
+            if (!level.isClientSide()) {
+                while(y < level.getMaxBuildHeight() && !serverWorld.getBlockState(blockUpPos).entityCanStandOnFace(level, blockUpPos, this, Direction.DOWN)){
                     x = this.getX();
                     y = this.getY();
                     z = this.getZ();
-                    teleport(x, y + 0.1D, z);
+                    teleportToWithTicket(x, y + 0.1D, z);
                     y = this.getY();
                     blockUpPos = new BlockPos(x, y + 1, z);
                 }
-                if(y >= world.getTopY()){
+                if(y >= level.getMaxBuildHeight()){
                     y = origY;
-                    teleport(x, y + 0.1D, z);
+                    teleportToWithTicket(x, y + 0.1D, z);
                 }
             }
 
 
             setStickingUp(true);
         }
-        if (spawnReason == SpawnReason.BUCKET) {
+        if (spawnReason == MobSpawnType.BUCKET) {
             return entityData;
         }
-        return super.initialize(serverWorld, difficulty, spawnReason, entityData, entityNbt);
+        return super.finalizeSpawn(serverWorld, difficulty, spawnReason, entityData, entityNbt);
     }
 
     //Tick for checking if sticking up
     @Override
-    public void tickMovement() {
-        if(!world.isClient){
+    public void aiStep() {
+        if(!level.isClientSide){
             if(isStickingUp()) {
-                this.setVelocity(this.getVelocity().multiply(0D, 0D, 0D));
+                this.setDeltaMovement(this.getDeltaMovement().multiply(0D, 0D, 0D));
 
-                if (world != null) {
+                if (level != null) {
                     double x = this.getX();
                     double y = this.getY();
                     double z = this.getZ();
 
                     BlockPos blockUpPos = new BlockPos(x, y + 1, z);
 
-                    if(!world.getBlockState(blockUpPos).isSolidSurface(world, blockUpPos, this, Direction.DOWN)){
+                    if(!level.getBlockState(blockUpPos).entityCanStandOnFace(level, blockUpPos, this, Direction.DOWN)){
                         setStickingUp(false);
                     }
                 }
             }
         }
-        super.tickMovement();
+        super.aiStep();
     }
 
     public int dripCooldown = 12;
@@ -211,18 +211,18 @@ public class GoopEntity extends HostileEntity implements CustomBucketable {
 
     //Tick For Spawning Drip
     @Override
-    public void mobTick() {
+    public void customServerAiStep() {
        dripCooldown--;
 
        if(dripCooldown <= 0){
            dripCooldown = 12;
 
-           if(getRandom().nextBetween(1, 100) == 1) {
+           if(getRandom().nextIntBetweenInclusive(1, 100) == 1) {
                drip();
            }
        }
 
-       super.mobTick();
+       super.customServerAiStep();
     }
 
     //Spawn Drip Entity
@@ -232,8 +232,8 @@ public class GoopEntity extends HostileEntity implements CustomBucketable {
             double y = this.getY();
             double z = this.getZ();
 
-            BigGoopDripProjectile bigGoopDripEntity = new BigGoopDripProjectile(world, x, y, z);
-            world.spawnEntity(bigGoopDripEntity);
+            BigGoopDripProjectile bigGoopDripEntity = new BigGoopDripProjectile(level, x, y, z);
+            level.addFreshEntity(bigGoopDripEntity);
         }
     }
 }

@@ -6,96 +6,100 @@ import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
-
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.AbstractCandleBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.List;
 import java.util.function.ToIntFunction;
 
-public class SpectacleCandleBlock extends AbstractSpectacleCandleBlock implements BlockEntityProvider  {
+public class SpectacleCandleBlock extends AbstractSpectacleCandleBlock implements EntityBlock  {
     public static final int field_31050 = 1;
     public static final int field_31051 = 4;
-    public static final IntProperty CANDLES;
+    public static final IntegerProperty CANDLES;
     public static final BooleanProperty LIT;
     public static final BooleanProperty WATERLOGGED;
     public static final ToIntFunction<BlockState> STATE_TO_LUMINANCE;
-    private static final Int2ObjectMap<List<Vec3d>> CANDLES_TO_PARTICLE_OFFSETS;
+    private static final Int2ObjectMap<List<Vec3>> CANDLES_TO_PARTICLE_OFFSETS;
     private static final VoxelShape ONE_CANDLE_SHAPE;
     private static final VoxelShape TWO_CANDLES_SHAPE;
     private static final VoxelShape THREE_CANDLES_SHAPE;
     private static final VoxelShape FOUR_CANDLES_SHAPE;
 
-    public SpectacleCandleBlock(Settings settings) {
+    public SpectacleCandleBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(CANDLES, 1).with(LIT, false).with(WATERLOGGED, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(CANDLES, 1).setValue(LIT, false).setValue(WATERLOGGED, false));
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new SpectacleCandleBlockEntity(pos, state);
     }
 
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (player.getAbilities().allowModifyWorld && player.getStackInHand(hand).isEmpty() && state.get(LIT)) {
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (player.getAbilities().mayBuild && player.getItemInHand(hand).isEmpty() && state.getValue(LIT)) {
             extinguish(player, state, world, pos);
-            return ActionResult.success(world.isClient);
+            return InteractionResult.sidedSuccess(world.isClientSide);
         } else {
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         }
     }
 
-    public boolean canReplace(BlockState state, ItemPlacementContext context) {
-        return !context.shouldCancelInteraction() && context.getStack().getItem() == this.asItem() && state.get(CANDLES) < 4 || super.canReplace(state, context);
+    public boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
+        return !context.isSecondaryUseActive() && context.getItemInHand().getItem() == this.asItem() && state.getValue(CANDLES) < 4 || super.canBeReplaced(state, context);
     }
 
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        BlockState blockState = ctx.getWorld().getBlockState(ctx.getBlockPos());
-        if (blockState.isOf(this)) {
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        BlockState blockState = ctx.getLevel().getBlockState(ctx.getClickedPos());
+        if (blockState.is(this)) {
             return blockState.cycle(CANDLES);
         } else {
-            FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
-            boolean bl = fluidState.getFluid() == Fluids.WATER;
-            return super.getPlacementState(ctx).with(WATERLOGGED, bl);
+            FluidState fluidState = ctx.getLevel().getFluidState(ctx.getClickedPos());
+            boolean bl = fluidState.getType() == Fluids.WATER;
+            return super.getStateForPlacement(ctx).setValue(WATERLOGGED, bl);
         }
     }
 
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-        if (state.get(WATERLOGGED)) {
-            world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+        if (state.getValue(WATERLOGGED)) {
+            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
         }
 
-        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return super.updateShape(state, direction, neighborState, world, pos, neighborPos);
     }
 
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        switch(state.get(CANDLES)) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        switch(state.getValue(CANDLES)) {
             case 1:
             default:
                 return ONE_CANDLE_SHAPE;
@@ -108,24 +112,24 @@ public class SpectacleCandleBlock extends AbstractSpectacleCandleBlock implement
         }
     }
 
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(CANDLES, LIT, WATERLOGGED);
     }
 
-    public boolean tryFillWithFluid(WorldAccess world, BlockPos pos, BlockState state, FluidState fluidState) {
-        if (!(Boolean)state.get(WATERLOGGED) && fluidState.getFluid() == Fluids.WATER) {
-            BlockState blockState = state.with(WATERLOGGED, true);
-            if (state.get(LIT)) {
+    public boolean tryFillWithFluid(LevelAccessor world, BlockPos pos, BlockState state, FluidState fluidState) {
+        if (!(Boolean)state.getValue(WATERLOGGED) && fluidState.getType() == Fluids.WATER) {
+            BlockState blockState = state.setValue(WATERLOGGED, true);
+            if (state.getValue(LIT)) {
                 extinguish(null, blockState, world, pos);
             } else {
-                world.setBlockState(pos, blockState, 3);
+                world.setBlock(pos, blockState, 3);
             }
 
-            world.createAndScheduleFluidTick(pos, fluidState.getFluid(), fluidState.getFluid().getTickRate(world));
+            world.scheduleTick(pos, fluidState.getType(), fluidState.getType().getTickDelay(world));
             return true;
         } else {
             return false;
@@ -133,43 +137,43 @@ public class SpectacleCandleBlock extends AbstractSpectacleCandleBlock implement
     }
 
     public static boolean canBeLit(BlockState state) {
-        return state.isIn(BlockTags.CANDLES, (statex) -> statex.contains(LIT) && statex.contains(WATERLOGGED)) && !(Boolean)state.get(LIT) && !(Boolean)state.get(WATERLOGGED);
+        return state.is(BlockTags.CANDLES, (statex) -> statex.hasProperty(LIT) && statex.hasProperty(WATERLOGGED)) && !(Boolean)state.getValue(LIT) && !(Boolean)state.getValue(WATERLOGGED);
     }
 
-    protected Iterable<Vec3d> getParticleOffsets(BlockState state) {
-        return CANDLES_TO_PARTICLE_OFFSETS.get(state.get(CANDLES));
+    protected Iterable<Vec3> getParticleOffsets(BlockState state) {
+        return CANDLES_TO_PARTICLE_OFFSETS.get(state.getValue(CANDLES));
     }
 
     protected boolean isNotLit(BlockState state) {
-        return !(Boolean)state.get(WATERLOGGED) && super.isNotLit(state);
+        return !(Boolean)state.getValue(WATERLOGGED) && super.isNotLit(state);
     }
 
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        return Block.sideCoversSmallSquare(world, pos.down(), Direction.UP);
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+        return Block.canSupportCenter(world, pos.below(), Direction.UP);
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, ModBlocks.SPECTACLE_CANDLE_BLOCK_ENTITY, SpectacleCandleBlockEntity::tick);
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+        return createTickerHelper(type, ModBlocks.SPECTACLE_CANDLE_BLOCK_ENTITY, SpectacleCandleBlockEntity::tick);
     }
 
     static {
-        CANDLES = Properties.CANDLES;
+        CANDLES = BlockStateProperties.CANDLES;
         LIT = AbstractCandleBlock.LIT;
-        WATERLOGGED = Properties.WATERLOGGED;
-        STATE_TO_LUMINANCE = (state) -> (Boolean)state.get(LIT) ? 3 * state.get(CANDLES) : 0;
+        WATERLOGGED = BlockStateProperties.WATERLOGGED;
+        STATE_TO_LUMINANCE = (state) -> (Boolean)state.getValue(LIT) ? 3 * state.getValue(CANDLES) : 0;
         CANDLES_TO_PARTICLE_OFFSETS = Util.make(() -> {
-            Int2ObjectMap<List<Vec3d>> int2ObjectMap = new Int2ObjectOpenHashMap();
+            Int2ObjectMap<List<Vec3>> int2ObjectMap = new Int2ObjectOpenHashMap();
             int2ObjectMap.defaultReturnValue(ImmutableList.of());
-            int2ObjectMap.put(1, ImmutableList.of(new Vec3d(0.5D, 0.5D, 0.5D)));
-            int2ObjectMap.put(2, ImmutableList.of(new Vec3d(0.375D, 0.44D, 0.5D), new Vec3d(0.625D, 0.5D, 0.44D)));
-            int2ObjectMap.put(3, ImmutableList.of(new Vec3d(0.5D, 0.313D, 0.625D), new Vec3d(0.375D, 0.44D, 0.5D), new Vec3d(0.56D, 0.5D, 0.44D)));
-            int2ObjectMap.put(4, ImmutableList.of(new Vec3d(0.44D, 0.313D, 0.56D), new Vec3d(0.625D, 0.44D, 0.56D), new Vec3d(0.375D, 0.44D, 0.375D), new Vec3d(0.56D, 0.5D, 0.375D)));
+            int2ObjectMap.put(1, ImmutableList.of(new Vec3(0.5D, 0.5D, 0.5D)));
+            int2ObjectMap.put(2, ImmutableList.of(new Vec3(0.375D, 0.44D, 0.5D), new Vec3(0.625D, 0.5D, 0.44D)));
+            int2ObjectMap.put(3, ImmutableList.of(new Vec3(0.5D, 0.313D, 0.625D), new Vec3(0.375D, 0.44D, 0.5D), new Vec3(0.56D, 0.5D, 0.44D)));
+            int2ObjectMap.put(4, ImmutableList.of(new Vec3(0.44D, 0.313D, 0.56D), new Vec3(0.625D, 0.44D, 0.56D), new Vec3(0.375D, 0.44D, 0.375D), new Vec3(0.56D, 0.5D, 0.375D)));
             return Int2ObjectMaps.unmodifiable(int2ObjectMap);
         });
-        ONE_CANDLE_SHAPE = Block.createCuboidShape(7.0D, 0.0D, 7.0D, 9.0D, 6.0D, 9.0D);
-        TWO_CANDLES_SHAPE = Block.createCuboidShape(5.0D, 0.0D, 6.0D, 11.0D, 6.0D, 9.0D);
-        THREE_CANDLES_SHAPE = Block.createCuboidShape(5.0D, 0.0D, 6.0D, 10.0D, 6.0D, 11.0D);
-        FOUR_CANDLES_SHAPE = Block.createCuboidShape(5.0D, 0.0D, 5.0D, 11.0D, 6.0D, 10.0D);
+        ONE_CANDLE_SHAPE = Block.box(7.0D, 0.0D, 7.0D, 9.0D, 6.0D, 9.0D);
+        TWO_CANDLES_SHAPE = Block.box(5.0D, 0.0D, 6.0D, 11.0D, 6.0D, 9.0D);
+        THREE_CANDLES_SHAPE = Block.box(5.0D, 0.0D, 6.0D, 10.0D, 6.0D, 11.0D);
+        FOUR_CANDLES_SHAPE = Block.box(5.0D, 0.0D, 5.0D, 11.0D, 6.0D, 10.0D);
     }
 }

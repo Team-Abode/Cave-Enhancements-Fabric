@@ -20,21 +20,20 @@ import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
-import net.minecraft.client.texture.SpriteAtlasTexture;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.phys.Vec3;
 import java.util.UUID;
 
 @Environment(EnvType.CLIENT)
 public class CaveEnhancementsClient implements ClientModInitializer {
 
-    public static final Identifier PacketID = new Identifier(CaveEnhancements.MODID, "spawn_packet");
+    public static final ResourceLocation PacketID = new ResourceLocation(CaveEnhancements.MODID, "spawn_packet");
 
     @Override
     public void onInitializeClient() {
@@ -47,7 +46,7 @@ public class CaveEnhancementsClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.CRUNCHER, CruncherEntityRenderer::new);
         EntityRendererRegistry.register(ModEntities.DRIPSTONE_TORTOISE, DripstoneTortoiseEntityRenderer::new);
         EntityRendererRegistry.register(ModEntities.DRIPSTONE_PIKE, DripstonePikeEntityRenderer::new);
-        EntityRendererRegistry.register(ModEntities.BIG_GOOP_DRIP_PROJECTILE_ENTITY, FlyingItemEntityRenderer::new);
+        EntityRendererRegistry.register(ModEntities.BIG_GOOP_DRIP_PROJECTILE_ENTITY, ThrownItemRenderer::new);
         EntityRendererRegistry.register(ModEntities.HARMONIC_ARROW, JingleArrowEntityRenderer::new);
 
 
@@ -60,8 +59,8 @@ public class CaveEnhancementsClient implements ClientModInitializer {
 
         // Block Entity Renderers
         BlockEntityRendererRegistry.register(ModBlocks.ROSE_QUARTZ_CHIMES_BLOCK_ENTITY, RoseQuartzChimesBlockEntityRenderer::new);
-        ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) ->
-                registry.register(new Identifier(CaveEnhancements.MODID, "entity/rose_quartz_chimes/chime")));
+        ClientSpriteRegistryCallback.event(TextureAtlas.LOCATION_BLOCKS).register((atlasTexture, registry) ->
+                registry.register(new ResourceLocation(CaveEnhancements.MODID, "entity/rose_quartz_chimes/chime")));
 
         // Particle Factory
         ParticleFactoryRegistry.getInstance().register(ModParticles.SHOCKWAVE, ShockwaveParticle.Factory::new);
@@ -77,27 +76,27 @@ public class CaveEnhancementsClient implements ClientModInitializer {
     //For spawning projectiles
     public void receiveEntityPacket() {
         ClientPlayNetworking.registerGlobalReceiver(PacketID, ((client, handler, buf, responseSender) -> {
-            EntityType<?> entityType = Registry.ENTITY_TYPE.get(buf.readVarInt());
-            UUID uuid = buf.readUuid();
+            EntityType<?> entityType = Registry.ENTITY_TYPE.byId(buf.readVarInt());
+            UUID uuid = buf.readUUID();
             int entityId = buf.readVarInt();
-            Vec3d pos = EntitySpawnPacket.PacketBufUtil.readVec3d(buf);
+            Vec3 pos = EntitySpawnPacket.PacketBufUtil.readVec3d(buf);
             float pitch = EntitySpawnPacket.PacketBufUtil.readAngle(buf);
             float yaw = EntitySpawnPacket.PacketBufUtil.readAngle(buf);
-            client.executeTask(() -> {
-               if (MinecraftClient.getInstance().world == null)
+            client.doRunTask(() -> {
+               if (Minecraft.getInstance().level == null)
                    throw new IllegalStateException("Cannot spawn entity without world!");
 
-               Entity entity = entityType.create(MinecraftClient.getInstance().world);
+               Entity entity = entityType.create(Minecraft.getInstance().level);
                if (entity == null)
                    throw new IllegalStateException("Cannot create entity of type " + entityType);
 
-               entity.updateTrackedPosition(pos.x, pos.y, pos.z);
-               entity.setPos(pos.x, pos.y, pos.z);
-               entity.setYaw(yaw);
-               entity.setPitch(pitch);
+               entity.syncPacketPositionCodec(pos.x, pos.y, pos.z);
+               entity.setPosRaw(pos.x, pos.y, pos.z);
+               entity.setYRot(yaw);
+               entity.setXRot(pitch);
                entity.setId(entityId);
-               entity.setUuid(uuid);
-               MinecraftClient.getInstance().world.addEntity(entityId, entity);
+               entity.setUUID(uuid);
+               Minecraft.getInstance().level.putNonPlayerEntity(entityId, entity);
             });
         }));
     }

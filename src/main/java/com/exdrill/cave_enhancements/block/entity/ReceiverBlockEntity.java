@@ -3,18 +3,17 @@ package com.exdrill.cave_enhancements.block.entity;
 import com.exdrill.cave_enhancements.block.OxidizableReceiverBlock;
 import com.exdrill.cave_enhancements.block.ReceiverBlock;
 import com.exdrill.cave_enhancements.registry.ModBlocks;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Oxidizable;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LightningEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.world.World;
-
 import java.util.List;
 import java.util.Optional;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.WeatheringCopper;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 public class ReceiverBlockEntity extends BlockEntity {
 
@@ -24,29 +23,29 @@ public class ReceiverBlockEntity extends BlockEntity {
         super(ModBlocks.RECEIVER_BLOCK_ENTITY, pos, state);
     }
 
-    public void tick(World world, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+    public void tick(Level world, BlockPos pos, BlockState state, BlockEntity blockEntity) {
         ReceiverBlock block = (ReceiverBlock) state.getBlock();
         int maxPower = block.getMaxPower();
 
-        if (state.get(ReceiverBlock.POWERED)) {
+        if (state.getValue(ReceiverBlock.POWERED)) {
             this.poweredTicks++;
         } else {
-            world.setBlockState(pos, state.with(ReceiverBlock.CAN_PASS, false));
+            world.setBlockAndUpdate(pos, state.setValue(ReceiverBlock.CAN_PASS, false));
             poweredTicks = 0;
         }
         if (poweredTicks == maxPower) {
-            world.setBlockState(pos, state.with(ReceiverBlock.CAN_PASS, true));
+            world.setBlockAndUpdate(pos, state.setValue(ReceiverBlock.CAN_PASS, true));
         }
 
-        List<Entity> list = world.getEntitiesByClass(Entity.class, new Box(pos).expand(5), (e) -> true);
+        List<Entity> list = world.getEntitiesOfClass(Entity.class, new AABB(pos).inflate(5), (e) -> true);
 
         if (block instanceof OxidizableReceiverBlock) {
             for (Entity entity : list) {
-                if (entity instanceof LightningEntity && entity.age % 5 == 0) {
-                    Optional<BlockState> optionalReceiver = Oxidizable.getDecreasedOxidationState(state);
+                if (entity instanceof LightningBolt && entity.tickCount % 5 == 0) {
+                    Optional<BlockState> optionalReceiver = WeatheringCopper.getPrevious(state);
                     if (optionalReceiver.isPresent()) {
-                        world.syncWorldEvent(3005, pos, 0);
-                        world.setBlockState(pos, optionalReceiver.get(), 11);
+                        world.levelEvent(3005, pos, 0);
+                        world.setBlock(pos, optionalReceiver.get(), 11);
                     }
                 }
             }
@@ -54,16 +53,16 @@ public class ReceiverBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt) {
+    protected void saveAdditional(CompoundTag nbt) {
         nbt.putInt("PoweredTicks", this.poweredTicks);
-        this.markDirty();
-        super.writeNbt(nbt);
+        this.setChanged();
+        super.saveAdditional(nbt);
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
+    public void load(CompoundTag nbt) {
         this.poweredTicks = nbt.getInt("PoweredTicks");
-        super.readNbt(nbt);
+        super.load(nbt);
     }
 
 

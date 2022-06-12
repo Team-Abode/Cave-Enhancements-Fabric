@@ -2,17 +2,23 @@ package com.exdrill.cave_enhancements.client.render.entity.model;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
 import com.exdrill.cave_enhancements.entity.CruncherEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.*;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Mob;
 
-public class CruncherEntityModel<E extends MobEntity> extends EntityModel<CruncherEntity> {
-    public static final EntityModelLayer ENTITY_MODEL_LAYER = new EntityModelLayer(new Identifier(CaveEnhancements.MODID, "cruncher"), "main");
+public class CruncherEntityModel<E extends Mob> extends EntityModel<CruncherEntity> {
+    public static final ModelLayerLocation ENTITY_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CaveEnhancements.MODID, "cruncher"), "main");
 
     private final ModelPart root;
     private final ModelPart body;
@@ -40,52 +46,45 @@ public class CruncherEntityModel<E extends MobEntity> extends EntityModel<Crunch
 
     }
 
+    public static LayerDefinition getTexturedModelData() {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition ModelPartData = meshdefinition.getRoot();
+        PartDefinition root = ModelPartData.addOrReplaceChild("root", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
+        PartDefinition body = root.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 26).addBox(-3.0F, -2.5F, -3.0F, 6.0F, 2.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -2.0F, 0.0F));
+        PartDefinition leg3 = body.addOrReplaceChild("leg3", CubeListBuilder.create().texOffs(0, 18).addBox(-1.0F, -0.5F, -2.0F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(2.25F, -0.5F, -1.25F));
+        PartDefinition leg2 = body.addOrReplaceChild("leg2", CubeListBuilder.create().texOffs(0, 18).mirror().addBox(-1.0F, -0.5F, -2.0F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-2.25F, -0.5F, -1.25F));
+        PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, -1.0F, 0.0F));
+        PartDefinition upperJaw = head.addOrReplaceChild("upper_jaw", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -4.0F, -10.0F, 8.0F, 3.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -3.0F, 4.0F));
+        PartDefinition mossCap = upperJaw.addOrReplaceChild("moss_cap", CubeListBuilder.create().texOffs(0, 51).addBox(-4.0F, -4.0F, -10.0F, 8.0F, 3.0F, 10.0F, new CubeDeformation(0.25F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition lowerJaw = head.addOrReplaceChild("lower_jaw", CubeListBuilder.create().texOffs(0, 13).addBox(-4.0F, -1.0F, -10.0F, 8.0F, 3.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -3.0F, 4.0F));
+        PartDefinition leg0 = root.addOrReplaceChild("leg0", CubeListBuilder.create().texOffs(0, 18).mirror().addBox(-1.0F, -0.5F, -2.0F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-2.25F, -2.5F, 3.25F));
+        PartDefinition leg1 = root.addOrReplaceChild("leg1", CubeListBuilder.create().texOffs(0, 18).addBox(-1.0F, -0.5F, -2.0F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(2.25F, -2.5F, 3.25F));
+
+        return LayerDefinition.create(meshdefinition, 64, 64);
+    }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
         root.render(matrices, vertices, light, overlay, red, green, blue, alpha);
     }
 
-    public static TexturedModelData getTexturedModelData() {
-        ModelData meshdefinition = new ModelData();
-        ModelPartData ModelPartData = meshdefinition.getRoot();
-        ModelPartData root = ModelPartData.addChild("root", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 24.0F, 0.0F));
-        ModelPartData body = root.addChild("body", ModelPartBuilder.create().uv(0, 26).cuboid(-3.0F, -2.5F, -3.0F, 6.0F, 2.0F, 6.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -2.0F, 0.0F));
-        ModelPartData leg3 = body.addChild("leg3", ModelPartBuilder.create().uv(0, 18).cuboid(-1.0F, -0.5F, -2.0F, 2.0F, 3.0F, 2.0F, new Dilation(0.0F)), ModelTransform.pivot(2.25F, -0.5F, -1.25F));
-        ModelPartData leg2 = body.addChild("leg2", ModelPartBuilder.create().uv(0, 18).mirrored().cuboid(-1.0F, -0.5F, -2.0F, 2.0F, 3.0F, 2.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.pivot(-2.25F, -0.5F, -1.25F));
-        ModelPartData head = body.addChild("head", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, -1.0F, 0.0F));
-        ModelPartData upperJaw = head.addChild("upper_jaw", ModelPartBuilder.create().uv(0, 0).cuboid(-4.0F, -4.0F, -10.0F, 8.0F, 3.0F, 10.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -3.0F, 4.0F));
-        ModelPartData mossCap = upperJaw.addChild("moss_cap", ModelPartBuilder.create().uv(0, 51).cuboid(-4.0F, -4.0F, -10.0F, 8.0F, 3.0F, 10.0F, new Dilation(0.25F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        ModelPartData lowerJaw = head.addChild("lower_jaw", ModelPartBuilder.create().uv(0, 13).cuboid(-4.0F, -1.0F, -10.0F, 8.0F, 3.0F, 10.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -3.0F, 4.0F));
-        ModelPartData leg0 = root.addChild("leg0", ModelPartBuilder.create().uv(0, 18).mirrored().cuboid(-1.0F, -0.5F, -2.0F, 2.0F, 3.0F, 2.0F, new Dilation(0.0F)).mirrored(false), ModelTransform.pivot(-2.25F, -2.5F, 3.25F));
-        ModelPartData leg1 = root.addChild("leg1", ModelPartBuilder.create().uv(0, 18).cuboid(-1.0F, -0.5F, -2.0F, 2.0F, 3.0F, 2.0F, new Dilation(0.0F)), ModelTransform.pivot(2.25F, -2.5F, 3.25F));
-
-        return TexturedModelData.of(meshdefinition, 64, 64);
-    }
-
     @Override
-    public void animateModel(CruncherEntity entity, float limbAngle, float limbDistance, float tickDelta) {
-        super.animateModel(entity, limbAngle, limbDistance, tickDelta);
+    public void setupAnim(CruncherEntity entity, float f, float g, float h, float i, float j) {
 
-    }
-
-    @Override
-    public void setAngles(CruncherEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-
-        this.head.yaw = headYaw * 0.017453292F;
-        this.leg0.pitch = MathHelper.cos(limbAngle * 1.1F) * 1.4F * limbDistance;
-        this.leg1.pitch = MathHelper.cos(limbAngle * 1.1F + 3.1415927F) * 3F * limbDistance;
-        this.leg2.pitch = MathHelper.cos(limbAngle * 1.1F + 3.1415927F) * 3F * limbDistance;
-        this.leg3.pitch = MathHelper.cos(limbAngle * 1.1F) * 3F * limbDistance;
+        this.head.yRot = i * 0.017453292F;
+        this.leg0.xRot = Mth.cos(f * 1.1F) * 1.4F * g;
+        this.leg1.xRot = Mth.cos(f * 1.1F + 3.1415927F) * 3F * g;
+        this.leg2.xRot = Mth.cos(f * 1.1F + 3.1415927F) * 3F * g;
+        this.leg3.xRot = Mth.cos(f * 1.1F) * 3F * g;
 
         if (entity.isEating()) {
-            this.head.pitch = -5F;
-            this.upperJaw.pitch = -MathHelper.cos(animationProgress * 0.8F) * 0.1F;
-            this.lowerJaw.pitch = MathHelper.cos(animationProgress * 0.8F) * 0.1F;
+            this.head.xRot = -5F;
+            this.upperJaw.xRot = -Mth.cos(h * 0.8F) * 0.1F;
+            this.lowerJaw.xRot = Mth.cos(h * 0.8F) * 0.1F;
         } else if (!entity.isEating()) {
-            this.head.pitch = headPitch * 0.017453292F;
-            this.upperJaw.pitch = 0.0F;
-            this.lowerJaw.pitch = -0.0F;
+            this.head.xRot = j * 0.017453292F;
+            this.upperJaw.xRot = 0.0F;
+            this.lowerJaw.xRot = -0.0F;
         }
         this.mossCap.visible = !entity.hasBeenSheared();
 

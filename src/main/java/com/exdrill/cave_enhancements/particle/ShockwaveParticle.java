@@ -1,45 +1,45 @@
 package com.exdrill.cave_enhancements.particle;
 
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Camera;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleFactory;
-import net.minecraft.client.particle.ParticleTextureSheet;
-import net.minecraft.client.particle.SpriteProvider;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 
 @Environment(EnvType.CLIENT)
 public class ShockwaveParticle extends Particle {
-    protected Sprite sprite;
+    protected TextureAtlasSprite sprite;
     protected float scale;
 
-    ShockwaveParticle(ClientWorld world, double x, double y, double z, double d) {
+    ShockwaveParticle(ClientLevel world, double x, double y, double z, double d) {
         super(world, x, y, z, 0.0D, 0.0D, 0.0D);
         this.scale = 1;
-        this.velocityX = 0;
-        this.velocityY = 0;
-        this.velocityZ = 0;
-        this.red = 1;
-        this.green = 1;
-        this.blue = 1;
-        this.maxAge = 5;
+        this.xd = 0;
+        this.yd = 0;
+        this.zd = 0;
+        this.rCol = 1;
+        this.gCol = 1;
+        this.bCol = 1;
+        this.lifetime = 5;
         this.setColor(1, 1, 1);
     }
 
-    public void buildGeometry(VertexConsumer vertexConsumer, Camera camera, float tickDelta) {
-        Vec3d cameraPos = camera.getPos();
+    public void render(VertexConsumer vertexConsumer, Camera camera, float tickDelta) {
+        Vec3 cameraPos = camera.getPosition();
 
-        float x = (float)(MathHelper.lerp(tickDelta, this.prevPosX, this.x) - cameraPos.getX());
-        float y = (float)(MathHelper.lerp(tickDelta, this.prevPosY, this.y) - cameraPos.getY());
-        float z = (float)(MathHelper.lerp(tickDelta, this.prevPosZ, this.z) - cameraPos.getZ());
+        float x = (float)(Mth.lerp(tickDelta, this.xo, this.x) - cameraPos.x());
+        float y = (float)(Mth.lerp(tickDelta, this.yo, this.y) - cameraPos.y());
+        float z = (float)(Mth.lerp(tickDelta, this.zo, this.z) - cameraPos.z());
 
         float size = this.getSize(tickDelta) * this.age / 20F * 25F + tickDelta / 20F * 25F;
 
@@ -71,37 +71,37 @@ public class ShockwaveParticle extends Particle {
     }
 
     public void addBand(VertexConsumer vertexConsumer, float xVO, float yVO, float size, float x, float y, float z, float minU, float maxU, float minV, float maxV, int light, float rotation){
-        Vec3f[] vertices = new Vec3f[]{new Vec3f(-xVO * size, -yVO, 0.0F), new Vec3f(-xVO * size, yVO, 0.0F), new Vec3f(xVO * size, yVO, 0.0F), new Vec3f(xVO * size, -yVO, 0.0F)};
+        Vector3f[] vertices = new Vector3f[]{new Vector3f(-xVO * size, -yVO, 0.0F), new Vector3f(-xVO * size, yVO, 0.0F), new Vector3f(xVO * size, yVO, 0.0F), new Vector3f(xVO * size, -yVO, 0.0F)};
 
-        Quaternion quaternion = Quaternion.fromEulerXyzDegrees(new Vec3f(0, rotation, 0));
+        Quaternion quaternion = Quaternion.fromXYZDegrees(new Vector3f(0, rotation, 0));
 
         for(int i = 0; i < 4; ++i) {
-            Vec3f vec3f = vertices[i];
-            vec3f.rotate(quaternion);
+            Vector3f vec3f = vertices[i];
+            vec3f.transform(quaternion);
             vec3f.add(x, y, z);
         }
 
-        vertexConsumer.vertex(vertices[0].getX(), vertices[0].getY(), vertices[0].getZ()).texture(maxU, maxV).color(this.red, this.green, this.blue, this.alpha).light(light).next();
-        vertexConsumer.vertex(vertices[1].getX(), vertices[1].getY(), vertices[1].getZ()).texture(maxU, minV).color(this.red, this.green, this.blue, this.alpha).light(light).next();
-        vertexConsumer.vertex(vertices[2].getX(), vertices[2].getY(), vertices[2].getZ()).texture(minU, minV).color(this.red, this.green, this.blue, this.alpha).light(light).next();
-        vertexConsumer.vertex(vertices[3].getX(), vertices[3].getY(), vertices[3].getZ()).texture(minU, maxV).color(this.red, this.green, this.blue, this.alpha).light(light).next();
+        vertexConsumer.vertex(vertices[0].x(), vertices[0].y(), vertices[0].z()).uv(maxU, maxV).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
+        vertexConsumer.vertex(vertices[1].x(), vertices[1].y(), vertices[1].z()).uv(maxU, minV).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
+        vertexConsumer.vertex(vertices[2].x(), vertices[2].y(), vertices[2].z()).uv(minU, minV).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
+        vertexConsumer.vertex(vertices[3].x(), vertices[3].y(), vertices[3].z()).uv(minU, maxV).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
 
-        vertices = new Vec3f[]{new Vec3f(xVO * size, -yVO, 0.0F), new Vec3f(xVO * size, yVO, 0.0F), new Vec3f(-xVO * size, yVO, 0.0F), new Vec3f(-xVO * size, -yVO, 0.0F)};
+        vertices = new Vector3f[]{new Vector3f(xVO * size, -yVO, 0.0F), new Vector3f(xVO * size, yVO, 0.0F), new Vector3f(-xVO * size, yVO, 0.0F), new Vector3f(-xVO * size, -yVO, 0.0F)};
 
         for(int i = 0; i < 4; ++i) {
-            Vec3f vec3f = vertices[i];
-            vec3f.rotate(quaternion);
+            Vector3f vec3f = vertices[i];
+            vec3f.transform(quaternion);
             vec3f.add(x, y, z);
         }
 
-        vertexConsumer.vertex(vertices[0].getX(), vertices[0].getY(), vertices[0].getZ()).texture(maxU, maxV).color(this.red, this.green, this.blue, this.alpha).light(light).next();
-        vertexConsumer.vertex(vertices[1].getX(), vertices[1].getY(), vertices[1].getZ()).texture(maxU, minV).color(this.red, this.green, this.blue, this.alpha).light(light).next();
-        vertexConsumer.vertex(vertices[2].getX(), vertices[2].getY(), vertices[2].getZ()).texture(minU, minV).color(this.red, this.green, this.blue, this.alpha).light(light).next();
-        vertexConsumer.vertex(vertices[3].getX(), vertices[3].getY(), vertices[3].getZ()).texture(minU, maxV).color(this.red, this.green, this.blue, this.alpha).light(light).next();
+        vertexConsumer.vertex(vertices[0].x(), vertices[0].y(), vertices[0].z()).uv(maxU, maxV).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
+        vertexConsumer.vertex(vertices[1].x(), vertices[1].y(), vertices[1].z()).uv(maxU, minV).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
+        vertexConsumer.vertex(vertices[2].x(), vertices[2].y(), vertices[2].z()).uv(minU, minV).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
+        vertexConsumer.vertex(vertices[3].x(), vertices[3].y(), vertices[3].z()).uv(minU, maxV).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
     }
 
-    public ParticleTextureSheet getType() {
-        return ParticleTextureSheet.PARTICLE_SHEET_OPAQUE;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     public float getSize(float tickDelta) {
@@ -109,41 +109,41 @@ public class ShockwaveParticle extends Particle {
     }
 
     @Environment(EnvType.CLIENT)
-    public static class Factory implements ParticleFactory<DefaultParticleType> {
-        private final SpriteProvider spriteProvider;
+    public static class Factory implements ParticleProvider<SimpleParticleType> {
+        private final SpriteSet spriteProvider;
 
-        public Factory(SpriteProvider spriteProvider) {
+        public Factory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(DefaultParticleType defaultParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
             ShockwaveParticle shockwave = new ShockwaveParticle(clientWorld, d, e, f, g);
             shockwave.setSprite(this.spriteProvider);
             return shockwave;
         }
     }
 
-    protected void setSprite(Sprite sprite) {
+    protected void setSprite(TextureAtlasSprite sprite) {
         this.sprite = sprite;
     }
 
     protected float getMinU() {
-        return this.sprite.getMinU();
+        return this.sprite.getU0();
     }
 
     protected float getMaxU() {
-        return this.sprite.getMaxU();
+        return this.sprite.getU1();
     }
 
     protected float getMinV() {
-        return this.sprite.getMinV();
+        return this.sprite.getV0();
     }
 
     protected float getMaxV() {
-        return this.sprite.getMaxV();
+        return this.sprite.getV1();
     }
 
-    public void setSprite(SpriteProvider spriteProvider) {
-        this.setSprite(spriteProvider.getSprite(this.random));
+    public void setSprite(SpriteSet spriteProvider) {
+        this.setSprite(spriteProvider.get(this.random));
     }
 }

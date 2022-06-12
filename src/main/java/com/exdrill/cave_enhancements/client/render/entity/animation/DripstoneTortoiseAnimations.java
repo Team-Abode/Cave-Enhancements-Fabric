@@ -2,56 +2,56 @@ package com.exdrill.cave_enhancements.client.render.entity.animation;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.animation.Animation;
-import net.minecraft.client.render.entity.animation.Animation.Builder;
-import net.minecraft.client.render.entity.animation.AnimationHelper;
-import net.minecraft.client.render.entity.animation.Keyframe;
-import net.minecraft.client.render.entity.animation.Transformation;
-import net.minecraft.client.render.entity.animation.Transformation.Interpolations;
-import net.minecraft.client.render.entity.animation.Transformation.Targets;
+import net.minecraft.client.animation.AnimationChannel;
+import net.minecraft.client.animation.AnimationChannel.Interpolations;
+import net.minecraft.client.animation.AnimationChannel.Targets;
+import net.minecraft.client.animation.AnimationDefinition;
+import net.minecraft.client.animation.AnimationDefinition.Builder;
+import net.minecraft.client.animation.Keyframe;
+import net.minecraft.client.animation.KeyframeAnimations;
 
 @Environment(EnvType.CLIENT)
 public class DripstoneTortoiseAnimations {
 
-    public static final Animation STOMPING;
-    public static final Animation RISING;
+    public static final AnimationDefinition STOMPING;
+    public static final AnimationDefinition RISING;
 
     // field_37884 = LINEAR
     // field_37885 = CATMULLROM
 
     static {
-        STOMPING = Builder.create(0.52F)
-                .addBoneAnimation("body",
-                        new Transformation(Targets.ROTATE,
-                                new Keyframe(0.0F, AnimationHelper.method_41829(0.0F, 0.0F, 0.0F), Interpolations.field_37885),
-                                new Keyframe(0.16F, AnimationHelper.method_41829(0.0F, 0.0F, 12.5F), Interpolations.field_37885),
-                                new Keyframe(0.28F, AnimationHelper.method_41829(0.0F, 0.0F, 0.0F), Interpolations.field_37885)))
-                .addBoneAnimation("head",
-                        new Transformation(Targets.ROTATE,
-                                new Keyframe(0.0F, AnimationHelper.method_41829(0.0F, 0.0F, 0.0F), Interpolations.field_37885),
-                                new Keyframe(0.16F, AnimationHelper.method_41829(-25.0F, 0.0F, 0.0F), Interpolations.field_37885),
-                                new Keyframe(0.28F, AnimationHelper.method_41829(20.0F, 0.0F, 0.0F), Interpolations.field_37885),
-                                new Keyframe(0.48F, AnimationHelper.method_41829(0.0F, 0.0F, 0.0F), Interpolations.field_37885)))
-                .addBoneAnimation("leg0", new Transformation(Targets.ROTATE,
-                                new Keyframe(0.0F, AnimationHelper.method_41829(0.0F, 0.0F, 0.0F), Interpolations.field_37885),
-                                new Keyframe(0.16F, AnimationHelper.method_41829(0.0F, 0.0F, 45.0F), Interpolations.field_37885),
-                                new Keyframe(0.28F, AnimationHelper.method_41829(0.0F, 0.0F, 0.0F), Interpolations.field_37885)))
-                .addBoneAnimation("leg1", new Transformation(Targets.ROTATE,
-                        new Keyframe(0.0F, AnimationHelper.method_41829(0.0F, 0.0F, 0.0F), Interpolations.field_37885),
-                        new Keyframe(0.16F, AnimationHelper.method_41829(0.0F, 0.0F, 22.5F), Interpolations.field_37885),
-                        new Keyframe(0.28F, AnimationHelper.method_41829(0.0F, 0.0F, 0.0F), Interpolations.field_37885)))
+        STOMPING = Builder.withLength(0.52F)
+                .addAnimation("body",
+                        new AnimationChannel(Targets.ROTATION,
+                                new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
+                                new Keyframe(0.16F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 12.5F), Interpolations.CATMULLROM),
+                                new Keyframe(0.28F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM)))
+                .addAnimation("head",
+                        new AnimationChannel(Targets.ROTATION,
+                                new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
+                                new Keyframe(0.16F, KeyframeAnimations.degreeVec(-25.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
+                                new Keyframe(0.28F, KeyframeAnimations.degreeVec(20.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
+                                new Keyframe(0.48F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM)))
+                .addAnimation("leg0", new AnimationChannel(Targets.ROTATION,
+                                new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
+                                new Keyframe(0.16F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 45.0F), Interpolations.CATMULLROM),
+                                new Keyframe(0.28F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM)))
+                .addAnimation("leg1", new AnimationChannel(Targets.ROTATION,
+                        new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
+                        new Keyframe(0.16F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 22.5F), Interpolations.CATMULLROM),
+                        new Keyframe(0.28F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM)))
                 .build();
 
-        RISING = Builder.create(0.6F)
-                .addBoneAnimation("pike", new Transformation(Targets.SCALE,
-                        new Keyframe(0.0F, AnimationHelper.method_41822(0.0F, 0.0F, 0.0F), Interpolations.field_37884),
-                        new Keyframe(0.1F, AnimationHelper.method_41822(1.0F, 1.0F, 1.0F), Interpolations.field_37884)))
+        RISING = Builder.withLength(0.6F)
+                .addAnimation("pike", new AnimationChannel(Targets.SCALE,
+                        new Keyframe(0.0F, KeyframeAnimations.scaleVec(0.0F, 0.0F, 0.0F), Interpolations.LINEAR),
+                        new Keyframe(0.1F, KeyframeAnimations.scaleVec(1.0F, 1.0F, 1.0F), Interpolations.LINEAR)))
 
-                .addBoneAnimation("pike",
-                        new Transformation(Targets.TRANSLATE,
-                            new Keyframe(0.0F, AnimationHelper.method_41823(0.0F, 0.0F, 0.0F), Interpolations.field_37884),
-                            new Keyframe(0.1F, AnimationHelper.method_41823(0.0F, 24.0F, 0.0F), Interpolations.field_37884),
-                            new Keyframe( 0.5F, AnimationHelper.method_41823(0.0F, 24.0F, 0.0F), Interpolations.field_37884),
-                            new Keyframe(0.6F, AnimationHelper.method_41823(0.0F, 0.0F, 0.0F), Interpolations.field_37884))).build();
+                .addAnimation("pike",
+                        new AnimationChannel(Targets.POSITION,
+                            new Keyframe(0.0F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), Interpolations.LINEAR),
+                            new Keyframe(0.1F, KeyframeAnimations.posVec(0.0F, 24.0F, 0.0F), Interpolations.LINEAR),
+                            new Keyframe( 0.5F, KeyframeAnimations.posVec(0.0F, 24.0F, 0.0F), Interpolations.LINEAR),
+                            new Keyframe(0.6F, KeyframeAnimations.posVec(0.0F, 0.0F, 0.0F), Interpolations.LINEAR))).build();
     }
 }

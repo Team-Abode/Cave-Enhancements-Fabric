@@ -2,22 +2,24 @@ package com.exdrill.cave_enhancements.mixin;
 
 
 import com.exdrill.cave_enhancements.registry.ModParticles;
-import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.core.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(WorldRenderer.class)
+@Mixin(LevelRenderer.class)
 public class WorldRendererMixin {
 
-    @Shadow
-    private ClientWorld world;
+    private ClientLevel world;
 
-    @Inject(method = "processWorldEvent", at = @At("TAIL"))
+    public WorldRendererMixin(ClientLevel world) {
+        this.world = world;
+    }
+
+    @Inject(method = "levelEvent", at = @At("TAIL"))
     private void processWorldEvent(int eventId, BlockPos pos, int data, CallbackInfo ci) {
         switch (eventId) {
             case 5190: {

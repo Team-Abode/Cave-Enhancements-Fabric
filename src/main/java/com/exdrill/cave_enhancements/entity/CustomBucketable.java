@@ -1,19 +1,19 @@
 package com.exdrill.cave_enhancements.entity;
 
 import java.util.Optional;
-import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 
 public interface CustomBucketable {
     boolean isFromBucket();
@@ -22,32 +22,32 @@ public interface CustomBucketable {
 
     void copyDataToStack(ItemStack stack);
 
-    void copyDataFromNbt(NbtCompound nbt);
+    void copyDataFromNbt(CompoundTag nbt);
 
     ItemStack getBucketItem();
 
     SoundEvent getBucketedSound();
 
-    static void copyDataToStack(MobEntity entity, ItemStack stack) {
-        NbtCompound nbtCompound = stack.getOrCreateNbt();
+    static void copyDataToStack(Mob entity, ItemStack stack) {
+        CompoundTag nbtCompound = stack.getOrCreateTag();
         if (entity.hasCustomName()) {
-            stack.setCustomName(entity.getCustomName());
+            stack.setHoverName(entity.getCustomName());
         }
 
-        if (entity.isAiDisabled()) {
-            nbtCompound.putBoolean("NoAI", entity.isAiDisabled());
+        if (entity.isNoAi()) {
+            nbtCompound.putBoolean("NoAI", entity.isNoAi());
         }
 
         if (entity.isSilent()) {
             nbtCompound.putBoolean("Silent", entity.isSilent());
         }
 
-        if (entity.hasNoGravity()) {
-            nbtCompound.putBoolean("NoGravity", entity.hasNoGravity());
+        if (entity.isNoGravity()) {
+            nbtCompound.putBoolean("NoGravity", entity.isNoGravity());
         }
 
-        if (entity.isGlowingLocal()) {
-            nbtCompound.putBoolean("Glowing", entity.isGlowingLocal());
+        if (entity.hasGlowingTag()) {
+            nbtCompound.putBoolean("Glowing", entity.hasGlowingTag());
         }
 
         if (entity.isInvulnerable()) {
@@ -57,9 +57,9 @@ public interface CustomBucketable {
         nbtCompound.putFloat("Health", entity.getHealth());
     }
 
-    static void copyDataFromNbt(MobEntity entity, NbtCompound nbt) {
+    static void copyDataFromNbt(Mob entity, CompoundTag nbt) {
         if (nbt.contains("NoAI")) {
-            entity.setAiDisabled(nbt.getBoolean("NoAI"));
+            entity.setNoAi(nbt.getBoolean("NoAI"));
         }
 
         if (nbt.contains("Silent")) {
@@ -71,7 +71,7 @@ public interface CustomBucketable {
         }
 
         if (nbt.contains("Glowing")) {
-            entity.setGlowing(nbt.getBoolean("Glowing"));
+            entity.setGlowingTag(nbt.getBoolean("Glowing"));
         }
 
         if (nbt.contains("Invulnerable")) {
@@ -84,21 +84,21 @@ public interface CustomBucketable {
 
     }
 
-    static <T extends LivingEntity & CustomBucketable> Optional<ActionResult> tryBucket(PlayerEntity player, Hand hand, T entity) {
-        ItemStack itemStack = player.getStackInHand(hand);
+    static <T extends LivingEntity & CustomBucketable> Optional<InteractionResult> tryBucket(Player player, InteractionHand hand, T entity) {
+        ItemStack itemStack = player.getItemInHand(hand);
         if (itemStack.getItem() == Items.BUCKET && entity.isAlive()) {
             entity.playSound(((CustomBucketable)entity).getBucketedSound(), 1.0F, 1.0F);
             ItemStack itemStack2 = ((CustomBucketable)entity).getBucketItem();
             ((CustomBucketable)entity).copyDataToStack(itemStack2);
-            ItemStack itemStack3 = ItemUsage.exchangeStack(itemStack, player, itemStack2, false);
-            player.setStackInHand(hand, itemStack3);
-            World world = entity.world;
-            if (!world.isClient) {
-                Criteria.FILLED_BUCKET.trigger((ServerPlayerEntity)player, itemStack2);
+            ItemStack itemStack3 = ItemUtils.createFilledResult(itemStack, player, itemStack2, false);
+            player.setItemInHand(hand, itemStack3);
+            Level world = entity.level;
+            if (!world.isClientSide) {
+                CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer)player, itemStack2);
             }
 
             entity.discard();
-            return Optional.of(ActionResult.success(world.isClient));
+            return Optional.of(InteractionResult.sidedSuccess(world.isClientSide));
         } else {
             return Optional.empty();
         }

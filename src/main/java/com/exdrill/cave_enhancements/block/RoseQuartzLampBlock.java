@@ -1,26 +1,30 @@
 package com.exdrill.cave_enhancements.block;
 
-import net.minecraft.block.*;
-import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-public class RoseQuartzLampBlock extends Block implements Waterloggable {
+public class RoseQuartzLampBlock extends Block implements SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED;
     public static final DirectionProperty FACING;
     public static final VoxelShape NORTH_SHAPE;
@@ -30,26 +34,26 @@ public class RoseQuartzLampBlock extends Block implements Waterloggable {
     public static final VoxelShape UP_SHAPE;
     public static final VoxelShape DOWN_SHAPE;
 
-    public RoseQuartzLampBlock(Settings settings) {
+    public RoseQuartzLampBlock(Properties settings) {
         super(settings);
     }
 
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(WATERLOGGED, FACING);
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return getShape(state);
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return getShape(state);
     }
 
     public VoxelShape getShape(BlockState state) {
-        Direction direction = state.get(FACING);
+        Direction direction = state.getValue(FACING);
         return switch (direction) {
             case NORTH -> NORTH_SHAPE;
             case SOUTH -> SOUTH_SHAPE;
@@ -60,53 +64,53 @@ public class RoseQuartzLampBlock extends Block implements Waterloggable {
         };
     }
 
-    public BlockState mirror(BlockState state, BlockMirror mirror) {
-        return state.rotate(mirror.getRotation(state.get(FACING)));
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
-    public PistonBehavior getPistonBehavior(BlockState state) {
-        return PistonBehavior.DESTROY;
+    public PushReaction getPistonPushReaction(BlockState state) {
+        return PushReaction.DESTROY;
     }
 
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        Direction direction = state.get(FACING);
-        BlockPos blockPos = pos.offset(direction.getOpposite());
-        return world.getBlockState(blockPos).isSideSolidFullSquare(world, blockPos, direction);
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+        Direction direction = state.getValue(FACING);
+        BlockPos blockPos = pos.relative(direction.getOpposite());
+        return world.getBlockState(blockPos).isFaceSturdy(world, blockPos, direction);
     }
 
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-        if (state.get(WATERLOGGED)) {
-            world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+        if (state.getValue(WATERLOGGED)) {
+            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
         }
 
-        return direction == state.get(FACING).getOpposite() && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+        return direction == state.getValue(FACING).getOpposite() && !state.canSurvive(world, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Nullable
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        WorldAccess worldAccess = ctx.getWorld();
-        BlockPos blockPos = ctx.getBlockPos();
-        return this.getDefaultState().with(WATERLOGGED, worldAccess.getFluidState(blockPos).getFluid() == Fluids.WATER).with(FACING, ctx.getSide());
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        LevelAccessor worldAccess = ctx.getLevel();
+        BlockPos blockPos = ctx.getClickedPos();
+        return this.defaultBlockState().setValue(WATERLOGGED, worldAccess.getFluidState(blockPos).getType() == Fluids.WATER).setValue(FACING, ctx.getClickedFace());
     }
 
-    public BlockState rotate(BlockState state, BlockRotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+    public BlockState rotate(BlockState state, Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
 
     static {
-        WATERLOGGED = Properties.WATERLOGGED;
-        FACING = Properties.FACING;
-        NORTH_SHAPE = VoxelShapes.union(Block.createCuboidShape(4.0D, 4.0D, 2.0D, 12.0D, 12.0D, 12.0D), Block.createCuboidShape(7.0D, 7.0D, 12.0D, 9.0D, 9.0D, 16.0D));
-        SOUTH_SHAPE = VoxelShapes.union(Block.createCuboidShape(4.0D, 4.0D, 4.0D, 12.0D, 12.0D, 14.0D), Block.createCuboidShape(7D, 7D, 0D, 9D, 9D, 0D));
-        EAST_SHAPE = VoxelShapes.union(Block.createCuboidShape(4.0D, 4.0D, 4.0D, 14.0D, 12.0D, 12.0D), Block.createCuboidShape(0D, 7D, 7D, 4D, 9D, 9D));
-        WEST_SHAPE = VoxelShapes.union(Block.createCuboidShape(2.0D, 4.0D, 4.0D, 12.0D, 12.0D, 12.0D), Block.createCuboidShape(12D, 7D, 7D, 16D, 9D, 9D));
-        UP_SHAPE = VoxelShapes.union(Block.createCuboidShape(4.0D, 4.0D, 4.0D, 12.0D, 14.0D, 12.0D), Block.createCuboidShape(7.0D, 0.0D, 7.0D, 9.0D, 4.0D, 9.0D));
-        DOWN_SHAPE = VoxelShapes.union(Block.createCuboidShape(4.0D, 2.0D, 4.0D, 12.0D, 12.0D, 12.0D), Block.createCuboidShape(7.0D, 12.0D, 7.0D, 9.0D, 16.0D, 9.0D));
+        WATERLOGGED = BlockStateProperties.WATERLOGGED;
+        FACING = BlockStateProperties.FACING;
+        NORTH_SHAPE = Shapes.or(Block.box(4.0D, 4.0D, 2.0D, 12.0D, 12.0D, 12.0D), Block.box(7.0D, 7.0D, 12.0D, 9.0D, 9.0D, 16.0D));
+        SOUTH_SHAPE = Shapes.or(Block.box(4.0D, 4.0D, 4.0D, 12.0D, 12.0D, 14.0D), Block.box(7D, 7D, 0D, 9D, 9D, 0D));
+        EAST_SHAPE = Shapes.or(Block.box(4.0D, 4.0D, 4.0D, 14.0D, 12.0D, 12.0D), Block.box(0D, 7D, 7D, 4D, 9D, 9D));
+        WEST_SHAPE = Shapes.or(Block.box(2.0D, 4.0D, 4.0D, 12.0D, 12.0D, 12.0D), Block.box(12D, 7D, 7D, 16D, 9D, 9D));
+        UP_SHAPE = Shapes.or(Block.box(4.0D, 4.0D, 4.0D, 12.0D, 14.0D, 12.0D), Block.box(7.0D, 0.0D, 7.0D, 9.0D, 4.0D, 9.0D));
+        DOWN_SHAPE = Shapes.or(Block.box(4.0D, 2.0D, 4.0D, 12.0D, 12.0D, 12.0D), Block.box(7.0D, 12.0D, 7.0D, 9.0D, 16.0D, 9.0D));
 
     }
 }
