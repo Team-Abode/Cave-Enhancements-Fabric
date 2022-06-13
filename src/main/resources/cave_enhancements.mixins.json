@@ -4,17 +4,17 @@
   "package": "com.exdrill.cave_enhancements.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-  "BrewingRecipeRegistryMixin",
-    "CreeperEntityMixin",
-    "DispenserBehaviorMixin",
+    "PotionBrewingMixin",
+    "CreeperMixin",
+    "DispenserItemBehaviorMixin",
     "EnchantmentMixin",
-    "PhantomEntityMixin",
+    "PhantomMixin",
     "RedstoneWireBlockMixin",
-    "UnbreakingEnchantmentMixin",
-    "VanillaBiomeParametersMixin"
+    "DigDurabilityEnchantmentMixin",
+    "OverworldBiomeBuilderMixin"
   ],
   "client": [
-    "WorldRendererMixin",
+    "LevelRendererMixin",
     "ItemRendererMixin",
     "ModelBakeryMixin"
   ],

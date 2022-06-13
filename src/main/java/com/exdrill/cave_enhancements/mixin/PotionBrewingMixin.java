@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PotionBrewing.class)
-public abstract class BrewingRecipeRegistryMixin {
+public abstract class PotionBrewingMixin {
 
     @Shadow
     private static void addMix(Potion potion, Item item, Potion potion2) {

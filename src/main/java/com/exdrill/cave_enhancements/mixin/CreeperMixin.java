@@ -12,9 +12,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Creeper.class)
-public abstract class CreeperEntityMixin extends Monster {
-    protected CreeperEntityMixin(EntityType<? extends Monster> entityType, Level world) {
-        super(entityType, world);
+public abstract class CreeperMixin extends Monster {
+    protected CreeperMixin(EntityType<? extends Monster> entityType, Level level) {
+        super(entityType, level);
     }
 
     @Inject(method = "registerGoals", at = @At("HEAD"))

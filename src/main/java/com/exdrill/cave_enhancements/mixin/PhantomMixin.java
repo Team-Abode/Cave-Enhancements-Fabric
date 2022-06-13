@@ -13,7 +13,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Phantom;
 
 @Mixin(targets = "net.minecraft.world.entity.monster.Phantom$PhantomSweepAttackGoal")
-public abstract class PhantomEntityMixin extends Goal {
+public abstract class PhantomMixin extends Goal {
     @Final
     Phantom field_7333;
 

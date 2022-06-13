@@ -18,10 +18,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ModelBakeryMixin {
 
 
-    @Shadow protected abstract void loadModel(ResourceLocation resourceLocation) throws Exception;
+    @Shadow protected abstract void loadTopLevel(ModelResourceLocation modelResourceLocation);
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resources/model/ModelBakery;loadTopLevel(Lnet/minecraft/client/resources/model/ModelResourceLocation;)V", ordinal = 3, shift = At.Shift.BEFORE))
     private void inject(ResourceManager resourceManager, BlockColors blockColors, ProfilerFiller profiler, int i, CallbackInfo ci) throws Exception {
-        this.loadModel(new ModelResourceLocation("cave_enhancements:amethyst_flute_in_hand#inventory"));
+        this.loadTopLevel(new ModelResourceLocation("cave_enhancements:amethyst_flute_in_hand#inventory"));
     }
 }

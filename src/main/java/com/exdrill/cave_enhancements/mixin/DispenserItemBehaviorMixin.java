@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(DispenseItemBehavior.class)
-public interface DispenserBehaviorMixin {
+public interface DispenserItemBehaviorMixin {
 
     @Inject(method = "bootStrap", at = @At("HEAD"))
     private static void registerDefaults(CallbackInfo ci) {
