@@ -1,7 +1,7 @@
 package com.exdrill.cave_enhancements.client.model;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
-import com.exdrill.cave_enhancements.client.animation.DripstoneTortoiseAnimations;
+import com.exdrill.cave_enhancements.client.animation.DripstoneTortoiseAnimation;
 import com.exdrill.cave_enhancements.entity.DripstonePike;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -14,12 +14,12 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 
-public class DripstonePikeEntityModel<T extends DripstonePike> extends HierarchicalModel<T> {
+public class DripstonePikeModel<T extends DripstonePike> extends HierarchicalModel<T> {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(CaveEnhancements.MODID, "dripstone_pike"), "main");
 	private final ModelPart root;
 	private final ModelPart pike;
 
-	public DripstonePikeEntityModel(ModelPart root) {
+	public DripstonePikeModel(ModelPart root) {
 		this.root = root.getChild("root");
 		this.pike = this.root.getChild("pike");
 	}
@@ -48,6 +48,6 @@ public class DripstonePikeEntityModel<T extends DripstonePike> extends Hierarchi
 	@Override
 	public void setupAnim(T entity, float f, float g, float h, float i, float j) {
 		this.root.getAllParts().forEach(ModelPart::resetPose);
-		this.animate(entity.risingAnimationState, DripstoneTortoiseAnimations.RISING, h);
+		this.animate(entity.risingAnimationState, DripstoneTortoiseAnimation.RISING, h);
 	}
 }

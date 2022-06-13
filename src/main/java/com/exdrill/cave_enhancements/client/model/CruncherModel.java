@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
 
-public class CruncherEntityModel<E extends Mob> extends EntityModel<Cruncher> {
+public class CruncherModel<E extends Mob> extends EntityModel<Cruncher> {
     public static final ModelLayerLocation ENTITY_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CaveEnhancements.MODID, "cruncher"), "main");
 
     private final ModelPart root;
@@ -32,7 +32,7 @@ public class CruncherEntityModel<E extends Mob> extends EntityModel<Cruncher> {
     private final ModelPart mossCap;
 
 
-    public CruncherEntityModel(ModelPart modelPart) {
+    public CruncherModel(ModelPart modelPart) {
         this.root = modelPart.getChild("root");
         this.body = root.getChild("body");
         this.leg0 = root.getChild("leg0");

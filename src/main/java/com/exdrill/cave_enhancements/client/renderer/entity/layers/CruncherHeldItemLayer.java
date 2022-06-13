@@ -1,6 +1,6 @@
 package com.exdrill.cave_enhancements.client.renderer.entity.layers;
 
-import com.exdrill.cave_enhancements.client.model.CruncherEntityModel;
+import com.exdrill.cave_enhancements.client.model.CruncherModel;
 import com.exdrill.cave_enhancements.entity.Cruncher;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
@@ -15,11 +15,11 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
 @Environment(EnvType.CLIENT)
-public class CruncherHeldItemLayer extends RenderLayer<Cruncher, CruncherEntityModel<Cruncher>> {
+public class CruncherHeldItemLayer extends RenderLayer<Cruncher, CruncherModel<Cruncher>> {
 
     private final ItemInHandRenderer heldItemRenderer;
 
-    public CruncherHeldItemLayer(RenderLayerParent<Cruncher, CruncherEntityModel<Cruncher>> featureRendererContext, ItemInHandRenderer heldItemRenderer) {
+    public CruncherHeldItemLayer(RenderLayerParent<Cruncher, CruncherModel<Cruncher>> featureRendererContext, ItemInHandRenderer heldItemRenderer) {
         super(featureRendererContext);
         this.heldItemRenderer = heldItemRenderer;
     }

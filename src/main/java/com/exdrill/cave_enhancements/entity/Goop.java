@@ -14,10 +14,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
@@ -27,6 +24,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class Goop extends Monster implements GoopBucketable {
     private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(Goop.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> STICKING_UP = SynchedEntityData.defineId(Goop.class, EntityDataSerializers.BOOLEAN);
@@ -50,12 +50,14 @@ public class Goop extends Monster implements GoopBucketable {
 
     // Attributes
     public static AttributeSupplier.Builder createGoopAttributes() {
-        return Monster.createMonsterAttributes()
+        return Mob.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
                 .add(Attributes.MAX_HEALTH, 15)
                 .add(Attributes.ARMOR, 2);
     }
+
+
 
     // Mob Group
     public MobType getMobType() {
@@ -85,7 +87,7 @@ public class Goop extends Monster implements GoopBucketable {
 
     public void copyDataToStack(ItemStack stack) {
         GoopBucketable.copyDataToStack(this, stack);
-        CompoundTag nbtCompound = stack.getOrCreateTag();
+        stack.getOrCreateTag();
     }
 
     @Override

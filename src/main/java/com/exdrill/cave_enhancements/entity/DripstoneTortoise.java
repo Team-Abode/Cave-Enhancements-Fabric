@@ -40,9 +40,11 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.EnumSet;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class DripstoneTortoise extends PathfinderMob implements NeutralMob {
     private static final EntityDataAccessor<Integer> ANGER = SynchedEntityData.defineId(DripstoneTortoise.class, EntityDataSerializers.INT);
 
@@ -121,17 +123,17 @@ public class DripstoneTortoise extends PathfinderMob implements NeutralMob {
 
     //AI
     protected void registerGoals() {
-        this.targetSelector.addGoal(1, (new DripstoneTortoiseRevengeGoal(this)).setAlertOthers(new Class[0]));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Player.class, 10, true, false, this::shouldAngerAt));
+        this.targetSelector.addGoal(1, (new DripstoneTortoiseRevengeGoal(this)).setAlertOthers());
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::shouldAngerAt));
         this.goalSelector.addGoal(4, new SpikeAttackGoal(this, 1.5D, true));
         this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1.5D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-        this.targetSelector.addGoal(6, new RandomSpikeGoal());
+        this.targetSelector.addGoal(6, new RandomSpikeGoal(this));
     }
 
     public static AttributeSupplier.Builder createDripstoneTortoiseAttributes() {
-        return PathfinderMob.createMobAttributes()
+        return Mob.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.125D)
                 .add(Attributes.MAX_HEALTH, 40)
                 .add(Attributes.ARMOR, 5)
@@ -443,7 +445,11 @@ public class DripstoneTortoise extends PathfinderMob implements NeutralMob {
             }
         }
 
-        public RandomSpikeGoal() {}
+        DripstoneTortoise dripstoneTortoise;
+
+        public RandomSpikeGoal(DripstoneTortoise dripstoneTortoise) {
+            this.dripstoneTortoise = dripstoneTortoise;
+        }
 
         public boolean canUse() {
             if(isAggressive()) return false;

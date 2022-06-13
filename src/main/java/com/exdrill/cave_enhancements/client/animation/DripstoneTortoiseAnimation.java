@@ -11,7 +11,7 @@ import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
 @Environment(EnvType.CLIENT)
-public class DripstoneTortoiseAnimations {
+public class DripstoneTortoiseAnimation {
 
     public static final AnimationDefinition STOMPING;
     public static final AnimationDefinition RISING;

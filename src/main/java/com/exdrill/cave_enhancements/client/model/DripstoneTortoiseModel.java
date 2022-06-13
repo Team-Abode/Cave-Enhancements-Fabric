@@ -1,7 +1,7 @@
 package com.exdrill.cave_enhancements.client.model;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
-import com.exdrill.cave_enhancements.client.animation.DripstoneTortoiseAnimations;
+import com.exdrill.cave_enhancements.client.animation.DripstoneTortoiseAnimation;
 import com.exdrill.cave_enhancements.entity.DripstoneTortoise;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -17,7 +17,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-public class DripstoneTortoiseEntityModel<T extends DripstoneTortoise> extends HierarchicalModel<T> {
+public class DripstoneTortoiseModel<T extends DripstoneTortoise> extends HierarchicalModel<T> {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(CaveEnhancements.MODID, "dripstone_tortoise"), "main");
 	private final ModelPart root;
 	private final ModelPart shell;
@@ -28,7 +28,7 @@ public class DripstoneTortoiseEntityModel<T extends DripstoneTortoise> extends H
 	private final ModelPart leg2;
 	private final ModelPart leg3;
 
-	public DripstoneTortoiseEntityModel(ModelPart root) {
+	public DripstoneTortoiseModel(ModelPart root) {
 		this.root = root.getChild("root");
 		this.shell = this.root.getChild("shell");
 		this.body = this.shell.getChild("body");
@@ -98,6 +98,6 @@ public class DripstoneTortoiseEntityModel<T extends DripstoneTortoise> extends H
 		this.leg1.xRot = Mth.cos(f * 1.1F + 3.1415927F) * 3F * g;
 		this.leg2.xRot = Mth.cos(f * 1.1F + 3.1415927F) * 3F * g;
 		this.leg3.xRot = Mth.cos(f * 1.1F) * 3F * g;
-		this.animate(entity.stompingAnimationState, DripstoneTortoiseAnimations.STOMPING, h);
+		this.animate(entity.stompingAnimationState, DripstoneTortoiseAnimation.STOMPING, h);
 	}
 }

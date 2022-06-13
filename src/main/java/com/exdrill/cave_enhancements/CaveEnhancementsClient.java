@@ -2,10 +2,10 @@ package com.exdrill.cave_enhancements;
 
 import com.exdrill.cave_enhancements.client.renderer.blockentity.RoseQuartzChimesBlockEntityRenderer;
 import com.exdrill.cave_enhancements.client.renderer.entity.*;
-import com.exdrill.cave_enhancements.client.model.CruncherEntityModel;
-import com.exdrill.cave_enhancements.client.model.DripstonePikeEntityModel;
-import com.exdrill.cave_enhancements.client.model.DripstoneTortoiseEntityModel;
-import com.exdrill.cave_enhancements.client.model.GoopEntityModel;
+import com.exdrill.cave_enhancements.client.model.CruncherModel;
+import com.exdrill.cave_enhancements.client.model.DripstonePikeModel;
+import com.exdrill.cave_enhancements.client.model.DripstoneTortoiseModel;
+import com.exdrill.cave_enhancements.client.model.GoopModel;
 import com.exdrill.cave_enhancements.particle.*;
 import com.exdrill.cave_enhancements.registry.ModBlocks;
 import com.exdrill.cave_enhancements.registry.ModEntities;
@@ -45,10 +45,10 @@ public class CaveEnhancementsClient implements ClientModInitializer {
 
 
         // Render Layers
-        EntityModelLayerRegistry.registerModelLayer(CruncherEntityModel.ENTITY_MODEL_LAYER, CruncherEntityModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(GoopEntityModel.ENTITY_MODEL_LAYER, GoopEntityModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(DripstoneTortoiseEntityModel.LAYER_LOCATION, DripstoneTortoiseEntityModel::texturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(DripstonePikeEntityModel.LAYER_LOCATION, DripstonePikeEntityModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(CruncherModel.ENTITY_MODEL_LAYER, CruncherModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(GoopModel.ENTITY_MODEL_LAYER, GoopModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(DripstoneTortoiseModel.LAYER_LOCATION, DripstoneTortoiseModel::texturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(DripstonePikeModel.LAYER_LOCATION, DripstonePikeModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(RoseQuartzChimesBlockEntityRenderer.LAYER_LOCATION, RoseQuartzChimesBlockEntityRenderer::getTexturedModelData);
 
         // Block Entity Renderers

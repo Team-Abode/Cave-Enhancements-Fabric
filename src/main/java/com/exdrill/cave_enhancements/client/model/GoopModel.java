@@ -16,11 +16,11 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
 
-public class GoopEntityModel<E extends Mob> extends EntityModel<Goop> {
+public class GoopModel<E extends Mob> extends EntityModel<Goop> {
 	public static final ModelLayerLocation ENTITY_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CaveEnhancements.MODID, "goop"), "main");
 	private final ModelPart goop;
 
-	public GoopEntityModel(ModelPart root) {
+	public GoopModel(ModelPart root) {
 		this.goop = root.getChild("goop");
 	}
 
