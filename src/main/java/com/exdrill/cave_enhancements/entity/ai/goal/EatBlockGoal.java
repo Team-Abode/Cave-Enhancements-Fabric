@@ -1,6 +1,6 @@
 package com.exdrill.cave_enhancements.entity.ai.goal;
 
-import com.exdrill.cave_enhancements.entity.CruncherEntity;
+import com.exdrill.cave_enhancements.entity.Cruncher;
 import java.util.EnumSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
@@ -10,11 +10,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 
 public class EatBlockGoal extends Goal {
-    private final CruncherEntity mob;
+    private final Cruncher mob;
     private final Level world;
     private int timer;
 
-    public EatBlockGoal(CruncherEntity mob) {
+    public EatBlockGoal(Cruncher mob) {
         this.mob = mob;
         this.world = mob.level;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.JUMP));

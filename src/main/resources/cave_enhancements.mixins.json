@@ -14,7 +14,9 @@
     "VanillaBiomeParametersMixin"
   ],
   "client": [
-    "WorldRendererMixin"
+    "WorldRendererMixin",
+    "ItemRendererMixin",
+    "ModelBakeryMixin"
   ],
   "injectors": {
     "defaultRequire": 1

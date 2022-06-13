@@ -1,6 +1,6 @@
 package com.exdrill.cave_enhancements.item;
 
-import com.exdrill.cave_enhancements.entity.HarmonicArrowEntity;
+import com.exdrill.cave_enhancements.entity.HarmonicArrow;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
@@ -15,6 +15,6 @@ public class HarmonicArrowItem extends ArrowItem {
 
     @Override
     public AbstractArrow createArrow(Level world, ItemStack stack, LivingEntity shooter) {
-        return new HarmonicArrowEntity(world, shooter);
+        return new HarmonicArrow(world, shooter);
     }
 }

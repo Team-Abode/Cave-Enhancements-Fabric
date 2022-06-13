@@ -1,8 +1,8 @@
-package com.exdrill.cave_enhancements.client.render.entity.model;
+package com.exdrill.cave_enhancements.client.model;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
-import com.exdrill.cave_enhancements.client.render.entity.animation.DripstoneTortoiseAnimations;
-import com.exdrill.cave_enhancements.entity.DripstonePikeEntity;
+import com.exdrill.cave_enhancements.client.animation.DripstoneTortoiseAnimations;
+import com.exdrill.cave_enhancements.entity.DripstonePike;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -14,7 +14,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 
-public class DripstonePikeEntityModel<T extends DripstonePikeEntity> extends HierarchicalModel<T> {
+public class DripstonePikeEntityModel<T extends DripstonePike> extends HierarchicalModel<T> {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(CaveEnhancements.MODID, "dripstone_pike"), "main");
 	private final ModelPart root;
 	private final ModelPart pike;

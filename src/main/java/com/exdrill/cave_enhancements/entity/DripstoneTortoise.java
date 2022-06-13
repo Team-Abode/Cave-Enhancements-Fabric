@@ -43,10 +43,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 import java.util.UUID;
 
-public class DripstoneTortoiseEntity extends PathfinderMob implements NeutralMob {
-    private static final EntityDataAccessor<Integer> ANGER = SynchedEntityData.defineId(DripstoneTortoiseEntity.class, EntityDataSerializers.INT);
+public class DripstoneTortoise extends PathfinderMob implements NeutralMob {
+    private static final EntityDataAccessor<Integer> ANGER = SynchedEntityData.defineId(DripstoneTortoise.class, EntityDataSerializers.INT);
 
-    private static final EntityDataAccessor<Boolean> SHOULD_STOMP = SynchedEntityData.defineId(DripstoneTortoiseEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> SHOULD_STOMP = SynchedEntityData.defineId(DripstoneTortoise.class, EntityDataSerializers.BOOLEAN);
 
     public final AnimationState stompingAnimationState = new AnimationState();
 
@@ -57,7 +57,7 @@ public class DripstoneTortoiseEntity extends PathfinderMob implements NeutralMob
     @Nullable
     private UUID angryAt;
 
-    public DripstoneTortoiseEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
+    public DripstoneTortoise(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
         this.xpReward = 30;
     }
@@ -142,7 +142,7 @@ public class DripstoneTortoiseEntity extends PathfinderMob implements NeutralMob
 
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
-        if(damageSource == DamageSource.STALAGMITE || damageSource == DamageSource.FALLING_STALACTITE || damageSource.isProjectile() || damageSource.getEntity() instanceof DripstoneTortoiseEntity) return true;
+        if(damageSource == DamageSource.STALAGMITE || damageSource == DamageSource.FALLING_STALACTITE || damageSource.isProjectile() || damageSource.getEntity() instanceof DripstoneTortoise) return true;
 
         return super.isInvulnerableTo(damageSource);
     }
@@ -243,7 +243,7 @@ public class DripstoneTortoiseEntity extends PathfinderMob implements NeutralMob
 
     //Goals
     private class DripstoneTortoiseRevengeGoal extends HurtByTargetGoal {
-        DripstoneTortoiseRevengeGoal(DripstoneTortoiseEntity dripstoneTortoise) {
+        DripstoneTortoiseRevengeGoal(DripstoneTortoise dripstoneTortoise) {
             super(dripstoneTortoise);
         }
 
@@ -252,7 +252,7 @@ public class DripstoneTortoiseEntity extends PathfinderMob implements NeutralMob
         }
 
         protected void alertOther(Mob mob, LivingEntity target) {
-            if (mob instanceof DripstoneTortoiseEntity && mob.hasLineOfSight(target)) {
+            if (mob instanceof DripstoneTortoise && mob.hasLineOfSight(target)) {
                 mob.setTarget(target);
             }
 
@@ -274,7 +274,7 @@ public class DripstoneTortoiseEntity extends PathfinderMob implements NeutralMob
             y = (float) pos.y();
         }
 
-        DripstonePikeEntity spellPart = new DripstonePikeEntity(ModEntities.DRIPSTONE_PIKE, level);
+        DripstonePike spellPart = new DripstonePike(ModEntities.DRIPSTONE_PIKE, level);
 
         spellPart.setPosRaw(pos.x(), y, pos.z());
 

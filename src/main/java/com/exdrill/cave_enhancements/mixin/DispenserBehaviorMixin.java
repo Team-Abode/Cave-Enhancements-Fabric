@@ -1,6 +1,6 @@
 package com.exdrill.cave_enhancements.mixin;
 
-import com.exdrill.cave_enhancements.entity.HarmonicArrowEntity;
+import com.exdrill.cave_enhancements.entity.HarmonicArrow;
 import com.exdrill.cave_enhancements.registry.ModItems;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
@@ -22,7 +22,7 @@ public interface DispenserBehaviorMixin {
     private static void registerDefaults(CallbackInfo ci) {
         DispenserBlock.registerBehavior(ModItems.HARMONIC_ARROW, new AbstractProjectileDispenseBehavior() {
             protected Projectile getProjectile(Level world, Position position, ItemStack stack) {
-                AbstractArrow persistentProjectileEntity = new HarmonicArrowEntity(world, position.x(), position.y(), position.z());
+                AbstractArrow persistentProjectileEntity = new HarmonicArrow(world, position.x(), position.y(), position.z());
                 persistentProjectileEntity.pickup = AbstractArrow.Pickup.ALLOWED;
                 return persistentProjectileEntity;
             }

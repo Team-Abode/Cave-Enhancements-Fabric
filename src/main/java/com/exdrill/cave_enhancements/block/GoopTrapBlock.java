@@ -1,6 +1,6 @@
 package com.exdrill.cave_enhancements.block;
 
-import com.exdrill.cave_enhancements.entity.GoopEntity;
+import com.exdrill.cave_enhancements.entity.Goop;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -12,10 +12,13 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@SuppressWarnings("deprecation")
 public class GoopTrapBlock extends Block {
 
     public GoopTrapBlock(Properties settings) {
@@ -38,11 +41,6 @@ public class GoopTrapBlock extends Block {
         }
     }
 
-    @Override
-    public boolean isPathfindable(BlockState state, BlockGetter world, BlockPos pos, PathComputationType type) {
-        return false;
-    }
-
     static {
         SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
     }
@@ -50,7 +48,7 @@ public class GoopTrapBlock extends Block {
     @Override
     public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
         if (!world.isClientSide) {
-            if (entity instanceof LivingEntity livingEntity && !(livingEntity instanceof Warden) && !(livingEntity instanceof GoopEntity)) {
+            if (entity instanceof LivingEntity livingEntity && !(livingEntity instanceof Warden) && !(livingEntity instanceof Goop)) {
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 6, true, true));
             }
         }

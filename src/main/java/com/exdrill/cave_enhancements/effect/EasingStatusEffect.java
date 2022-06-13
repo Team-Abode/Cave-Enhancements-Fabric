@@ -1,4 +1,4 @@
-package com.exdrill.cave_enhancements.entity.effect;
+package com.exdrill.cave_enhancements.effect;
 
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;

@@ -17,23 +17,23 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class HarmonicArrowEntity extends AbstractArrow {
+public class HarmonicArrow extends AbstractArrow {
 
 
 
-    public HarmonicArrowEntity(EntityType<? extends HarmonicArrowEntity> entityType, Level world) {
+    public HarmonicArrow(EntityType<? extends HarmonicArrow> entityType, Level world) {
         super(entityType, world);
 
     }
 
     LivingEntity owner = (LivingEntity) this.getOwner();
 
-    public HarmonicArrowEntity(Level world, LivingEntity owner) {
+    public HarmonicArrow(Level world, LivingEntity owner) {
         super(ModEntities.HARMONIC_ARROW, owner, world);
         this.owner = owner;
     }
 
-    public HarmonicArrowEntity(Level world, double x, double y, double z) {
+    public HarmonicArrow(Level world, double x, double y, double z) {
         super(ModEntities.HARMONIC_ARROW, x, y, z, world);
     }
 

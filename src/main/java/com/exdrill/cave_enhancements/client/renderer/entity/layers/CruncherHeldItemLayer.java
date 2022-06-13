@@ -1,7 +1,7 @@
-package com.exdrill.cave_enhancements.client.render.entity.feature;
+package com.exdrill.cave_enhancements.client.renderer.entity.layers;
 
-import com.exdrill.cave_enhancements.client.render.entity.model.CruncherEntityModel;
-import com.exdrill.cave_enhancements.entity.CruncherEntity;
+import com.exdrill.cave_enhancements.client.model.CruncherEntityModel;
+import com.exdrill.cave_enhancements.entity.Cruncher;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.fabricmc.api.EnvType;
@@ -15,16 +15,16 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
 @Environment(EnvType.CLIENT)
-public class CruncherEntityFeatureRenderer extends RenderLayer<CruncherEntity, CruncherEntityModel<CruncherEntity>> {
+public class CruncherHeldItemLayer extends RenderLayer<Cruncher, CruncherEntityModel<Cruncher>> {
 
     private final ItemInHandRenderer heldItemRenderer;
 
-    public CruncherEntityFeatureRenderer(RenderLayerParent<CruncherEntity, CruncherEntityModel<CruncherEntity>> featureRendererContext, ItemInHandRenderer heldItemRenderer) {
+    public CruncherHeldItemLayer(RenderLayerParent<Cruncher, CruncherEntityModel<Cruncher>> featureRendererContext, ItemInHandRenderer heldItemRenderer) {
         super(featureRendererContext);
         this.heldItemRenderer = heldItemRenderer;
     }
 
-    public void render(PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, CruncherEntity cruncherEntity, float f, float g, float h, float j, float k, float l) {
+    public void render(PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, Cruncher cruncher, float f, float g, float h, float j, float k, float l) {
         matrixStack.pushPose();
 
         matrixStack.translate(0, 1.25, 0);
@@ -36,9 +36,9 @@ public class CruncherEntityFeatureRenderer extends RenderLayer<CruncherEntity, C
 
         matrixStack.mulPose(Vector3f.XP.rotationDegrees(90.0F));
 
-        ItemStack itemStack = cruncherEntity.getItemBySlot(EquipmentSlot.MAINHAND);
+        ItemStack itemStack = cruncher.getItemBySlot(EquipmentSlot.MAINHAND);
 
-        this.heldItemRenderer.renderItem(cruncherEntity, itemStack, TransformType.GROUND, false, matrixStack, vertexConsumerProvider, i);
+        this.heldItemRenderer.renderItem(cruncher, itemStack, TransformType.GROUND, false, matrixStack, vertexConsumerProvider, i);
         matrixStack.popPose();
 
     }

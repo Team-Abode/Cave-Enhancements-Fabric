@@ -17,7 +17,7 @@ public class LightningAnchorBlockEntity extends BlockEntity {
         super(ModBlocks.LIGHTNING_ANCHOR_BLOCK_ENTITY, pos, state);
     }
 
-    public static void tick(Level world, BlockPos pos, BlockState state, LightningAnchorBlockEntity entity) {
+    public static void tick(Level world, BlockPos pos, LightningAnchorBlockEntity entity) {
         if(world.isClientSide()) return;
 
         if(entity.ticksTillActivate > 0){

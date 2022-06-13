@@ -1,7 +1,7 @@
 package com.exdrill.cave_enhancements.item;
 
 
-import com.exdrill.cave_enhancements.entity.DripstoneTortoiseEntity;
+import com.exdrill.cave_enhancements.entity.DripstoneTortoise;
 import com.exdrill.cave_enhancements.registry.ModParticles;
 import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -48,8 +48,8 @@ public class AmethystFluteItem extends Item {
                     world.broadcastEntityEvent(ravagerEntity, (byte)39);
                 } else if (entity instanceof Vex vexEntity) {
                     vexEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 10, 0));
-                } else if (entity instanceof DripstoneTortoiseEntity dripstoneTortoiseEntity) {
-                    dripstoneTortoiseEntity.sooth();
+                } else if (entity instanceof DripstoneTortoise dripstoneTortoise) {
+                    dripstoneTortoise.sooth();
                 }
             });
 

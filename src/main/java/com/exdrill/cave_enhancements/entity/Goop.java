@@ -27,13 +27,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
-public class GoopEntity extends Monster implements CustomBucketable {
-    private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(GoopEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> STICKING_UP = SynchedEntityData.defineId(GoopEntity.class, EntityDataSerializers.BOOLEAN);
+public class Goop extends Monster implements GoopBucketable {
+    private static final EntityDataAccessor<Boolean> FROM_BUCKET = SynchedEntityData.defineId(Goop.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> STICKING_UP = SynchedEntityData.defineId(Goop.class, EntityDataSerializers.BOOLEAN);
 
     public Level level;
 
-    public GoopEntity(EntityType<? extends GoopEntity> entityType, Level world) {
+    public Goop(EntityType<? extends Goop> entityType, Level world) {
         super(entityType, world);
         this.xpReward = 5;
         this.level = world;
@@ -84,13 +84,13 @@ public class GoopEntity extends Monster implements CustomBucketable {
     }
 
     public void copyDataToStack(ItemStack stack) {
-        CustomBucketable.copyDataToStack(this, stack);
+        GoopBucketable.copyDataToStack(this, stack);
         CompoundTag nbtCompound = stack.getOrCreateTag();
     }
 
     @Override
     public void copyDataFromNbt(CompoundTag nbt) {
-        CustomBucketable.copyDataFromNbt(this, nbt);
+        GoopBucketable.copyDataFromNbt(this, nbt);
 
         if (nbt.contains("StickingUp")) {
             this.isStickingUp();
@@ -124,7 +124,7 @@ public class GoopEntity extends Monster implements CustomBucketable {
 
     // Bucket Components
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        return CustomBucketable.tryBucket(player, hand, this).orElse(super.mobInteract(player, hand));
+        return GoopBucketable.tryBucket(player, hand, this).orElse(super.mobInteract(player, hand));
     }
     public ItemStack getBucketItem() {
         return new ItemStack(ModItems.GOOP_BUCKET);

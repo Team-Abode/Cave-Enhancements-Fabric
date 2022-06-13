@@ -1,7 +1,7 @@
 package com.exdrill.cave_enhancements.registry;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
-import com.exdrill.cave_enhancements.entity.effect.EasingStatusEffect;
+import com.exdrill.cave_enhancements.effect.EasingStatusEffect;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;

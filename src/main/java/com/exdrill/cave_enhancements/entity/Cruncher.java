@@ -35,9 +35,9 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class CruncherEntity extends PathfinderMob {
-    private static final EntityDataAccessor<Boolean> IS_EATING_BLOCK = SynchedEntityData.defineId(CruncherEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> IS_SHEARED = SynchedEntityData.defineId(CruncherEntity.class, EntityDataSerializers.BOOLEAN);
+public class Cruncher extends PathfinderMob {
+    private static final EntityDataAccessor<Boolean> IS_EATING_BLOCK = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> IS_SHEARED = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
     private static final Ingredient TEMPTING_ITEMS;
     public long lastEatTick;
     public int eatingTicks = 0;
@@ -45,7 +45,7 @@ public class CruncherEntity extends PathfinderMob {
     public int eatingTime;
     public boolean hasItem;
 
-    public CruncherEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
+    public Cruncher(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
 
         this.setCanPickUpLoot(true);
@@ -142,7 +142,7 @@ public class CruncherEntity extends PathfinderMob {
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(0, new EatBlockGoal(this));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.25, TEMPTING_ITEMS, false));
-        this.goalSelector.addGoal(2, new CruncherEntity.PickupItemGoal());
+        this.goalSelector.addGoal(2, new Cruncher.PickupItemGoal());
     }
 
     // Interactions
@@ -263,33 +263,33 @@ public class CruncherEntity extends PathfinderMob {
         }
 
         public boolean canUse() {
-            if (!CruncherEntity.this.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty()) {
+            if (!Cruncher.this.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty()) {
                 return false;
             } else {
-                if (!CruncherEntity.this.wantsToPickupItem()) {
+                if (!Cruncher.this.wantsToPickupItem()) {
                     return false;
-                } else if (CruncherEntity.this.getRandom().nextInt(reducedTickDelay(10)) != 0) {
+                } else if (Cruncher.this.getRandom().nextInt(reducedTickDelay(10)) != 0) {
                     return false;
                 } else {
-                    List<ItemEntity> list = CruncherEntity.this.level.getEntitiesOfClass(ItemEntity.class, CruncherEntity.this.getBoundingBox().inflate(8.0D, 8.0D, 8.0D), CruncherEntity.PICKABLE_DROP_FILTER);
-                    return !list.isEmpty() && CruncherEntity.this.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty();
+                    List<ItemEntity> list = Cruncher.this.level.getEntitiesOfClass(ItemEntity.class, Cruncher.this.getBoundingBox().inflate(8.0D, 8.0D, 8.0D), Cruncher.PICKABLE_DROP_FILTER);
+                    return !list.isEmpty() && Cruncher.this.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty();
                 }
             }
         }
 
         public void tick() {
-            List<ItemEntity> list = CruncherEntity.this.level.getEntitiesOfClass(ItemEntity.class, CruncherEntity.this.getBoundingBox().inflate(8.0D, 8.0D, 8.0D), CruncherEntity.PICKABLE_DROP_FILTER);
-            ItemStack itemStack = CruncherEntity.this.getItemBySlot(EquipmentSlot.MAINHAND);
+            List<ItemEntity> list = Cruncher.this.level.getEntitiesOfClass(ItemEntity.class, Cruncher.this.getBoundingBox().inflate(8.0D, 8.0D, 8.0D), Cruncher.PICKABLE_DROP_FILTER);
+            ItemStack itemStack = Cruncher.this.getItemBySlot(EquipmentSlot.MAINHAND);
             if (itemStack.isEmpty() && !list.isEmpty()) {
-                CruncherEntity.this.getNavigation().moveTo(list.get(0), 1.0D);
+                Cruncher.this.getNavigation().moveTo(list.get(0), 1.0D);
             }
 
         }
 
         public void start() {
-            List<ItemEntity> list = CruncherEntity.this.level.getEntitiesOfClass(ItemEntity.class, CruncherEntity.this.getBoundingBox().inflate(8.0D, 8.0D, 8.0D), CruncherEntity.PICKABLE_DROP_FILTER);
+            List<ItemEntity> list = Cruncher.this.level.getEntitiesOfClass(ItemEntity.class, Cruncher.this.getBoundingBox().inflate(8.0D, 8.0D, 8.0D), Cruncher.PICKABLE_DROP_FILTER);
             if (!list.isEmpty()) {
-                CruncherEntity.this.getNavigation().moveTo(list.get(0), 1.0D);
+                Cruncher.this.getNavigation().moveTo(list.get(0), 1.0D);
             }
 
         }

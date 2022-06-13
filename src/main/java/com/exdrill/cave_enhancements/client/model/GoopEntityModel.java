@@ -1,7 +1,7 @@
-package com.exdrill.cave_enhancements.client.render.entity.model;
+package com.exdrill.cave_enhancements.client.model;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
-import com.exdrill.cave_enhancements.entity.GoopEntity;
+import com.exdrill.cave_enhancements.entity.Goop;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.*;
@@ -16,7 +16,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
 
-public class GoopEntityModel<E extends Mob> extends EntityModel<GoopEntity> {
+public class GoopEntityModel<E extends Mob> extends EntityModel<Goop> {
 	public static final ModelLayerLocation ENTITY_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CaveEnhancements.MODID, "goop"), "main");
 	private final ModelPart goop;
 
@@ -42,7 +42,7 @@ public class GoopEntityModel<E extends Mob> extends EntityModel<GoopEntity> {
 	}
 
 	@Override
-	public void setupAnim(GoopEntity entity, float f, float g, float h, float i, float j) {
+	public void setupAnim(Goop entity, float f, float g, float h, float i, float j) {
 		if (entity.isStickingUp()) {
 			this.goop.xRot = 3.1415927F;
 			this.goop.y = 17.0F;

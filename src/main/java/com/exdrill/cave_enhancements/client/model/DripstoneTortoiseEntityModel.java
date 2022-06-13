@@ -1,8 +1,8 @@
-package com.exdrill.cave_enhancements.client.render.entity.model;
+package com.exdrill.cave_enhancements.client.model;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
-import com.exdrill.cave_enhancements.client.render.entity.animation.DripstoneTortoiseAnimations;
-import com.exdrill.cave_enhancements.entity.DripstoneTortoiseEntity;
+import com.exdrill.cave_enhancements.client.animation.DripstoneTortoiseAnimations;
+import com.exdrill.cave_enhancements.entity.DripstoneTortoise;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.*;
@@ -17,7 +17,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-public class DripstoneTortoiseEntityModel<T extends DripstoneTortoiseEntity> extends HierarchicalModel<T> {
+public class DripstoneTortoiseEntityModel<T extends DripstoneTortoise> extends HierarchicalModel<T> {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(CaveEnhancements.MODID, "dripstone_tortoise"), "main");
 	private final ModelPart root;
 	private final ModelPart shell;

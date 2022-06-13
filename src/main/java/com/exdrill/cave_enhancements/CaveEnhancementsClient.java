@@ -1,12 +1,11 @@
 package com.exdrill.cave_enhancements;
 
-import com.exdrill.cave_enhancements.client.render.block.RoseQuartzChimesBlockEntityRenderer;
-import com.exdrill.cave_enhancements.client.render.entity.*;
-import com.exdrill.cave_enhancements.client.render.entity.model.CruncherEntityModel;
-import com.exdrill.cave_enhancements.client.render.entity.model.DripstonePikeEntityModel;
-import com.exdrill.cave_enhancements.client.render.entity.model.DripstoneTortoiseEntityModel;
-import com.exdrill.cave_enhancements.client.render.entity.model.GoopEntityModel;
-import com.exdrill.cave_enhancements.entity.EntitySpawnPacket;
+import com.exdrill.cave_enhancements.client.renderer.blockentity.RoseQuartzChimesBlockEntityRenderer;
+import com.exdrill.cave_enhancements.client.renderer.entity.*;
+import com.exdrill.cave_enhancements.client.model.CruncherEntityModel;
+import com.exdrill.cave_enhancements.client.model.DripstonePikeEntityModel;
+import com.exdrill.cave_enhancements.client.model.DripstoneTortoiseEntityModel;
+import com.exdrill.cave_enhancements.client.model.GoopEntityModel;
 import com.exdrill.cave_enhancements.particle.*;
 import com.exdrill.cave_enhancements.registry.ModBlocks;
 import com.exdrill.cave_enhancements.registry.ModEntities;
@@ -14,26 +13,21 @@ import com.exdrill.cave_enhancements.registry.ModParticles;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.phys.Vec3;
-import java.util.UUID;
+
+import static com.exdrill.cave_enhancements.CaveEnhancements.MODID;
 
 @Environment(EnvType.CLIENT)
 public class CaveEnhancementsClient implements ClientModInitializer {
 
-    public static final ResourceLocation PacketID = new ResourceLocation(CaveEnhancements.MODID, "spawn_packet");
+
 
     @Override
     public void onInitializeClient() {
@@ -42,12 +36,12 @@ public class CaveEnhancementsClient implements ClientModInitializer {
         ModParticles.registerClient();
 
         // Entity Renderers
-        EntityRendererRegistry.register(ModEntities.GOOP, GoopEntityRenderer::new);
-        EntityRendererRegistry.register(ModEntities.CRUNCHER, CruncherEntityRenderer::new);
-        EntityRendererRegistry.register(ModEntities.DRIPSTONE_TORTOISE, DripstoneTortoiseEntityRenderer::new);
-        EntityRendererRegistry.register(ModEntities.DRIPSTONE_PIKE, DripstonePikeEntityRenderer::new);
+        EntityRendererRegistry.register(ModEntities.GOOP, GoopRenderer::new);
+        EntityRendererRegistry.register(ModEntities.CRUNCHER, CruncherRenderer::new);
+        EntityRendererRegistry.register(ModEntities.DRIPSTONE_TORTOISE, DripstoneTortoiseRenderer::new);
+        EntityRendererRegistry.register(ModEntities.DRIPSTONE_PIKE, DripstonePikeRenderer::new);
         EntityRendererRegistry.register(ModEntities.BIG_GOOP_DRIP_PROJECTILE_ENTITY, ThrownItemRenderer::new);
-        EntityRendererRegistry.register(ModEntities.HARMONIC_ARROW, JingleArrowEntityRenderer::new);
+        EntityRendererRegistry.register(ModEntities.HARMONIC_ARROW, HarmonicArrowRenderer::new);
 
 
         // Render Layers
@@ -60,7 +54,7 @@ public class CaveEnhancementsClient implements ClientModInitializer {
         // Block Entity Renderers
         BlockEntityRendererRegistry.register(ModBlocks.ROSE_QUARTZ_CHIMES_BLOCK_ENTITY, RoseQuartzChimesBlockEntityRenderer::new);
         ClientSpriteRegistryCallback.event(TextureAtlas.LOCATION_BLOCKS).register((atlasTexture, registry) ->
-                registry.register(new ResourceLocation(CaveEnhancements.MODID, "entity/rose_quartz_chimes/chime")));
+                registry.register(new ResourceLocation(MODID, "entity/rose_quartz_chimes/chime")));
 
         // Particle Factory
         ParticleFactoryRegistry.getInstance().register(ModParticles.SHOCKWAVE, ShockwaveParticle.Factory::new);
@@ -70,34 +64,16 @@ public class CaveEnhancementsClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(ModParticles.ROSE_CHIMES, RoseChimesParticle.RoseChimesFactory::new);
         ParticleFactoryRegistry.getInstance().register(ModParticles.SMALL_GOOP_DRIP, SmallGoopDripParticle.SmallGoopDripFactory::new);
 
-        receiveEntityPacket();
-    }
 
-    //For spawning projectiles
-    public void receiveEntityPacket() {
-        ClientPlayNetworking.registerGlobalReceiver(PacketID, ((client, handler, buf, responseSender) -> {
-            EntityType<?> entityType = Registry.ENTITY_TYPE.byId(buf.readVarInt());
-            UUID uuid = buf.readUUID();
-            int entityId = buf.readVarInt();
-            Vec3 pos = EntitySpawnPacket.PacketBufUtil.readVec3d(buf);
-            float pitch = EntitySpawnPacket.PacketBufUtil.readAngle(buf);
-            float yaw = EntitySpawnPacket.PacketBufUtil.readAngle(buf);
-            client.doRunTask(() -> {
-               if (Minecraft.getInstance().level == null)
-                   throw new IllegalStateException("Cannot spawn entity without world!");
-
-               Entity entity = entityType.create(Minecraft.getInstance().level);
-               if (entity == null)
-                   throw new IllegalStateException("Cannot create entity of type " + entityType);
-
-               entity.syncPacketPositionCodec(pos.x, pos.y, pos.z);
-               entity.setPosRaw(pos.x, pos.y, pos.z);
-               entity.setYRot(yaw);
-               entity.setXRot(pitch);
-               entity.setId(entityId);
-               entity.setUUID(uuid);
-               Minecraft.getInstance().level.putNonPlayerEntity(entityId, entity);
-            });
-        }));
+        /*
+        ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
+            if (renderMode == ItemTransforms.TransformType.GUI || renderMode == ItemTransforms.TransformType.GROUND || renderMode == ItemTransforms.TransformType.FIXED) {
+                out.accept(new ResourceLocation(MODID, "item/amethyst_flute"));
+            }
+            else {
+                out.accept(new ResourceLocation(MODID, "item/amethyst_flute_in_hand"));
+            }
+        });
+        */
     }
 }

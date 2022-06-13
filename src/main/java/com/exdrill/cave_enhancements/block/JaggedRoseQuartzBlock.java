@@ -25,6 +25,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@SuppressWarnings("deprecation")
 public class JaggedRoseQuartzBlock extends Block implements SimpleWaterloggedBlock {
     private static final BooleanProperty WATERLOGGED;
     private static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 12.0D, 15.0D);
@@ -32,6 +36,8 @@ public class JaggedRoseQuartzBlock extends Block implements SimpleWaterloggedBlo
         super(settings);
         this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, false));
     }
+
+
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateManager) {
@@ -78,9 +84,11 @@ public class JaggedRoseQuartzBlock extends Block implements SimpleWaterloggedBlo
         }
     }
 
+    @Override
     public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
+
 
     static {
         WATERLOGGED = BlockStateProperties.WATERLOGGED;

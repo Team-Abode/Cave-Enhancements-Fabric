@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
-public interface CustomBucketable {
+public interface GoopBucketable {
     boolean isFromBucket();
 
     void setFromBucket(boolean fromBucket);
@@ -84,12 +84,12 @@ public interface CustomBucketable {
 
     }
 
-    static <T extends LivingEntity & CustomBucketable> Optional<InteractionResult> tryBucket(Player player, InteractionHand hand, T entity) {
+    static <T extends LivingEntity & GoopBucketable> Optional<InteractionResult> tryBucket(Player player, InteractionHand hand, T entity) {
         ItemStack itemStack = player.getItemInHand(hand);
         if (itemStack.getItem() == Items.BUCKET && entity.isAlive()) {
-            entity.playSound(((CustomBucketable)entity).getBucketedSound(), 1.0F, 1.0F);
-            ItemStack itemStack2 = ((CustomBucketable)entity).getBucketItem();
-            ((CustomBucketable)entity).copyDataToStack(itemStack2);
+            entity.playSound(entity.getBucketedSound(), 1.0F, 1.0F);
+            ItemStack itemStack2 = entity.getBucketItem();
+            entity.copyDataToStack(itemStack2);
             ItemStack itemStack3 = ItemUtils.createFilledResult(itemStack, player, itemStack2, false);
             player.setItemInHand(hand, itemStack3);
             Level world = entity.level;

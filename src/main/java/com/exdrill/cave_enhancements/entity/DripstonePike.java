@@ -38,7 +38,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DripstonePikeEntity extends Mob {
+public class DripstonePike extends Mob {
 
     public int dieTimer = 20;
     public int damageDelay = 4;
@@ -48,9 +48,9 @@ public class DripstonePikeEntity extends Mob {
 
     public final AnimationState risingAnimationState = new AnimationState();
 
-    private static final EntityDataAccessor<Boolean> INVULNERABLE = SynchedEntityData.defineId(DripstonePikeEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> INVULNERABLE = SynchedEntityData.defineId(DripstonePike.class, EntityDataSerializers.BOOLEAN);
 
-    public DripstonePikeEntity(EntityType<? extends DripstonePikeEntity> entityType, Level world) {
+    public DripstonePike(EntityType<? extends DripstonePike> entityType, Level world) {
         super(entityType, world);
 
         noPhysics = true;

@@ -15,26 +15,26 @@ import net.minecraft.world.level.levelgen.Heightmap.Types;
 
 public class ModEntities {
 
-    public static final EntityType<GoopEntity> GOOP = Registry.register(
+    public static final EntityType<Goop> GOOP = Registry.register(
             Registry.ENTITY_TYPE,
             new ResourceLocation(CaveEnhancements.MODID, "goop"),
-            FabricEntityTypeBuilder.create(MobCategory.CREATURE, GoopEntity::new)
+            FabricEntityTypeBuilder.create(MobCategory.CREATURE, Goop::new)
                     .dimensions(EntityDimensions.fixed(0.6f, 0.9f))
                     .build()
     );
 
-    public static final EntityType<CruncherEntity> CRUNCHER = Registry.register(
+    public static final EntityType<Cruncher> CRUNCHER = Registry.register(
             Registry.ENTITY_TYPE,
             new ResourceLocation(CaveEnhancements.MODID, "cruncher"),
-            FabricEntityTypeBuilder.create(MobCategory.CREATURE, CruncherEntity::new)
+            FabricEntityTypeBuilder.create(MobCategory.CREATURE, Cruncher::new)
                     .dimensions(EntityDimensions.fixed(0.8f, 0.8f))
                     .build()
     );
 
-    public static final EntityType<DripstoneTortoiseEntity> DRIPSTONE_TORTOISE = Registry.register(
+    public static final EntityType<DripstoneTortoise> DRIPSTONE_TORTOISE = Registry.register(
             Registry.ENTITY_TYPE,
             new ResourceLocation(CaveEnhancements.MODID, "dripstone_tortoise"),
-            FabricEntityTypeBuilder.create(MobCategory.CREATURE, DripstoneTortoiseEntity::new)
+            FabricEntityTypeBuilder.create(MobCategory.CREATURE, DripstoneTortoise::new)
                     .dimensions(EntityDimensions.fixed(1.3F, 0.8F))
                     .build()
     );
@@ -48,28 +48,28 @@ public class ModEntities {
                     .build()
     );
 
-    public static final EntityType<DripstonePikeEntity> DRIPSTONE_PIKE = Registry.register(
+    public static final EntityType<DripstonePike> DRIPSTONE_PIKE = Registry.register(
             Registry.ENTITY_TYPE,
             new ResourceLocation(CaveEnhancements.MODID, "dripstone_pike"),
-            FabricEntityTypeBuilder.create(MobCategory.MISC, DripstonePikeEntity::new)
+            FabricEntityTypeBuilder.create(MobCategory.MISC, DripstonePike::new)
                     .dimensions(EntityDimensions.fixed(0.3F, 0.3F))
                     .build()
     );
 
-    public static final EntityType<HarmonicArrowEntity> HARMONIC_ARROW = Registry.register(
+    public static final EntityType<HarmonicArrow> HARMONIC_ARROW = Registry.register(
             Registry.ENTITY_TYPE,
             new ResourceLocation(CaveEnhancements.MODID, "harmonic_arrow"),
-            FabricEntityTypeBuilder.<HarmonicArrowEntity>create(MobCategory.MISC, HarmonicArrowEntity::new)
+            FabricEntityTypeBuilder.<HarmonicArrow>create(MobCategory.MISC, HarmonicArrow::new)
                     .dimensions(EntityDimensions.fixed(0.5F, 0.5F))
                     .build()
     );
 
     public static void register() {
-        FabricDefaultAttributeRegistry.register(GOOP, GoopEntity.createGoopAttributes());
-        FabricDefaultAttributeRegistry.register(CRUNCHER, CruncherEntity.createCruncherAttributes());
-        FabricDefaultAttributeRegistry.register(DRIPSTONE_TORTOISE, DripstoneTortoiseEntity.createDripstoneTortoiseAttributes());
-        FabricDefaultAttributeRegistry.register(DRIPSTONE_PIKE, DripstonePikeEntity.createDripstonePikeAttributes());
-        SpawnRestrictionAccessor.callRegister(DRIPSTONE_TORTOISE, SpawnPlacements.Type.ON_GROUND, Types.MOTION_BLOCKING, DripstoneTortoiseEntity::canSpawnInDark);
-        SpawnRestrictionAccessor.callRegister(CRUNCHER, SpawnPlacements.Type.ON_GROUND, Types.MOTION_BLOCKING, CruncherEntity::checkMobSpawnRules);
+        FabricDefaultAttributeRegistry.register(GOOP, Goop.createGoopAttributes());
+        FabricDefaultAttributeRegistry.register(CRUNCHER, Cruncher.createCruncherAttributes());
+        FabricDefaultAttributeRegistry.register(DRIPSTONE_TORTOISE, DripstoneTortoise.createDripstoneTortoiseAttributes());
+        FabricDefaultAttributeRegistry.register(DRIPSTONE_PIKE, DripstonePike.createDripstonePikeAttributes());
+        SpawnRestrictionAccessor.callRegister(DRIPSTONE_TORTOISE, SpawnPlacements.Type.ON_GROUND, Types.MOTION_BLOCKING, DripstoneTortoise::canSpawnInDark);
+        SpawnRestrictionAccessor.callRegister(CRUNCHER, SpawnPlacements.Type.ON_GROUND, Types.MOTION_BLOCKING, Cruncher::checkMobSpawnRules);
     }
 }

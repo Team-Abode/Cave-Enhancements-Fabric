@@ -23,7 +23,7 @@ public class ReceiverBlockEntity extends BlockEntity {
         super(ModBlocks.RECEIVER_BLOCK_ENTITY, pos, state);
     }
 
-    public void tick(Level world, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+    public void tick(Level world, BlockPos pos, BlockState state) {
         ReceiverBlock block = (ReceiverBlock) state.getBlock();
         int maxPower = block.getMaxPower();
 

@@ -21,6 +21,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@SuppressWarnings("deprecation")
 public class RoseQuartzChimesBlock extends BaseEntityBlock {
 
     public RoseQuartzChimesBlock (FabricBlockSettings settings){
@@ -57,7 +61,7 @@ public class RoseQuartzChimesBlock extends BaseEntityBlock {
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-        return createTickerHelper(type, ModBlocks.ROSE_QUARTZ_CHIMES_BLOCK_ENTITY, RoseQuartzChimesBlockEntity::tick);
+        return createTickerHelper(type, ModBlocks.ROSE_QUARTZ_CHIMES_BLOCK_ENTITY, (world1, pos, state1, entity) -> RoseQuartzChimesBlockEntity.tick(world1, pos, entity));
     }
 
     public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {

@@ -132,7 +132,7 @@ public class ReceiverBlock extends DiodeBlock implements EntityBlock {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
         return (world1, pos, state1, blockEntity) -> {
             if (blockEntity instanceof ReceiverBlockEntity) {
-                ((ReceiverBlockEntity) blockEntity).tick(world1, pos, state1, blockEntity);
+                ((ReceiverBlockEntity) blockEntity).tick(world1, pos, state1);
             }
         };
     }

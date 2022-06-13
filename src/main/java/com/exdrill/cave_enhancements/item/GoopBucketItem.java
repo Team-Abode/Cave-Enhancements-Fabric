@@ -1,6 +1,6 @@
 package com.exdrill.cave_enhancements.item;
 
-import com.exdrill.cave_enhancements.entity.CustomBucketable;
+import com.exdrill.cave_enhancements.entity.GoopBucketable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -54,7 +54,7 @@ public class GoopBucketItem extends BucketItem {
 
     private void spawnEntity(ServerLevel world, ItemStack stack, BlockPos pos) {
         Entity entity = this.entityType.spawn(world, stack, null, pos, MobSpawnType.BUCKET, true, false);
-        if (entity instanceof CustomBucketable bucketable) {
+        if (entity instanceof GoopBucketable bucketable) {
             bucketable.copyDataFromNbt(stack.getOrCreateTag());
             bucketable.setFromBucket(true);
         }

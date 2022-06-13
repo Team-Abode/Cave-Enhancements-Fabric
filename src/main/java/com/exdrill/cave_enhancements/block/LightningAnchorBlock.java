@@ -13,6 +13,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@SuppressWarnings("deprecation")
+@ParametersAreNonnullByDefault
 public class LightningAnchorBlock extends BaseEntityBlock {
     public LightningAnchorBlock(FabricBlockSettings settings){
         super(settings);
@@ -30,7 +34,7 @@ public class LightningAnchorBlock extends BaseEntityBlock {
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-        return createTickerHelper(type, ModBlocks.LIGHTNING_ANCHOR_BLOCK_ENTITY, LightningAnchorBlockEntity::tick);
+        return createTickerHelper(type, ModBlocks.LIGHTNING_ANCHOR_BLOCK_ENTITY, (world1, pos, state1, entity) -> LightningAnchorBlockEntity.tick(world1, pos, entity));
     }
 
     @Override

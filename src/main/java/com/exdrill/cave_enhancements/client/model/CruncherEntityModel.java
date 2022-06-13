@@ -1,7 +1,7 @@
-package com.exdrill.cave_enhancements.client.render.entity.model;
+package com.exdrill.cave_enhancements.client.model;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
-import com.exdrill.cave_enhancements.entity.CruncherEntity;
+import com.exdrill.cave_enhancements.entity.Cruncher;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.*;
@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
 
-public class CruncherEntityModel<E extends Mob> extends EntityModel<CruncherEntity> {
+public class CruncherEntityModel<E extends Mob> extends EntityModel<Cruncher> {
     public static final ModelLayerLocation ENTITY_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(CaveEnhancements.MODID, "cruncher"), "main");
 
     private final ModelPart root;
@@ -69,7 +69,7 @@ public class CruncherEntityModel<E extends Mob> extends EntityModel<CruncherEnti
     }
 
     @Override
-    public void setupAnim(CruncherEntity entity, float f, float g, float h, float i, float j) {
+    public void setupAnim(Cruncher entity, float f, float g, float h, float i, float j) {
 
         this.head.yRot = i * 0.017453292F;
         this.leg0.xRot = Mth.cos(f * 1.1F) * 1.4F * g;
