@@ -29,6 +29,7 @@ public class CaveEnhancements implements ModInitializer {
         ModSounds.register();
         ModEntities.register();
         ModBiomes.register();
+        ModParticles.register();
         ModBiomes.registerModifications();
         ModStatusEffects.register();
         ModBlocks.registerOxidizablePairs();

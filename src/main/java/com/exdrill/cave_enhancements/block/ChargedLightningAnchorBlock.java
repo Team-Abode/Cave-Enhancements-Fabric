@@ -1,15 +1,20 @@
 package com.exdrill.cave_enhancements.block;
 
 import com.exdrill.cave_enhancements.registry.ModBlocks;
+import com.exdrill.cave_enhancements.registry.ModParticles;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -18,9 +23,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Iterator;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class ChargedLightningAnchorBlock extends Block {
     public ChargedLightningAnchorBlock(FabricBlockSettings settings){
         super(settings);
@@ -62,17 +70,18 @@ public class ChargedLightningAnchorBlock extends Block {
             LivingEntity livingEntity;
             for (Iterator<? extends LivingEntity> var2 = list.iterator(); var2.hasNext(); knockBack(livingEntity, pos, power, verticalPower)) {
                 livingEntity = var2.next();
-                livingEntity.hurt(DamageSource.LIGHTNING_BOLT, 20.0F);
+                livingEntity.hurt(DamageSource.LIGHTNING_BOLT, 10.0F);
             }
 
-            world.levelEvent(5190, pos, 0);
+            if (!world.isClientSide) {
+                ((ServerLevel)world).sendParticles(ModParticles.SHOCKWAVE, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+            }
+
 
             world.setBlockAndUpdate(pos, ModBlocks.LIGHTNING_ANCHOR.defaultBlockState());
-
             world.playSound(null, pos, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
     }
-
 
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         activate(world, pos, true);
