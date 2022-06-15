@@ -1,19 +1,12 @@
 package com.exdrill.cave_enhancements.block.entity;
 
-import com.exdrill.cave_enhancements.block.OxidizableReceiverBlock;
 import com.exdrill.cave_enhancements.block.ReceiverBlock;
 import com.exdrill.cave_enhancements.registry.ModBlocks;
-import java.util.List;
-import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 
 public class ReceiverBlockEntity extends BlockEntity {
 
@@ -35,20 +28,6 @@ public class ReceiverBlockEntity extends BlockEntity {
         }
         if (poweredTicks == maxPower) {
             world.setBlockAndUpdate(pos, state.setValue(ReceiverBlock.CAN_PASS, true));
-        }
-
-        List<Entity> list = world.getEntitiesOfClass(Entity.class, new AABB(pos).inflate(5), (e) -> true);
-
-        if (block instanceof OxidizableReceiverBlock) {
-            for (Entity entity : list) {
-                if (entity instanceof LightningBolt && entity.tickCount % 5 == 0) {
-                    Optional<BlockState> optionalReceiver = WeatheringCopper.getPrevious(state);
-                    if (optionalReceiver.isPresent()) {
-                        world.levelEvent(3005, pos, 0);
-                        world.setBlock(pos, optionalReceiver.get(), 11);
-                    }
-                }
-            }
         }
     }
 

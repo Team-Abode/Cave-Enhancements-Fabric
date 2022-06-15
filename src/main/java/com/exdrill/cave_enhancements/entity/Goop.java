@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -21,7 +22,9 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.dimension.DimensionType;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -33,7 +36,7 @@ public class Goop extends Monster implements GoopBucketable {
 
     public Level level;
 
-    public Goop(EntityType<? extends Goop> entityType, Level world) {
+    public Goop(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
         this.xpReward = 5;
         this.level = world;
@@ -56,8 +59,6 @@ public class Goop extends Monster implements GoopBucketable {
                 .add(Attributes.MAX_HEALTH, 15)
                 .add(Attributes.ARMOR, 2);
     }
-
-
 
     // Mob Group
     public MobType getMobType() {

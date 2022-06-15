@@ -1,0 +1,9 @@
+{
+    "replace": false,
+    "values": [
+        "#minecraft:dirt",
+        "#minecraft:base_stone_overworld",
+        "minecraft:moss_block",
+        "minecraft:clay"
+    ]
+}

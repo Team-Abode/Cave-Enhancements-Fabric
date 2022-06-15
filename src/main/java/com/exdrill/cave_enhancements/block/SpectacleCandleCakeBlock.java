@@ -1,9 +1,12 @@
 package com.exdrill.cave_enhancements.block;
 
 import com.exdrill.cave_enhancements.block.entity.SpectacleCandleBlockEntity;
+import com.exdrill.cave_enhancements.block.entity.SpectacleCandleCakeBlockEntity;
+import com.exdrill.cave_enhancements.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.CandleBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CandleCakeBlock;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -14,25 +17,24 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class SpectacleCandleBlock extends CandleBlock implements EntityBlock {
+public class SpectacleCandleCakeBlock extends CandleCakeBlock implements EntityBlock {
 
-    public SpectacleCandleBlock(Properties properties) {
-        super(properties);
+    public SpectacleCandleCakeBlock(Block block, Properties properties) {
+        super(block, properties);
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new SpectacleCandleBlockEntity(blockPos, blockState);
+        return new SpectacleCandleCakeBlockEntity(blockPos, blockState);
     }
-
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
         return (world1, pos, state1, blockEntity) -> {
-            if (blockEntity instanceof SpectacleCandleBlockEntity) {
-                SpectacleCandleBlockEntity.tick(world1, pos, state1);
+            if (blockEntity instanceof SpectacleCandleCakeBlockEntity) {
+                SpectacleCandleCakeBlockEntity.tick(world1, pos, state1);
             }
         };
     }

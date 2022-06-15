@@ -9,7 +9,13 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 
 public class ModTags {
 
+
     public static final TagKey<BannerPattern> GOOP_PATTERN_ITEM = TagKey.create(Registry.BANNER_PATTERN_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "goop_pattern_item"));
+
+
+    // Block Tags
     public static final TagKey<Block> RECEIVERS = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "receivers"));
     public static final TagKey<Block> PIKE_DESTROYABLES = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "pike_destroyables"));
+    public static final TagKey<Block> CRUNCHER_CONSUMABLES = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "cruncher_consumables"));
+    public static final TagKey<Block> CRUNCHERS_SPAWNABLE_ON = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "crunchers_spawnable_on"));
 }

@@ -1,0 +1,10 @@
+{
+    "replace": false,
+    "values": [
+        "#minecraft:dirt",
+        "#minecraft:terracotta",
+        "#minecraft:base_stone_overworld",
+        "#minecraft:base_stone_nether",
+        "minecraft:gravel"
+    ]
+}

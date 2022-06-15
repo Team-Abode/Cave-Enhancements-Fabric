@@ -2,6 +2,8 @@ package com.exdrill.cave_enhancements.entity.ai.goal;
 
 import com.exdrill.cave_enhancements.entity.Cruncher;
 import java.util.EnumSet;
+
+import com.exdrill.cave_enhancements.registry.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -24,7 +26,7 @@ public class EatBlockGoal extends Goal {
         if (this.mob.eatingTicks > 0 && this.mob.level.getGameTime() - this.mob.lastEatTick > 120L) {
             BlockPos blockPos = this.mob.blockPosition().below();
 
-                return this.world.getBlockState(blockPos.below()).is(BlockTags.BASE_STONE_OVERWORLD);
+                return this.world.getBlockState(blockPos.below()).is(ModTags.CRUNCHER_CONSUMABLES);
         }
         return false;
     }

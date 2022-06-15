@@ -1,0 +1,33 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:map",
+          "functions": [
+            {
+              "function": "minecraft:exploration_map",
+              "destination": "minecraft:ancient_city",
+              "decoration": "target_x",
+              "zoom": 5,
+              "search_radius": 1000,
+              "skip_existing_chunks": true
+            },
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "text": "Ancient City Map",
+                "color": "#77ccff",
+                "bold": false,
+                "italic": false,
+                "underlined": false
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

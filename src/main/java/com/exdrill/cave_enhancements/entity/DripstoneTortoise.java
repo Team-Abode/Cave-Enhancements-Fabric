@@ -31,11 +31,14 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -227,19 +230,23 @@ public class DripstoneTortoise extends PathfinderMob implements NeutralMob {
         }
     }
 
-    public static boolean isSpawnDark(ServerLevelAccessor world, BlockPos pos, RandomSource random) {
-        if (world.getBrightness(LightLayer.SKY, pos) > random.nextInt(32)) {
-            return false;
-        } else if (world.getBrightness(LightLayer.BLOCK, pos) > 0) {
+    public static boolean isDarkEnoughToSpawn(ServerLevelAccessor serverLevelAccessor, BlockPos blockPos, RandomSource randomSource) {
+        if (serverLevelAccessor.getBrightness(LightLayer.SKY, blockPos) > randomSource.nextInt(32)) {
             return false;
         } else {
-            int i = world.getLevel().isThundering() ? world.getMaxLocalRawBrightness(pos, 10) : world.getMaxLocalRawBrightness(pos);
-            return i <= random.nextInt(8);
+            DimensionType dimensionType = serverLevelAccessor.dimensionType();
+            int i = dimensionType.monsterSpawnBlockLightLimit();
+            if (i < 15 && serverLevelAccessor.getBrightness(LightLayer.BLOCK, blockPos) > i) {
+                return false;
+            } else {
+                int j = serverLevelAccessor.getLevel().isThundering() ? serverLevelAccessor.getMaxLocalRawBrightness(blockPos, 10) : serverLevelAccessor.getMaxLocalRawBrightness(blockPos);
+                return j <= dimensionType.monsterSpawnLightTest().sample(randomSource);
+            }
         }
     }
 
-    public static boolean canSpawnInDark(EntityType<? extends PathfinderMob> type, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
-        return world.getDifficulty() != Difficulty.PEACEFUL && isSpawnDark(world, pos, random) && checkMobSpawnRules(type, world, spawnReason, pos, random);
+    public static boolean checkDripstoneTortoiseSpawnRules(EntityType<? extends DripstoneTortoise> entityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
+        return serverLevelAccessor.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(serverLevelAccessor, blockPos, randomSource) && checkMobSpawnRules(entityType, serverLevelAccessor, mobSpawnType, blockPos, randomSource);
     }
 
 

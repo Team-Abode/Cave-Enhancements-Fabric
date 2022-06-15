@@ -11,6 +11,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.levelgen.Heightmap.Types;
 
 public class ModEntities {
@@ -64,12 +65,14 @@ public class ModEntities {
                     .build()
     );
 
+
     public static void register() {
         FabricDefaultAttributeRegistry.register(GOOP, Goop.createGoopAttributes());
         FabricDefaultAttributeRegistry.register(CRUNCHER, Cruncher.createCruncherAttributes());
         FabricDefaultAttributeRegistry.register(DRIPSTONE_TORTOISE, DripstoneTortoise.createDripstoneTortoiseAttributes());
         FabricDefaultAttributeRegistry.register(DRIPSTONE_PIKE, DripstonePike.createDripstonePikeAttributes());
-        SpawnRestrictionAccessor.callRegister(DRIPSTONE_TORTOISE, SpawnPlacements.Type.ON_GROUND, Types.MOTION_BLOCKING, DripstoneTortoise::canSpawnInDark);
-        SpawnRestrictionAccessor.callRegister(CRUNCHER, SpawnPlacements.Type.ON_GROUND, Types.MOTION_BLOCKING, Cruncher::checkMobSpawnRules);
+        SpawnRestrictionAccessor.callRegister(GOOP, SpawnPlacements.Type.ON_GROUND, Types.MOTION_BLOCKING, Monster::checkMonsterSpawnRules);
+        SpawnRestrictionAccessor.callRegister(DRIPSTONE_TORTOISE, SpawnPlacements.Type.ON_GROUND, Types.MOTION_BLOCKING, DripstoneTortoise::checkDripstoneTortoiseSpawnRules);
+        SpawnRestrictionAccessor.callRegister(CRUNCHER, SpawnPlacements.Type.ON_GROUND, Types.MOTION_BLOCKING, Cruncher::checkCruncherSpawnRules);
     }
 }
