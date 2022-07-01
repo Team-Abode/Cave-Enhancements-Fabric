@@ -5,7 +5,7 @@
     "xz_spread": 16,
     "y_spread": 3,
     "feature": {
-      "feature": "cave_enhancements:rose_quartz_pillars",
+      "feature": "cave_enhancements:rose_quartz_caves/rose_quartz_pillars",
       "placement": [
         {
           "type": "minecraft:block_predicate_filter",

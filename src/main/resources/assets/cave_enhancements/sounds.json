@@ -122,6 +122,18 @@
     ],
     "subtitle": "subtitles.entity.goop.death"
   },
+  "item.bucket.fill.goop": {
+      "sounds": [
+        "cave_enhancements:item/bucket/fill_goop"
+      ],
+      "subtitle": "subtitles.item.bucket.fill_goop"
+  },
+  "item.bucket.empty.goop": {
+      "sounds": [
+        "cave_enhancements:item/bucket/empty_goop"
+      ],
+      "subtitle": "subtitles.item.bucket.empty"
+  },
   "entity.dripstone_tortoise.hurt": {
     "sounds": [
       "cave_enhancements:mob/dripstone_tortoise/hurt1",

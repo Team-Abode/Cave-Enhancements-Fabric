@@ -134,7 +134,7 @@ public class Goop extends Monster implements GoopBucketable {
     }
 
     public SoundEvent getBucketedSound() {
-        return SoundEvents.BUCKET_FILL;
+        return ModSounds.ITEM_BUCKET_FILL_GOOP;
     }
 
     // Despawn Components

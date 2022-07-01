@@ -4,6 +4,7 @@ import com.exdrill.cave_enhancements.CaveEnhancements;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
 
@@ -12,6 +13,7 @@ public class ModTags {
 
     public static final TagKey<BannerPattern> GOOP_PATTERN_ITEM = TagKey.create(Registry.BANNER_PATTERN_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "goop_pattern_item"));
 
+    public static final TagKey<EntityType<?>> GOOP_TRAP_IMMUNE = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "goop_trap_immune"));
 
     // Block Tags
     public static final TagKey<Block> RECEIVERS = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "receivers"));

@@ -1,9 +1,9 @@
 {
-  "feature": "cave_enhancements:goop_patch",
+  "feature": "cave_enhancements:rose_quartz_caves/rose_quartz_patch",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 110
+      "count": 188
     },
     {
       "type": "minecraft:in_square"
@@ -29,7 +29,7 @@
       },
       "allowed_search_condition": {
         "type": "minecraft:matching_blocks",
-        "blocks": "minecraft:air"
+        "blocks": "minecraft:water"
       }
     },
     {

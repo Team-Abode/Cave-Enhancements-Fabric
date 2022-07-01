@@ -146,9 +146,9 @@
     ],
     [
       "minecraft:glow_lichen",
-      "cave_enhancements:rose_quartz_patch_feature",
-      "cave_enhancements:rose_quartz_patch_down_feature",
-      "cave_enhancements:jagged_rose_quartz_feature"
+      "cave_enhancements:rose_quartz_caves/rose_quartz_patch_feature",
+      "cave_enhancements:rose_quartz_caves/rose_quartz_patch_down_feature",
+      "cave_enhancements:rose_quartz_caves/jagged_rose_quartz_feature"
     ],
     [
       "minecraft:freeze_top_layer"

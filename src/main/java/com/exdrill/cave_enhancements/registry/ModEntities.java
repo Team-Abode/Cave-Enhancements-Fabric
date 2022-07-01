@@ -7,10 +7,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.mixin.object.builder.SpawnRestrictionAccessor;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.levelgen.Heightmap.Types;
 
@@ -71,7 +68,6 @@ public class ModEntities {
         FabricDefaultAttributeRegistry.register(CRUNCHER, Cruncher.createCruncherAttributes());
         FabricDefaultAttributeRegistry.register(DRIPSTONE_TORTOISE, DripstoneTortoise.createDripstoneTortoiseAttributes());
         FabricDefaultAttributeRegistry.register(DRIPSTONE_PIKE, DripstonePike.createDripstonePikeAttributes());
-        SpawnRestrictionAccessor.callRegister(GOOP, SpawnPlacements.Type.ON_GROUND, Types.MOTION_BLOCKING, Monster::checkMonsterSpawnRules);
         SpawnRestrictionAccessor.callRegister(DRIPSTONE_TORTOISE, SpawnPlacements.Type.ON_GROUND, Types.MOTION_BLOCKING, DripstoneTortoise::checkDripstoneTortoiseSpawnRules);
         SpawnRestrictionAccessor.callRegister(CRUNCHER, SpawnPlacements.Type.ON_GROUND, Types.MOTION_BLOCKING, Cruncher::checkCruncherSpawnRules);
     }

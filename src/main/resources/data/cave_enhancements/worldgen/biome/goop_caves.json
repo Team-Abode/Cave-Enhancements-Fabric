@@ -48,19 +48,19 @@
       },
       {
         "type": "minecraft:enderman",
-        "weight": 10,
+        "weight": 5,
         "minCount": 1,
         "maxCount": 4
       },
       {
         "type": "minecraft:witch",
-        "weight": 10,
+        "weight": 5,
         "minCount": 1,
         "maxCount": 1
       },
       {
         "type": "cave_enhancements:goop",
-        "weight": 40,
+        "weight": 60,
         "minCount": 1,
         "maxCount": 1
       }
@@ -140,11 +140,11 @@
     ],
     [
       "minecraft:glow_lichen",
-      "cave_enhancements:ore_goop",
-      "cave_enhancements:goop_caves_patch_feature",
-      "cave_enhancements:goop_splat_ceiling_feature",
-      "cave_enhancements:goop_splat_floor_feature",
-      "cave_enhancements:dripping_goop_feature"
+      "cave_enhancements:goop_caves/ore_goop",
+      "cave_enhancements:goop_caves/goop_patch_floor",
+      "cave_enhancements:goop_caves/goop_patch_ceiling",
+      "cave_enhancements:goop_caves/goop_splat",
+      "cave_enhancements:goop_caves/dripping_goop"
     ],
     [
       "minecraft:freeze_top_layer"

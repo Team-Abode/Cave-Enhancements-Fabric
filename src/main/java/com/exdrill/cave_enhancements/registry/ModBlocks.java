@@ -123,6 +123,7 @@ public class ModBlocks {
     public static BlockEntityType<LightningAnchorBlockEntity> LIGHTNING_ANCHOR_BLOCK_ENTITY;
     public static BlockEntityType<RoseQuartzChimesBlockEntity> ROSE_QUARTZ_CHIMES_BLOCK_ENTITY;
     public static BlockEntityType<ReceiverBlockEntity> RECEIVER_BLOCK_ENTITY;
+    public static BlockEntityType<EnchantedTetherBlockEntity> ENCHANTED_TETHER_BLOCK_ENTITY;
 
 
 
@@ -133,6 +134,7 @@ public class ModBlocks {
         LIGHTNING_ANCHOR_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "lightning_anchor"), FabricBlockEntityTypeBuilder.create(LightningAnchorBlockEntity::new, LIGHTNING_ANCHOR).build(null));
         ROSE_QUARTZ_CHIMES_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "rose_quartz_chimes"), FabricBlockEntityTypeBuilder.create(RoseQuartzChimesBlockEntity::new, ROSE_QUARTZ_CHIMES).build(null));
         RECEIVER_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "redstone_receiver"),FabricBlockEntityTypeBuilder.create(ReceiverBlockEntity::new, REDSTONE_RECEIVER, EXPOSED_REDSTONE_RECEIVER, WEATHERED_REDSTONE_RECEIVER, OXIDIZED_REDSTONE_RECEIVER, WAXED_REDSTONE_RECEIVER, WAXED_EXPOSED_REDSTONE_RECEIVER, WAXED_WEATHERED_REDSTONE_RECEIVER, WAXED_OXIDIZED_REDSTONE_RECEIVER).build(null));
+        ENCHANTED_TETHER_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "enchanted_tether"), FabricBlockEntityTypeBuilder.create(EnchantedTetherBlockEntity::new, TEST).build(null));
     }
 
     // Pairs

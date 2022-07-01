@@ -1,9 +1,9 @@
 {
-  "feature": "cave_enhancements:rose_quartz_patch",
+  "feature": "cave_enhancements:goop_caves/dripping_goop",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 188
+      "count": 150
     },
     {
       "type": "minecraft:in_square"
@@ -22,20 +22,21 @@
     },
     {
       "type": "minecraft:environment_scan",
-      "direction_of_search": "down",
+      "direction_of_search": "up",
       "max_steps": 12,
       "target_condition": {
-        "type": "minecraft:solid"
+        "type": "minecraft:has_sturdy_face",
+        "direction": "down"
       },
       "allowed_search_condition": {
         "type": "minecraft:matching_blocks",
-        "blocks": "minecraft:water"
+        "blocks": "minecraft:air"
       }
     },
     {
       "type": "minecraft:random_offset",
       "xz_spread": 0,
-      "y_spread": 1
+      "y_spread": -1
     },
     {
       "type": "minecraft:biome"

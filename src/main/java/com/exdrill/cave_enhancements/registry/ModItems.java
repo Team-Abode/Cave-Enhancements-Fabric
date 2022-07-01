@@ -28,7 +28,7 @@ public class ModItems {
     public static final BlockItem CHARGED_LIGHTNING_ANCHOR = new BlockItem(ModBlocks.CHARGED_LIGHTNING_ANCHOR, new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE));
     public static final AmethystFluteItem AMETHYST_FLUTE = new AmethystFluteItem(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1).durability(64));
     public static final SpawnEggItem GOOP_SPAWN_EGG = new SpawnEggItem(ModEntities.GOOP, 13946012, 11637089, new Item.Properties().tab(CreativeModeTab.TAB_MISC));
-    public static final GoopBucketItem GOOP_BUCKET = new GoopBucketItem(ModEntities.GOOP, Fluids.EMPTY, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().tab(CreativeModeTab.TAB_MISC).stacksTo(1));
+    public static final GoopBucketItem GOOP_BUCKET = new GoopBucketItem(ModEntities.GOOP, Fluids.EMPTY, ModSounds.ITEM_BUCKET_EMPTY_GOOP, new Item.Properties().tab(CreativeModeTab.TAB_MISC).stacksTo(1));
     public static final BannerPatternItem GOOP_BANNER_PATTERN = new BannerPatternItem(ModTags.GOOP_PATTERN_ITEM,new Item.Properties().tab(CreativeModeTab.TAB_MISC));
 
     // Redstone Receivers
@@ -64,6 +64,8 @@ public class ModItems {
     public static final BlockItem SOUL_ROSE_QUARTZ_LAMP  = new BlockItem(ModBlocks.SOUL_ROSE_QUARTZ_LAMP, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
 
     public static final HarmonicArrowItem HARMONIC_ARROW = new HarmonicArrowItem(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT));
+
+    public static final BlockItem ENCHANTED_TETHER = new BlockItem(ModBlocks.TEST, new Item.Properties().tab(CreativeModeTab.TAB_MISC));
 
     //Registry
     public static void register() {
@@ -111,5 +113,7 @@ public class ModItems {
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "goop_spawn_egg"), GOOP_SPAWN_EGG);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "cruncher_spawn_egg"), CRUNCHER_SPAWN_EGG);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "dripstone_tortoise_spawn_egg"), DRIPSTONE_TORTOISE_SPAWN_EGG);
+
+        Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "enchanted_tether"), ENCHANTED_TETHER);
     }
 }

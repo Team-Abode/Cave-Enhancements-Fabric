@@ -67,6 +67,12 @@ public class ModSounds {
     public static final ResourceLocation ENTITY_DRIPSTONE_TORTOISE_IDLE_ID = new ResourceLocation(CaveEnhancements.MODID, "entity.dripstone_tortoise.idle");
     public static SoundEvent ENTITY_DRIPSTONE_TORTOISE_IDLE = new SoundEvent(ENTITY_DRIPSTONE_TORTOISE_IDLE_ID);
 
+    public static final ResourceLocation ITEM_BUCKET_FILL_GOOP_ID = new ResourceLocation(CaveEnhancements.MODID, "item.bucket.fill.goop");
+    public static SoundEvent ITEM_BUCKET_FILL_GOOP = new SoundEvent(ITEM_BUCKET_FILL_GOOP_ID);
+
+    public static final ResourceLocation ITEM_BUCKET_EMPTY_GOOP_ID = new ResourceLocation(CaveEnhancements.MODID, "item.bucket.empty.goop");
+    public static SoundEvent ITEM_BUCKET_EMPTY_GOOP = new SoundEvent(ITEM_BUCKET_EMPTY_GOOP_ID);
+
     // Block Sounds
     public static final SoundType ROSE_QUARTZ  = new SoundType(1.0F, 1.0F, BLOCK_ROSE_QUARTZ_BREAK, SoundEvents.GLASS_STEP, SoundEvents.CALCITE_PLACE, SoundEvents.GLASS_HIT, SoundEvents.GLASS_FALL);
     public static final SoundType GOOP_BLOCK = new SoundType(1.0F, 1.0F, BLOCK_GOOP_BLOCK_BREAK, BLOCK_GOOP_BLOCK_STEP, BLOCK_GOOP_BLOCK_PLACE, BLOCK_GOOP_BLOCK_HIT, BLOCK_GOOP_BLOCK_FALL);
@@ -90,6 +96,8 @@ public class ModSounds {
 
         Registry.register(Registry.SOUND_EVENT, ENTITY_GOOP_HURT_ID, ENTITY_GOOP_HURT);
         Registry.register(Registry.SOUND_EVENT, ENTITY_GOOP_DEATH_ID, ENTITY_GOOP_DEATH);
+        Registry.register(Registry.SOUND_EVENT, ITEM_BUCKET_EMPTY_GOOP_ID, ITEM_BUCKET_EMPTY_GOOP);
+        Registry.register(Registry.SOUND_EVENT, ITEM_BUCKET_FILL_GOOP_ID, ITEM_BUCKET_FILL_GOOP);
 
         Registry.register(Registry.SOUND_EVENT, ENTITY_DRIPSTONE_TORTOISE_HURT_ID, ENTITY_DRIPSTONE_TORTOISE_HURT);
         Registry.register(Registry.SOUND_EVENT, ENTITY_DRIPSTONE_TORTOISE_DEATH_ID, ENTITY_DRIPSTONE_TORTOISE_DEATH);

@@ -1,9 +1,9 @@
 {
-  "feature": "cave_enhancements:underwater_spring",
+  "feature": "cave_enhancements:goop_caves/ore_goop",
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 188
+      "count": 60
     },
     {
       "type": "minecraft:in_square"

@@ -78,6 +78,7 @@
 
   "subtitles.entity.goop.hurt": "Goop hurts",
   "subtitles.entity.goop.death": "Goop dies",
+  "subtitles.item.bucket.fill_goop": "Goop poured",
 
   "subtitles.entity.dripstone_tortoise.hurt": "Dripstone Tortoise hurts",
   "subtitles.entity.dripstone_tortoise.death": "Dripstone Tortoise dies",

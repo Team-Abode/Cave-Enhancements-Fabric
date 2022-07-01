@@ -23,10 +23,13 @@ import javax.annotation.Nullable;
 public class SplatBlock extends MultifaceBlock implements SimpleWaterloggedBlock {
 
     private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    private final MultifaceSpreader spreader = new MultifaceSpreader(this);
+
     public SplatBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, false));
     }
+
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
@@ -58,7 +61,7 @@ public class SplatBlock extends MultifaceBlock implements SimpleWaterloggedBlock
     @Nullable
     @Override
     public MultifaceSpreader getSpreader() {
-        return null;
+        return this.spreader;
     }
 
 }
