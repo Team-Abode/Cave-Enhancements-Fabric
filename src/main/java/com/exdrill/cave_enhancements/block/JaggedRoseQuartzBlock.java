@@ -5,6 +5,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -14,6 +16,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -29,11 +32,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @SuppressWarnings("deprecation")
-public class JaggedRoseQuartzBlock extends Block implements SimpleWaterloggedBlock {
+public class JaggedRoseQuartzBlock extends DropExperienceBlock implements SimpleWaterloggedBlock {
     private static final BooleanProperty WATERLOGGED;
     private static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 12.0D, 15.0D);
     public JaggedRoseQuartzBlock(Properties settings) {
-        super(settings);
+        super(settings, UniformInt.of(1, 2));
         this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, false));
     }
 
@@ -89,6 +92,12 @@ public class JaggedRoseQuartzBlock extends Block implements SimpleWaterloggedBlo
         return SHAPE;
     }
 
+
+
+    @Override
+    public VoxelShape getCollisionShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+        return super.getCollisionShape(blockState, blockGetter, blockPos, collisionContext);
+    }
 
     static {
         WATERLOGGED = BlockStateProperties.WATERLOGGED;

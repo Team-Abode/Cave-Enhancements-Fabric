@@ -16,7 +16,7 @@ public class ModEntities {
     public static final EntityType<Goop> GOOP = Registry.register(
             Registry.ENTITY_TYPE,
             new ResourceLocation(CaveEnhancements.MODID, "goop"),
-            FabricEntityTypeBuilder.create(MobCategory.CREATURE, Goop::new)
+            FabricEntityTypeBuilder.create(MobCategory.MONSTER, Goop::new)
                     .dimensions(EntityDimensions.fixed(0.6f, 0.9f))
                     .build()
     );
@@ -32,7 +32,7 @@ public class ModEntities {
     public static final EntityType<DripstoneTortoise> DRIPSTONE_TORTOISE = Registry.register(
             Registry.ENTITY_TYPE,
             new ResourceLocation(CaveEnhancements.MODID, "dripstone_tortoise"),
-            FabricEntityTypeBuilder.create(MobCategory.CREATURE, DripstoneTortoise::new)
+            FabricEntityTypeBuilder.create(MobCategory.MONSTER, DripstoneTortoise::new)
                     .dimensions(EntityDimensions.fixed(1.3F, 0.8F))
                     .build()
     );

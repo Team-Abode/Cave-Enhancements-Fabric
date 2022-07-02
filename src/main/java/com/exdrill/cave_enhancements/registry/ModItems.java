@@ -65,8 +65,6 @@ public class ModItems {
 
     public static final HarmonicArrowItem HARMONIC_ARROW = new HarmonicArrowItem(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT));
 
-    public static final BlockItem ENCHANTED_TETHER = new BlockItem(ModBlocks.TEST, new Item.Properties().tab(CreativeModeTab.TAB_MISC));
-
     //Registry
     public static void register() {
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "goop"), GOOP);
@@ -113,7 +111,5 @@ public class ModItems {
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "goop_spawn_egg"), GOOP_SPAWN_EGG);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "cruncher_spawn_egg"), CRUNCHER_SPAWN_EGG);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "dripstone_tortoise_spawn_egg"), DRIPSTONE_TORTOISE_SPAWN_EGG);
-
-        Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "enchanted_tether"), ENCHANTED_TETHER);
     }
 }
