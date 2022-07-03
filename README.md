@@ -17,4 +17,4 @@ Cave Enhancements is a mod that expands upon the Caves and Cliffs update by addi
 ### **External Links**
 * Join the discord for sneak peeks, announcements, betas and more: https://discord.gg/ERRpzxNUT5
 
-* Cave Enhancements is also on Fabric, check it out: https://www.curseforge.com/minecraft/mc-mods/cave-enhancements-fabric
+* Cave Enhancements is also on Forge, check it out: https://www.curseforge.com/minecraft/mc-mods/cave-enhancements-forge
