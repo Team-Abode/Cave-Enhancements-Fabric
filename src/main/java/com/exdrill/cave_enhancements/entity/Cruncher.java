@@ -196,7 +196,7 @@ public class Cruncher extends Animal {
 
     // Attributes
     public static AttributeSupplier.Builder createCruncherAttributes() {
-        return Mob.createMobAttributes()
+        return Animal.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.15D)
                 .add(Attributes.MAX_HEALTH, 15);
     }

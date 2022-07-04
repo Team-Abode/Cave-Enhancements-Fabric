@@ -136,7 +136,7 @@ public class DripstoneTortoise extends PathfinderMob implements NeutralMob {
     }
 
     public static AttributeSupplier.Builder createDripstoneTortoiseAttributes() {
-        return Mob.createMobAttributes()
+        return PathfinderMob.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.125D)
                 .add(Attributes.MAX_HEALTH, 40)
                 .add(Attributes.ARMOR, 5)

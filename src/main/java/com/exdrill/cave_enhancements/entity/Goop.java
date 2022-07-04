@@ -53,7 +53,7 @@ public class Goop extends Monster implements GoopBucketable {
 
     // Attributes
     public static AttributeSupplier.Builder createGoopAttributes() {
-        return Mob.createMobAttributes()
+        return Monster.createMonsterAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
                 .add(Attributes.MAX_HEALTH, 15)

@@ -68,7 +68,5 @@ public class ModEntities {
         FabricDefaultAttributeRegistry.register(CRUNCHER, Cruncher.createCruncherAttributes());
         FabricDefaultAttributeRegistry.register(DRIPSTONE_TORTOISE, DripstoneTortoise.createDripstoneTortoiseAttributes());
         FabricDefaultAttributeRegistry.register(DRIPSTONE_PIKE, DripstonePike.createDripstonePikeAttributes());
-        SpawnRestrictionAccessor.callRegister(DRIPSTONE_TORTOISE, SpawnPlacements.Type.ON_GROUND, Types.MOTION_BLOCKING, DripstoneTortoise::checkDripstoneTortoiseSpawnRules);
-        SpawnRestrictionAccessor.callRegister(CRUNCHER, SpawnPlacements.Type.ON_GROUND, Types.MOTION_BLOCKING, Cruncher::checkCruncherSpawnRules);
     }
 }

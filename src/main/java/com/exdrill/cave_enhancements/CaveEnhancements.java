@@ -3,7 +3,10 @@ package com.exdrill.cave_enhancements;
 import com.exdrill.cave_enhancements.registry.*;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.RegistryOps;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BannerPattern;
 
 public class CaveEnhancements implements ModInitializer {
@@ -24,6 +27,7 @@ public class CaveEnhancements implements ModInitializer {
         ModBiomes.register();
         ModParticles.register();
         ModBiomes.registerModifications();
+        ModSpawnPlacements.register();
         ModStatusEffects.register();
         ModBlocks.registerOxidizablePairs();
         Registry.register(Registry.BANNER_PATTERN, new ResourceLocation(MODID, "goop"), GOOP);
