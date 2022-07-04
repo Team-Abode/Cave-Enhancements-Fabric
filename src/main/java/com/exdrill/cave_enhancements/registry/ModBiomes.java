@@ -26,12 +26,6 @@ public class ModBiomes {
         register(ROSE_QUARTZ_CAVES, CaveBiomes.createRoseQuartzCaves());
     }
 
-    public static void registerModifications() {
-          BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DRIPSTONE_CAVES), MobCategory.MONSTER, ModEntities.DRIPSTONE_TORTOISE, 100, 2, 3);
-          BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.LUSH_CAVES), MobCategory.MONSTER, ModEntities.CRUNCHER, 75, 1, 1);
-    }
-
-
     private static Holder<Biome> register(ResourceKey<Biome> key, Biome biome) {
         return BuiltinRegistries.register(BuiltinRegistries.BIOME, key, biome);
     }

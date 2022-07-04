@@ -28,7 +28,7 @@ public class ModItems {
     public static final BlockItem CHARGED_LIGHTNING_ANCHOR = new BlockItem(ModBlocks.CHARGED_LIGHTNING_ANCHOR, new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE));
     public static final AmethystFluteItem AMETHYST_FLUTE = new AmethystFluteItem(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1).durability(64));
     public static final SpawnEggItem GOOP_SPAWN_EGG = new SpawnEggItem(ModEntities.GOOP, 13946012, 11637089, new Item.Properties().tab(CreativeModeTab.TAB_MISC));
-    public static final GoopBucketItem GOOP_BUCKET = new GoopBucketItem(ModEntities.GOOP, Fluids.EMPTY, ModSounds.ITEM_BUCKET_EMPTY_GOOP, new Item.Properties().tab(CreativeModeTab.TAB_MISC).stacksTo(1));
+    public static final GoopBucketItem GOOP_BUCKET = new GoopBucketItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC).stacksTo(1));
     public static final BannerPatternItem GOOP_BANNER_PATTERN = new BannerPatternItem(ModTags.GOOP_PATTERN_ITEM,new Item.Properties().tab(CreativeModeTab.TAB_MISC));
 
     // Redstone Receivers

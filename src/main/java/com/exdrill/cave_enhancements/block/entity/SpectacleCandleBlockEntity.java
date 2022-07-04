@@ -1,7 +1,7 @@
 package com.exdrill.cave_enhancements.block.entity;
 
 import com.exdrill.cave_enhancements.block.SpectacleCandleBlock;
-import com.exdrill.cave_enhancements.registry.ModBlocks;
+import com.exdrill.cave_enhancements.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class SpectacleCandleBlockEntity extends BlockEntity {
     public SpectacleCandleBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlocks.SPECTACLE_CANDLE_BLOCK_ENTITY, pos, state);
+        super(ModBlockEntities.SPECTACLE_CANDLE, pos, state);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state) {

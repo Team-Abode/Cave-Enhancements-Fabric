@@ -1,5 +1,6 @@
 package com.exdrill.cave_enhancements.block.entity;
 
+import com.exdrill.cave_enhancements.registry.ModBlockEntities;
 import com.exdrill.cave_enhancements.registry.ModBlocks;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -14,7 +15,7 @@ public class LightningAnchorBlockEntity extends BlockEntity {
     public int ticksTillActivate = 30;
 
     public LightningAnchorBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlocks.LIGHTNING_ANCHOR_BLOCK_ENTITY, pos, state);
+        super(ModBlockEntities.LIGHTNING_ANCHOR, pos, state);
     }
 
     public static void tick(Level world, BlockPos pos, LightningAnchorBlockEntity entity) {

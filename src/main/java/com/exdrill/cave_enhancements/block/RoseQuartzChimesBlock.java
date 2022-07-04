@@ -1,6 +1,7 @@
 package com.exdrill.cave_enhancements.block;
 
 import com.exdrill.cave_enhancements.block.entity.RoseQuartzChimesBlockEntity;
+import com.exdrill.cave_enhancements.registry.ModBlockEntities;
 import com.exdrill.cave_enhancements.registry.ModBlocks;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.BlockPos;
@@ -61,7 +62,7 @@ public class RoseQuartzChimesBlock extends BaseEntityBlock {
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-        return createTickerHelper(type, ModBlocks.ROSE_QUARTZ_CHIMES_BLOCK_ENTITY, (world1, pos, state1, entity) -> RoseQuartzChimesBlockEntity.tick(world1, pos, entity));
+        return createTickerHelper(type, ModBlockEntities.ROSE_QUARTZ_CHIMES, (world1, pos, state1, entity) -> RoseQuartzChimesBlockEntity.tick(world1, pos, entity));
     }
 
     public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {

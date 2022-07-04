@@ -1,7 +1,7 @@
 package com.exdrill.cave_enhancements.block.entity;
 
 import com.exdrill.cave_enhancements.block.ReceiverBlock;
-import com.exdrill.cave_enhancements.registry.ModBlocks;
+import com.exdrill.cave_enhancements.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
@@ -13,7 +13,7 @@ public class ReceiverBlockEntity extends BlockEntity {
     public int poweredTicks = 0;
 
     public ReceiverBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlocks.RECEIVER_BLOCK_ENTITY, pos, state);
+        super(ModBlockEntities.RECEIVER_BLOCK, pos, state);
     }
 
     public void tick(Level world, BlockPos pos, BlockState state) {

@@ -1,9 +1,8 @@
 package com.exdrill.cave_enhancements.block.entity;
 
-import com.exdrill.cave_enhancements.registry.ModBlocks;
+import com.exdrill.cave_enhancements.registry.ModBlockEntities;
 import com.exdrill.cave_enhancements.registry.ModParticles;
-import com.exdrill.cave_enhancements.registry.ModStatusEffects;
-import java.util.List;
+import com.exdrill.cave_enhancements.registry.ModEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -18,13 +17,15 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
+import java.util.List;
+
 public class RoseQuartzChimesBlockEntity extends BlockEntity {
     public int ticksTillActivateClear = 1200;
     public int ticking = 0;
 
 
     public RoseQuartzChimesBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlocks.ROSE_QUARTZ_CHIMES_BLOCK_ENTITY, pos, state);
+        super(ModBlockEntities.ROSE_QUARTZ_CHIMES, pos, state);
     }
 
     public static void tick(Level world, BlockPos pos, RoseQuartzChimesBlockEntity entity) {
@@ -50,10 +51,10 @@ public class RoseQuartzChimesBlockEntity extends BlockEntity {
                 }
             }
             if ((otherEntity instanceof AgeableMob || otherEntity instanceof Player)) {
-                if (world.isRaining() && entity.ticksTillActivateClear <= 600 && !otherEntity.hasEffect(ModStatusEffects.EASING) ) {
-                    otherEntity.addEffect(new MobEffectInstance(ModStatusEffects.EASING, 300, 1, false, true));
-                } else if (!world.isRaining() && entity.ticksTillActivateClear <= 0 && !otherEntity.hasEffect(ModStatusEffects.EASING)) {
-                    otherEntity.addEffect(new MobEffectInstance(ModStatusEffects.EASING, 300, 0, false, true));
+                if (world.isRaining() && entity.ticksTillActivateClear <= 600 && !otherEntity.hasEffect(ModEffects.EASING) ) {
+                    otherEntity.addEffect(new MobEffectInstance(ModEffects.EASING, 300, 1, false, true));
+                } else if (!world.isRaining() && entity.ticksTillActivateClear <= 0 && !otherEntity.hasEffect(ModEffects.EASING)) {
+                    otherEntity.addEffect(new MobEffectInstance(ModEffects.EASING, 300, 0, false, true));
                 }
             }
         }

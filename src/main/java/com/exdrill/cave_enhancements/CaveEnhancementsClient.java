@@ -7,6 +7,7 @@ import com.exdrill.cave_enhancements.client.model.DripstonePikeModel;
 import com.exdrill.cave_enhancements.client.model.DripstoneTortoiseModel;
 import com.exdrill.cave_enhancements.client.model.GoopModel;
 import com.exdrill.cave_enhancements.particle.*;
+import com.exdrill.cave_enhancements.registry.ModBlockEntities;
 import com.exdrill.cave_enhancements.registry.ModBlocks;
 import com.exdrill.cave_enhancements.registry.ModEntities;
 import com.exdrill.cave_enhancements.registry.ModParticles;
@@ -51,7 +52,7 @@ public class CaveEnhancementsClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(RoseQuartzChimesBlockEntityRenderer.LAYER_LOCATION, RoseQuartzChimesBlockEntityRenderer::getTexturedModelData);
 
         // Block Entity Renderers
-        BlockEntityRendererRegistry.register(ModBlocks.ROSE_QUARTZ_CHIMES_BLOCK_ENTITY, RoseQuartzChimesBlockEntityRenderer::new);
+        BlockEntityRendererRegistry.register(ModBlockEntities.ROSE_QUARTZ_CHIMES, RoseQuartzChimesBlockEntityRenderer::new);
         ClientSpriteRegistryCallback.event(TextureAtlas.LOCATION_BLOCKS).register((atlasTexture, registry) ->
                 registry.register(new ResourceLocation(MODID, "entity/rose_quartz_chimes/chime")));
 

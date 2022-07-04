@@ -1,4 +1,4 @@
-package com.exdrill.cave_enhancements.mixin;
+package com.exdrill.cave_enhancements.mixin.client;
 
 
 import net.minecraft.client.color.block.BlockColors;

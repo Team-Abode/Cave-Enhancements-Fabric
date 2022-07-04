@@ -118,36 +118,6 @@ public class ModBlocks {
         BlockRenderLayerMap.INSTANCE.putBlock(WAXED_OXIDIZED_REDSTONE_RECEIVER, RenderType.cutout());
     }
 
-    // Block Entity
-    public static BlockEntityType<SpectacleCandleBlockEntity> SPECTACLE_CANDLE_BLOCK_ENTITY;
-    public static BlockEntityType<SpectacleCandleCakeBlockEntity> SPECTACLE_CANDLE_CAKE_BLOCK_ENTITY;
-    public static BlockEntityType<LightningAnchorBlockEntity> LIGHTNING_ANCHOR_BLOCK_ENTITY;
-    public static BlockEntityType<RoseQuartzChimesBlockEntity> ROSE_QUARTZ_CHIMES_BLOCK_ENTITY;
-    public static BlockEntityType<ReceiverBlockEntity> RECEIVER_BLOCK_ENTITY;
-
-
-
-    // Block Entity Registry
-    public static void registerBlockEntities() {
-        SPECTACLE_CANDLE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "spectacle_candle"), FabricBlockEntityTypeBuilder.create(SpectacleCandleBlockEntity::new, SPECTACLE_CANDLE).build(null));
-        SPECTACLE_CANDLE_CAKE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "spectacle_candle_cake"), FabricBlockEntityTypeBuilder.create(SpectacleCandleCakeBlockEntity::new, SPECTACLE_CANDLE_CAKE).build(null));
-        LIGHTNING_ANCHOR_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "lightning_anchor"), FabricBlockEntityTypeBuilder.create(LightningAnchorBlockEntity::new, LIGHTNING_ANCHOR).build(null));
-        ROSE_QUARTZ_CHIMES_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "rose_quartz_chimes"), FabricBlockEntityTypeBuilder.create(RoseQuartzChimesBlockEntity::new, ROSE_QUARTZ_CHIMES).build(null));
-        RECEIVER_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "redstone_receiver"),FabricBlockEntityTypeBuilder.create(ReceiverBlockEntity::new, REDSTONE_RECEIVER, EXPOSED_REDSTONE_RECEIVER, WEATHERED_REDSTONE_RECEIVER, OXIDIZED_REDSTONE_RECEIVER, WAXED_REDSTONE_RECEIVER, WAXED_EXPOSED_REDSTONE_RECEIVER, WAXED_WEATHERED_REDSTONE_RECEIVER, WAXED_OXIDIZED_REDSTONE_RECEIVER).build(null));
-    }
-
-    // Pairs
-    public static void registerOxidizablePairs() {
-        OxidizableBlocksRegistry.registerOxidizableBlockPair(REDSTONE_RECEIVER, EXPOSED_REDSTONE_RECEIVER);
-        OxidizableBlocksRegistry.registerOxidizableBlockPair(EXPOSED_REDSTONE_RECEIVER, WEATHERED_REDSTONE_RECEIVER);
-        OxidizableBlocksRegistry.registerOxidizableBlockPair(WEATHERED_REDSTONE_RECEIVER, OXIDIZED_REDSTONE_RECEIVER);
-
-        OxidizableBlocksRegistry.registerWaxableBlockPair(REDSTONE_RECEIVER, WAXED_REDSTONE_RECEIVER);
-        OxidizableBlocksRegistry.registerWaxableBlockPair(EXPOSED_REDSTONE_RECEIVER, WAXED_EXPOSED_REDSTONE_RECEIVER);
-        OxidizableBlocksRegistry.registerWaxableBlockPair(WEATHERED_REDSTONE_RECEIVER, WAXED_WEATHERED_REDSTONE_RECEIVER);
-        OxidizableBlocksRegistry.registerWaxableBlockPair(OXIDIZED_REDSTONE_RECEIVER, WAXED_OXIDIZED_REDSTONE_RECEIVER);
-    }
-
     private static ToIntFunction<BlockState> litBlockEmission(int i) {
         return (blockState) -> (Boolean)blockState.getValue(BlockStateProperties.LIT) ? i : 0;
     }

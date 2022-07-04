@@ -14,8 +14,8 @@
     "OverworldBiomeBuilderMixin"
   ],
   "client": [
-    "ItemRendererMixin",
-    "ModelBakeryMixin"
+    "client.ItemRendererMixin",
+    "client.ModelBakeryMixin"
   ],
   "injectors": {
     "defaultRequire": 1

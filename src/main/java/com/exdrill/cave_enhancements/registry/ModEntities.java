@@ -62,7 +62,6 @@ public class ModEntities {
                     .build()
     );
 
-
     public static void register() {
         FabricDefaultAttributeRegistry.register(GOOP, Goop.createGoopAttributes());
         FabricDefaultAttributeRegistry.register(CRUNCHER, Cruncher.createCruncherAttributes());

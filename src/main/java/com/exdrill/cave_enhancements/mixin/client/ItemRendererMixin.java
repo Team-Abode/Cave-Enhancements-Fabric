@@ -1,4 +1,4 @@
-package com.exdrill.cave_enhancements.mixin;
+package com.exdrill.cave_enhancements.mixin.client;
 
 import com.exdrill.cave_enhancements.registry.ModItems;
 import net.minecraft.client.renderer.ItemModelShaper;
