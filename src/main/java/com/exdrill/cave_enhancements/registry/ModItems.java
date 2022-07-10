@@ -20,7 +20,7 @@ public class ModItems {
 
     //Items
     public static BlockItem GOOP;
-    public static final GlowPasteItem GLOW_PASTE = new GlowPasteItem(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1).durability(32));
+    public static GlowPasteItem GLOW_PASTE;
     public static final BlockItem SPECTACLE_CANDLE = new BlockItem(ModBlocks.SPECTACLE_CANDLE, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
     public static final BlockItem LIGHTNING_ANCHOR = new BlockItem(ModBlocks.LIGHTNING_ANCHOR, new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE));
     public static final BlockItem CHARGED_LIGHTNING_ANCHOR = new BlockItem(ModBlocks.CHARGED_LIGHTNING_ANCHOR, new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE));
@@ -67,7 +67,12 @@ public class ModItems {
     public static void register() {
         GOOP = (BlockItem) Scribe.GetItem(new ResourceLocation(CaveEnhancements.MODID, "goop"));
 
-        Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "glow_paste"), GLOW_PASTE);
+        GLOW_PASTE = (GlowPasteItem) Scribe.RegisterItem(
+                new ResourceLocation(CaveEnhancements.MODID, "glow_paste"),
+                new GlowPasteItem(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1).durability(32)),
+                CreativeModeTab.TAB_TOOLS
+        );
+
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "spectacle_candle"), SPECTACLE_CANDLE);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "lightning_anchor"), LIGHTNING_ANCHOR);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "charged_lightning_anchor"), CHARGED_LIGHTNING_ANCHOR);
