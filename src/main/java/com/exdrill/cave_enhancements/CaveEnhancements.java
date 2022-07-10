@@ -3,6 +3,7 @@ package com.exdrill.cave_enhancements;
 import com.exdrill.cave_enhancements.entity.Cruncher;
 import com.exdrill.cave_enhancements.entity.DripstoneTortoise;
 import com.exdrill.cave_enhancements.registry.*;
+import com.outercloud.scribe.Scribe;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
@@ -26,6 +27,8 @@ public class CaveEnhancements implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        Scribe.InitializeDataDrivenFeatures();
+
         ModBlocks.register();
         ModBlockEntities.register();
 

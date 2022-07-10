@@ -1,0 +1,12 @@
+{
+  "lifetime": 12,
+  "scale":  0.3,
+  "wander": {
+    "magnitude": 1,
+    "smoothness": 300
+  },
+  "physics": {
+    "collides": false,
+    "gravity": 0
+  }
+}

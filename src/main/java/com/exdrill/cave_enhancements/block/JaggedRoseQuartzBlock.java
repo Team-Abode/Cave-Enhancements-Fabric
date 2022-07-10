@@ -1,8 +1,11 @@
 package com.exdrill.cave_enhancements.block;
 
+import com.exdrill.cave_enhancements.CaveEnhancements;
 import com.exdrill.cave_enhancements.registry.ModParticles;
+import com.outercloud.scribe.Scribe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -83,6 +86,7 @@ public class JaggedRoseQuartzBlock extends DropExperienceBlock implements Simple
             double d = (double)l + random.nextDouble();
             double e = (double)j + 0.5D;
             double f = (double)k + random.nextDouble();
+
             world.addParticle(ModParticles.ROSE_QUARTZ_AURA, d, e, f, Mth.nextFloat(random, -1, 1) / 50, 0.01D, Mth.nextFloat(random, -1, 1) / 50);
         }
     }
