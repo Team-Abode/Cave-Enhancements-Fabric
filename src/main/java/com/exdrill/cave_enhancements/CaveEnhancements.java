@@ -24,16 +24,13 @@ public class CaveEnhancements implements ModInitializer {
 
     public static final BannerPattern GOOP = new BannerPattern("goop");
 
-
-
-
     @Override
     public void onInitialize() {
         ModBlocks.register();
+        ModEntities.register();
         ModItems.register();
         ModBlockEntities.register();
         ModSounds.register();
-        ModEntities.register();
         ModBiomes.register();
         ModParticles.register();
         ModEffects.register();
@@ -44,15 +41,6 @@ public class CaveEnhancements implements ModInitializer {
 
         SpawnRestrictionAccessor.callRegister(ModEntities.DRIPSTONE_TORTOISE, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, DripstoneTortoise::checkDripstoneTortoiseSpawnRules);
         SpawnRestrictionAccessor.callRegister(ModEntities.CRUNCHER, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, Cruncher::checkCruncherSpawnRules);
-
-        OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.REDSTONE_RECEIVER, ModBlocks.EXPOSED_REDSTONE_RECEIVER);
-        OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.EXPOSED_REDSTONE_RECEIVER, ModBlocks.WEATHERED_REDSTONE_RECEIVER);
-        OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.WEATHERED_REDSTONE_RECEIVER, ModBlocks.OXIDIZED_REDSTONE_RECEIVER);
-
-        OxidizableBlocksRegistry.registerWaxableBlockPair(ModBlocks.REDSTONE_RECEIVER, ModBlocks.WAXED_REDSTONE_RECEIVER);
-        OxidizableBlocksRegistry.registerWaxableBlockPair(ModBlocks.EXPOSED_REDSTONE_RECEIVER, ModBlocks.WAXED_EXPOSED_REDSTONE_RECEIVER);
-        OxidizableBlocksRegistry.registerWaxableBlockPair(ModBlocks.WEATHERED_REDSTONE_RECEIVER, ModBlocks.WAXED_WEATHERED_REDSTONE_RECEIVER);
-        OxidizableBlocksRegistry.registerWaxableBlockPair(ModBlocks.OXIDIZED_REDSTONE_RECEIVER, ModBlocks.WAXED_OXIDIZED_REDSTONE_RECEIVER);
     }
 }
 
