@@ -11,6 +11,7 @@ import com.exdrill.cave_enhancements.registry.ModBlockEntities;
 import com.exdrill.cave_enhancements.registry.ModBlocks;
 import com.exdrill.cave_enhancements.registry.ModEntities;
 import com.exdrill.cave_enhancements.registry.ModParticles;
+import com.outercloud.scribe.Scribe;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -35,8 +36,14 @@ public class CaveEnhancementsClient implements ClientModInitializer {
         ModBlocks.registerClient();
         ModParticles.registerClient();
 
+        Scribe.RegisterClientEntity(
+            new ResourceLocation(CaveEnhancements.MODID, "goop"),
+            GoopRenderer::new,
+            GoopModel.ENTITY_MODEL_LAYER,
+            GoopModel::getTexturedModelData
+        );
+
         // Entity Renderers
-        EntityRendererRegistry.register(ModEntities.GOOP, GoopRenderer::new);
         EntityRendererRegistry.register(ModEntities.CRUNCHER, CruncherRenderer::new);
         EntityRendererRegistry.register(ModEntities.DRIPSTONE_TORTOISE, DripstoneTortoiseRenderer::new);
         EntityRendererRegistry.register(ModEntities.DRIPSTONE_PIKE, DripstonePikeRenderer::new);
@@ -46,7 +53,6 @@ public class CaveEnhancementsClient implements ClientModInitializer {
 
         // Render Layers
         EntityModelLayerRegistry.registerModelLayer(CruncherModel.ENTITY_MODEL_LAYER, CruncherModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(GoopModel.ENTITY_MODEL_LAYER, GoopModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(DripstoneTortoiseModel.LAYER_LOCATION, DripstoneTortoiseModel::texturedModelData);
         EntityModelLayerRegistry.registerModelLayer(DripstonePikeModel.LAYER_LOCATION, DripstonePikeModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(RoseQuartzChimesBlockEntityRenderer.LAYER_LOCATION, RoseQuartzChimesBlockEntityRenderer::getTexturedModelData);
