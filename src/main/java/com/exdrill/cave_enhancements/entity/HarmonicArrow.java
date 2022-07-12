@@ -47,7 +47,7 @@ public class HarmonicArrow extends AbstractArrow {
 
     @Override
     protected void onHitBlock(BlockHitResult blockHitResult) {
-        knockbackEntitiesAround(0.35F);
+        knockbackEntitiesAround(0.45F);
         if (this.level.isClientSide) {
             this.level.addParticle(ModParticles.AMETHYST_BLAST, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
         }
@@ -56,7 +56,7 @@ public class HarmonicArrow extends AbstractArrow {
 
     @Override
     protected void doPostHurtEffects(LivingEntity target) {
-        knockbackEntitiesAround(0.2F);
+        knockbackEntitiesAround(0.25F);
     }
 
     public void knockbackEntitiesAround( float strength ) {
@@ -81,7 +81,9 @@ public class HarmonicArrow extends AbstractArrow {
             InteractionHand hand = owner.getMainHandItem().getItem() == Items.BOW ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
             ItemStack itemStack = owner.getItemInHand(hand);
 
-            return EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, itemStack) / 30F;
+
+
+            return EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, itemStack) / 30F;
         }
         return 0;
     }

@@ -4,8 +4,13 @@ import com.exdrill.cave_enhancements.registry.ModBlocks;
 import com.exdrill.cave_enhancements.registry.ModParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -27,6 +32,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("deprecation")
 public class DrippingGoopBlock extends Block implements SimpleWaterloggedBlock {
 
     private static final BooleanProperty WATERLOGGED;
@@ -59,6 +65,46 @@ public class DrippingGoopBlock extends Block implements SimpleWaterloggedBlock {
         boolean waterCheck = fluidState.getType() == Fluids.WATER;
         BlockState blockState = super.defaultBlockState();
         return blockState.setValue(WATERLOGGED, waterCheck);
+    }
+
+    @Override
+    public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
+        if (this.isSlidingDown(blockPos, entity)) {
+            doHangMovement(entity);
+            maybeDoHangEffects(level, entity);
+        }
+
+
+        super.entityInside(blockState, level, blockPos, entity);
+    }
+
+    private void maybeDoHangEffects(Level level, Entity entity) {
+        if (level.random.nextInt(10) == 0) {
+            entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
+        }
+        if (level instanceof ServerLevel server && server.random.nextInt(5) == 0) {
+
+            BlockState blockState = ModBlocks.DRIPPING_GOOP.defaultBlockState();
+
+            server.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, blockState), entity.getX(), entity.getY(), entity.getZ(), 5, 0.0, 0.0, 0.0, 0.0);
+        }
+
+    }
+
+    private void doHangMovement(Entity entity) {
+        Vec3 vec3 = entity.getDeltaMovement();
+        if (vec3.y < -0.13) {
+            double d = -0.05 / vec3.y;
+            entity.setDeltaMovement(new Vec3(vec3.x * d, -0.35, vec3.z * d));
+        } else {
+            entity.setDeltaMovement(new Vec3(vec3.x, -0.05, vec3.z));
+        }
+
+        entity.resetFallDistance();
+    }
+
+    private boolean isSlidingDown(BlockPos blockPos, Entity entity) {
+        return !entity.isOnGround();
     }
 
     public static boolean canDrip(BlockState state) {
@@ -114,8 +160,6 @@ public class DrippingGoopBlock extends Block implements SimpleWaterloggedBlock {
     public VoxelShape getShape(BlockState blockState, BlockGetter blockView, BlockPos pos, CollisionContext shapeContext) {
         return SHAPE;
     }
-
-
 
     public boolean propagatesSkylightDown(BlockState state, BlockGetter world, BlockPos pos) {
         return state.getFluidState().isEmpty();
