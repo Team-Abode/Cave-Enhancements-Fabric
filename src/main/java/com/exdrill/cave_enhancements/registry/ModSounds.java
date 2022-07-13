@@ -31,6 +31,9 @@ public class ModSounds {
     public static final ResourceLocation BLOCK_GOOP_BLOCK_FALL_ID = new ResourceLocation(CaveEnhancements.MODID, "block.goop_block.fall");
     public static SoundEvent BLOCK_GOOP_BLOCK_FALL = new SoundEvent(BLOCK_GOOP_BLOCK_FALL_ID);
 
+    public static final ResourceLocation BLOCK_GOOP_BLOCK_SLIDE_ID = new ResourceLocation(CaveEnhancements.MODID, "block.goop_block.slide");
+    public static SoundEvent BLOCK_GOOP_BLOCK_SLIDE = new SoundEvent(BLOCK_GOOP_BLOCK_SLIDE_ID);
+
     // Goop Decoration Sounds
     public static final ResourceLocation BLOCK_GOOP_DECORATION_BREAK_ID = new ResourceLocation(CaveEnhancements.MODID, "block.goop_decoration.break");
     public static SoundEvent BLOCK_GOOP_DECORATION_BREAK = new SoundEvent(BLOCK_GOOP_DECORATION_BREAK_ID);
@@ -88,11 +91,13 @@ public class ModSounds {
         Registry.register(Registry.SOUND_EVENT, BLOCK_GOOP_BLOCK_HIT_ID, BLOCK_GOOP_BLOCK_HIT);
         Registry.register(Registry.SOUND_EVENT, BLOCK_GOOP_BLOCK_FALL_ID, BLOCK_GOOP_BLOCK_FALL);
 
+
         Registry.register(Registry.SOUND_EVENT, BLOCK_GOOP_DECORATION_BREAK_ID, BLOCK_GOOP_DECORATION_BREAK);
         Registry.register(Registry.SOUND_EVENT, BLOCK_GOOP_DECORATION_STEP_ID, BLOCK_GOOP_DECORATION_STEP);
         Registry.register(Registry.SOUND_EVENT, BLOCK_GOOP_DECORATION_PLACE_ID, BLOCK_GOOP_DECORATION_PLACE);
         Registry.register(Registry.SOUND_EVENT, BLOCK_GOOP_DECORATION_HIT_ID, BLOCK_GOOP_DECORATION_HIT);
         Registry.register(Registry.SOUND_EVENT, BLOCK_GOOP_DECORATION_FALL_ID, BLOCK_GOOP_DECORATION_FALL);
+        Registry.register(Registry.SOUND_EVENT, BLOCK_GOOP_BLOCK_SLIDE_ID, BLOCK_GOOP_BLOCK_SLIDE);
 
         Registry.register(Registry.SOUND_EVENT, ENTITY_GOOP_HURT_ID, ENTITY_GOOP_HURT);
         Registry.register(Registry.SOUND_EVENT, ENTITY_GOOP_DEATH_ID, ENTITY_GOOP_DEATH);

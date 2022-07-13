@@ -59,6 +59,13 @@
     ],
     "subtitle": "subtitles.block.generic.place"
   },
+  "block.goop_block.slide": {
+    "sounds": [
+      "cave_enhancements:block/goop_block/slide1",
+      "cave_enhancements:block/goop_block/slide2"
+    ],
+    "subtitle": "subtitles.block.goop_block.slide"
+  },
   "block.goop_decoration.break": {
     "sounds": [
       "cave_enhancements:block/goop_block/step1",
