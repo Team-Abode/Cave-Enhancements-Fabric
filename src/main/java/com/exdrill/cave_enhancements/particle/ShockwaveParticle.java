@@ -41,7 +41,7 @@ public class ShockwaveParticle extends Particle {
         float y = (float)(Mth.lerp(tickDelta, this.yo, this.y) - cameraPos.y());
         float z = (float)(Mth.lerp(tickDelta, this.zo, this.z) - cameraPos.z());
 
-        float size = this.getSize(tickDelta) * this.age / 20F * 25F + tickDelta / 20F * 25F;
+        float size = (this.age + tickDelta) / 20F * 25F;
 
         float minU = this.getMinU();
         float maxU = this.getMaxU();
@@ -80,6 +80,14 @@ public class ShockwaveParticle extends Particle {
             vec3f.transform(quaternion);
             vec3f.add(x, y, z);
         }
+
+        float UE = maxU - minU;
+        maxU = 15F / 16F * UE + minU;
+        minU += 1F / 16F * UE;
+
+        float VE = maxV - minV;
+        maxV =  9F / 16F * VE + minV;
+        minV += 7F / 16F * VE;
 
         vertexConsumer.vertex(vertices[0].x(), vertices[0].y(), vertices[0].z()).uv(maxU, maxV).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
         vertexConsumer.vertex(vertices[1].x(), vertices[1].y(), vertices[1].z()).uv(maxU, minV).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(light).endVertex();
