@@ -31,46 +31,18 @@ public class ModParticles {
     }
 
     public static void registerClient() {
-        // Small Goop Drip Client Particle
-        ClientSpriteRegistryCallback.event(InventoryMenu.BLOCK_ATLAS).register(((atlasTexture, registry) -> {
-            registry.register(new ResourceLocation(CaveEnhancements.MODID, "particle/small_goop_drip"));
-        }));
         ParticleFactoryRegistry.getInstance().register(ModParticles.SMALL_GOOP_DRIP, SmallGoopDripParticle.SmallGoopDripFactory::new);
 
-        // Shockwave Client Particle
-        ClientSpriteRegistryCallback.event(InventoryMenu.BLOCK_ATLAS).register(((atlasTexture, registry) -> {
-            registry.register(new ResourceLocation(CaveEnhancements.MODID, "particle/shockwave"));
-        }));
         ParticleFactoryRegistry.getInstance().register(ModParticles.SHOCKWAVE, ShockwaveParticle.Factory::new);
 
-        // Rose Quartz Aura Client Particle
-        ClientSpriteRegistryCallback.event(InventoryMenu.BLOCK_ATLAS).register(((atlasTexture, registry) -> {
-            registry.register(new ResourceLocation(CaveEnhancements.MODID, "particle/rose_quartz_aura"));
-        }));
         ParticleFactoryRegistry.getInstance().register(ModParticles.ROSE_QUARTZ_AURA, RoseQuartzAuraParticle.RoseQuartzFactory::new);
 
-        // Soothing Note Client Particle
-        ClientSpriteRegistryCallback.event(InventoryMenu.BLOCK_ATLAS).register(((atlasTexture, registry) -> {
-            registry.register(new ResourceLocation(CaveEnhancements.MODID, "particle/soothing_note"));
-        }));
         ParticleFactoryRegistry.getInstance().register(ModParticles.SOOTHING_NOTE, SoothingNoteParticle.SoothingNoteFactory::new);
 
-        // Rose Chimes Client Particle
-        ClientSpriteRegistryCallback.event(InventoryMenu.BLOCK_ATLAS).register(((atlasTexture, registry) -> {
-            registry.register(new ResourceLocation(CaveEnhancements.MODID, "particle/rose_chimes"));
-        }));
         ParticleFactoryRegistry.getInstance().register(ModParticles.ROSE_CHIMES, RoseChimesParticle.RoseChimesFactory::new);
 
-        // Amethyst Blast Client Particle
-        ClientSpriteRegistryCallback.event(InventoryMenu.BLOCK_ATLAS).register(((atlasTexture, registry) -> {
-            registry.register(new ResourceLocation(CaveEnhancements.MODID, "particle/amethyst_blast"));
-        }));
         ParticleFactoryRegistry.getInstance().register(ModParticles.AMETHYST_BLAST, AmethystBlastParticle.Factory::new);
 
-        ClientSpriteRegistryCallback.event(InventoryMenu.BLOCK_ATLAS).register(((atlasTexture, registry) -> {
-            registry.register(new ResourceLocation(CaveEnhancements.MODID, "particle/hovering_note"));
-        }));
         ParticleFactoryRegistry.getInstance().register(ModParticles.HOVERING_NOTE, HoveringNoteParticle.Factory::new);
-
     }
 }
