@@ -359,6 +359,7 @@ public class DripstoneTortoise extends PathfinderMob implements NeutralMob {
 
         public boolean canContinueToUse() {
             if(soothed > 0) return false;
+            if (!isOnGround()) return false;
 
             LivingEntity livingEntity = this.mob.getTarget();
 
@@ -459,7 +460,7 @@ public class DripstoneTortoise extends PathfinderMob implements NeutralMob {
         }
 
         public boolean canUse() {
-            if(isAggressive()) return false;
+            if (isAggressive() || !isOnGround()) return false;
 
             long l = level.getGameTime();
             if (l - this.lastUpdateTime < 20L) {
@@ -472,7 +473,7 @@ public class DripstoneTortoise extends PathfinderMob implements NeutralMob {
         }
 
         public boolean canContinueToUse() {
-            return !isAggressive();
+            return !isAggressive() || !isOnGround();
         }
 
         public void start() {
