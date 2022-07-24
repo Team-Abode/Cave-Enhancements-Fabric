@@ -6,11 +6,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "cave_enhancements:goop",
+          "name": "cave_enhancements:volatile_goop",
           "functions": [
             {
               "function": "minecraft:set_count",
-              "count": 1.0,
+              "count": 8.0,
               "add": false
             }
           ],
