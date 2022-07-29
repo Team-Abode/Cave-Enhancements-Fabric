@@ -33,9 +33,9 @@ public abstract class OverworldBiomeBuilderMixin {
     private void writeCaveBiomes(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> parameters, CallbackInfo ci) {
 
         // Rose Quartz Caves
-        this.addUndergroundBiome(parameters, Climate.Parameter.span(0.7F, 1F), this.defaultParameter, this.deepOceanContinentalness, Climate.Parameter.span(-0.5F, 0.5F), Climate.Parameter.span(-0.75F, 0.4F), 0.0F, ModBiomes.GOOP_CAVES);
-
+        this.addUndergroundBiome(parameters, Climate.Parameter.span(0.7F, 1F), this.defaultParameter, this.deepOceanContinentalness, Climate.Parameter.span(-0.5F, 0.5F), Climate.Parameter.span(-0.75F, 0.4F), 0.0F, ModBiomes.ROSE_QUARTZ_CAVES);
+        
         // Goop Caves
-        this.addUndergroundBiome(parameters, Climate.Parameter.span(-1F, 0.215F), Climate.Parameter.span(-0.4F, 0.5F), Climate.Parameter.span(0.32F, 0.72F), Climate.Parameter.span(0.4F, 0.7F), Climate.Parameter.span(0.8F, 0.875F), 0.0F, ModBiomes.ROSE_QUARTZ_CAVES);
+        this.addUndergroundBiome(parameters, Climate.Parameter.span(-1F, 0.2F), Climate.Parameter.span(-0.4F, 0.5F), Climate.Parameter.span(0.32F, 0.72F), Climate.Parameter.span(0.4F, 0.7F), Climate.Parameter.span(0.8F, 0.875F), 0.0F, ModBiomes.GOOP_CAVES);
     }
 }

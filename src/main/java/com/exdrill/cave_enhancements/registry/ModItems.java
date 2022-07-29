@@ -22,7 +22,7 @@ public class ModItems {
     public static final BlockItem GOOP_BLOCK = new BlockItem(ModBlocks.GOOP_BLOCK, new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS));
     public static final BlockItem GOOP_TRAP = new BlockItem(ModBlocks.GOOP_TRAP, new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS));
     public static final BlockItem DRIPPING_GOOP = new BlockItem(ModBlocks.DRIPPING_GOOP, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
-    public static final BlockItem VOLATILE_GOOP = new BlockItem(ModBlocks.VOLATILE_GOOP, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
+    //public static final BlockItem VOLATILE_GOOP = new BlockItem(ModBlocks.VOLATILE_GOOP, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
 
     public static final GlowPasteItem GLOW_PASTE = new GlowPasteItem(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1).durability(32));
     public static final BlockItem SPECTACLE_CANDLE = new BlockItem(ModBlocks.SPECTACLE_CANDLE, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
@@ -73,7 +73,7 @@ public class ModItems {
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "goop_block"), GOOP_BLOCK);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "goop_trap"), GOOP_TRAP);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "dripping_goop"), DRIPPING_GOOP);
-        Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "volatile_goop"), VOLATILE_GOOP);
+        //Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "volatile_goop"), VOLATILE_GOOP);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "glow_paste"), GLOW_PASTE);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "spectacle_candle"), SPECTACLE_CANDLE);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "lightning_anchor"), LIGHTNING_ANCHOR);

@@ -28,7 +28,7 @@ import java.nio.file.Path;
 
 public class CaveEnhancements implements ModInitializer {
     public static final String MODID = "cave_enhancements";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
+    public static final Logger LOGGER = LoggerFactory.getLogger("Cave Enhancements");
 
     public static final BannerPattern GOOP = new BannerPattern("goop");
 
@@ -50,6 +50,7 @@ public class CaveEnhancements implements ModInitializer {
 
         SpawnRestrictionAccessor.callRegister(ModEntities.DRIPSTONE_TORTOISE, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, DripstoneTortoise::checkDripstoneTortoiseSpawnRules);
         SpawnRestrictionAccessor.callRegister(ModEntities.CRUNCHER, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, Cruncher::checkCruncherSpawnRules);
+
 
         OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.REDSTONE_RECEIVER, ModBlocks.EXPOSED_REDSTONE_RECEIVER);
         OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.EXPOSED_REDSTONE_RECEIVER, ModBlocks.WEATHERED_REDSTONE_RECEIVER);

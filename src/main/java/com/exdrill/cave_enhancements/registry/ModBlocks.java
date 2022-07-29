@@ -27,7 +27,7 @@ public class ModBlocks {
     public static final GoopTrapBlock GOOP_TRAP = new GoopTrapBlock(FabricBlockSettings.of(Material.VEGETABLE).strength(2.0F, 5.0F).sound(ModSounds.GOOP_BLOCK).speedFactor( 0.01F).jumpFactor(0.3F).friction(0.8F).color(MaterialColor.SAND));
     public static final SplatBlock GOOP_SPLAT = new SplatBlock(FabricBlockSettings.of(Material.CLAY).instabreak().sound(ModSounds.GOOP_DECORATION).noCollission().noOcclusion().color(MaterialColor.SAND));
     public static final DrippingGoopBlock DRIPPING_GOOP = new DrippingGoopBlock(FabricBlockSettings.of(Material.CLAY).sound(ModSounds.GOOP_DECORATION).noOcclusion().noCollission().lightLevel((state) -> 2).color(MaterialColor.SAND));
-    public static final VolatileGoopBlock VOLATILE_GOOP = new VolatileGoopBlock(FabricBlockSettings.of(Material.CLAY).strength(2.0F, 5.0F).sound(ModSounds.GOOP_BLOCK).color(MaterialColor.SAND));
+    //public static final VolatileGoopBlock VOLATILE_GOOP = new VolatileGoopBlock(FabricBlockSettings.of(Material.CLAY).strength(2.0F, 5.0F).sound(ModSounds.GOOP_BLOCK).color(MaterialColor.SAND));
 
     public static final SplatBlock GLOW_SPLOTCH = new SplatBlock(FabricBlockSettings.of(Material.CLAY).sound(SoundType.HONEY_BLOCK).noOcclusion().noCollission().lightLevel((state) -> 8).color(MaterialColor.SAND));
     public static final SpectacleCandleBlock SPECTACLE_CANDLE = new SpectacleCandleBlock(FabricBlockSettings.of(Material.DECORATION).sound(SoundType.CANDLE).lightLevel(CandleBlock.LIGHT_EMISSION).strength(0.1F, 0F));
@@ -69,7 +69,7 @@ public class ModBlocks {
         Registry.register(Registry.BLOCK, new ResourceLocation(CaveEnhancements.MODID, "goop_splat"), GOOP_SPLAT);
         Registry.register(Registry.BLOCK, new ResourceLocation(CaveEnhancements.MODID, "goop_trap"), GOOP_TRAP);
         Registry.register(Registry.BLOCK, new ResourceLocation(CaveEnhancements.MODID, "dripping_goop"), DRIPPING_GOOP);
-        Registry.register(Registry.BLOCK, new ResourceLocation(CaveEnhancements.MODID, "volatile_goop"), VOLATILE_GOOP);
+        //Registry.register(Registry.BLOCK, new ResourceLocation(CaveEnhancements.MODID, "volatile_goop"), VOLATILE_GOOP);
 
         Registry.register(Registry.BLOCK, new ResourceLocation(CaveEnhancements.MODID, "glow_splotch"), GLOW_SPLOTCH);
         Registry.register(Registry.BLOCK, new ResourceLocation(CaveEnhancements.MODID, "spectacle_candle"), SPECTACLE_CANDLE);
