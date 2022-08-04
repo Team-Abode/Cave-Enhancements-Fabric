@@ -1,7 +1,7 @@
 package com.exdrill.cave_enhancements.item;
 
-import com.exdrill.cave_enhancements.entity.Goop;
-import com.exdrill.cave_enhancements.entity.GoopBucketable;
+import com.exdrill.cave_enhancements.entity.goop.Goop;
+import com.exdrill.cave_enhancements.entity.goop.GoopBucketable;
 import com.exdrill.cave_enhancements.registry.ModEntities;
 import com.exdrill.cave_enhancements.registry.ModSounds;
 import net.minecraft.core.BlockPos;

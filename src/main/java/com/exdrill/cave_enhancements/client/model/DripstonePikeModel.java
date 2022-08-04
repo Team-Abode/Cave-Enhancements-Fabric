@@ -2,7 +2,7 @@ package com.exdrill.cave_enhancements.client.model;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
 import com.exdrill.cave_enhancements.client.animation.DripstoneTortoiseAnimation;
-import com.exdrill.cave_enhancements.entity.DripstonePike;
+import com.exdrill.cave_enhancements.entity.dripstone_tortoise.DripstonePike;
 import net.minecraft.client.model.*;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;

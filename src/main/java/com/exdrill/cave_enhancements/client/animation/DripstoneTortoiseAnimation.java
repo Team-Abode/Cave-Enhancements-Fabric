@@ -18,33 +18,39 @@ public class DripstoneTortoiseAnimation {
 
     static {
         STOMPING = Builder.withLength(0.52F)
-                .addAnimation("body",
-                        new AnimationChannel(Targets.ROTATION,
-                                new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
-                                new Keyframe(0.16F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 12.5F), Interpolations.CATMULLROM),
-                                new Keyframe(0.28F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM)
-                        )
-                )
                 .addAnimation("head",
                         new AnimationChannel(Targets.ROTATION,
                                 new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
-                                new Keyframe(0.16F, KeyframeAnimations.degreeVec(-25.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
-                                new Keyframe(0.28F, KeyframeAnimations.degreeVec(20.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
-                                new Keyframe(0.48F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM)
-                        )
-                )
-                .addAnimation("leg0",
-                        new AnimationChannel(Targets.ROTATION,
-                                new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
-                                new Keyframe(0.16F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 45.0F), Interpolations.CATMULLROM),
+                                new Keyframe(0.16F, KeyframeAnimations.degreeVec(-45.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
                                 new Keyframe(0.28F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM)
                         )
                 )
-                .addAnimation("leg1",
+                .addAnimation("left_front_leg",
+                        new AnimationChannel(Targets.ROTATION,
+                                new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
+                                new Keyframe(0.16F, KeyframeAnimations.degreeVec(-50.0F, -30.0F, 30.0F), Interpolations.CATMULLROM),
+                                new Keyframe(0.28F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM)
+                        )
+                )
+                .addAnimation("right_front_leg",
                         new AnimationChannel(Targets.ROTATION,
                             new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
-                            new Keyframe(0.16F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 22.5F), Interpolations.CATMULLROM),
+                            new Keyframe(0.16F, KeyframeAnimations.degreeVec(-50.0F, 30.0F, -30.0F), Interpolations.CATMULLROM),
                             new Keyframe(0.28F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM)
+                        )
+                )
+                .addAnimation("left_hind_leg",
+                        new AnimationChannel(Targets.ROTATION,
+                                new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
+                                new Keyframe(0.16F, KeyframeAnimations.degreeVec(50.0F, -30.0F, -30.0F), Interpolations.CATMULLROM),
+                                new Keyframe(0.28F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM)
+                        )
+                )
+                .addAnimation("right_hind_leg",
+                        new AnimationChannel(Targets.ROTATION,
+                                new Keyframe(0.0F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM),
+                                new Keyframe(0.16F, KeyframeAnimations.degreeVec(50.0F, 30.0F, 30.0F), Interpolations.CATMULLROM),
+                                new Keyframe(0.28F, KeyframeAnimations.degreeVec(0.0F, 0.0F, 0.0F), Interpolations.CATMULLROM)
                         )
                 )
                 .build();

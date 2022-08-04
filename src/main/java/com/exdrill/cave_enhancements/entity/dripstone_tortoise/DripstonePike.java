@@ -1,4 +1,4 @@
-package com.exdrill.cave_enhancements.entity;
+package com.exdrill.cave_enhancements.entity.dripstone_tortoise;
 
 import com.exdrill.cave_enhancements.registry.ModTags;
 import net.minecraft.core.BlockPos;
@@ -11,15 +11,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -121,7 +113,7 @@ public class DripstonePike extends Mob {
             BlockPos pos = new BlockPos(this.getX(), this.getY(), this.getZ());
             RandomSource random = level.getRandom();
 
-            if (!(random.nextFloat() < 0.9f)) {
+            if (random.nextInt(50) == 0) {
                 if (level.getBlockState(pos.above()).is(ModTags.PIKE_DESTROYABLES) || level.getBlockState(pos.below()).is(ModTags.PIKE_DESTROYABLES)) {
                     level.playSound(null, pos, SoundEvents.POINTED_DRIPSTONE_LAND, SoundSource.BLOCKS, 1.0F, 1.0F);
                     ItemEntity itemEntity = new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), Items.POINTED_DRIPSTONE.getDefaultInstance());
@@ -160,10 +152,10 @@ public class DripstonePike extends Mob {
                 for (Entity entity : list) {
                     otherEntity = entity;
 
-                    otherEntity.hurt(DamageSource.indirectMobAttack(this, owner), 8);
+                    otherEntity.hurt(DamageSource.STALAGMITE, 8);
 
                     if (otherEntity instanceof Creeper) {
-                        otherEntity.hurt(DamageSource.indirectMobAttack(this, owner), 20);
+                        otherEntity.hurt(DamageSource.STALAGMITE, 20);
                     }
                 }
             }

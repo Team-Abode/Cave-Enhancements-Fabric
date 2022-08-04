@@ -1,6 +1,6 @@
-package com.exdrill.cave_enhancements.entity;
+package com.exdrill.cave_enhancements.entity.cruncher;
 
-import com.exdrill.cave_enhancements.entity.ai.goal.EatBlockGoal;
+import com.exdrill.cave_enhancements.entity.cruncher.goals.EatBlockGoal;
 import com.exdrill.cave_enhancements.registry.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -41,7 +41,8 @@ public class Cruncher extends Animal {
 
     private static final EntityDataAccessor<Boolean> IS_EATING_BLOCK = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> IS_SHEARED = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
-    private static final Ingredient TEMPTING_ITEMS;
+    private static final Ingredient TEMPTING_ITEMS = Ingredient.of(Items.GLOW_BERRIES);
+    private static final Predicate<ItemEntity> PICKABLE_DROP_FILTER = (item) -> !item.hasPickUpDelay() && item.isAlive() && item.getItem().getItem() == Items.GLOW_BERRIES;
     public long lastEatTick;
     public int eatingTicks = 0;
     public int eatingAnimation = 0;
@@ -133,7 +134,6 @@ public class Cruncher extends Animal {
         if (itemStack.isEmpty() && hasItem) {
             hasItem = false;
             this.eatingTicks = 1200;
-            System.out.println("Finished Eating?");
         }
 
         super.tick();
@@ -320,12 +320,5 @@ public class Cruncher extends Animal {
             super.handleEntityEvent(status);
         }
 
-    }
-
-    static final Predicate<ItemEntity> PICKABLE_DROP_FILTER;
-
-    static {
-        TEMPTING_ITEMS = Ingredient.of(Items.GLOW_BERRIES);
-        PICKABLE_DROP_FILTER = (item) -> !item.hasPickUpDelay() && item.isAlive() && item.getItem().getItem() == Items.GLOW_BERRIES;
     }
 }

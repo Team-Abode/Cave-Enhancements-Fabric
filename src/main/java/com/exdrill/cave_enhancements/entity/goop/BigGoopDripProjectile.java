@@ -1,4 +1,4 @@
-package com.exdrill.cave_enhancements.entity;
+package com.exdrill.cave_enhancements.entity.goop;
 
 import com.exdrill.cave_enhancements.registry.ModBlocks;
 import com.exdrill.cave_enhancements.registry.ModEntities;

@@ -47,7 +47,7 @@ public class CaveEnhancementsClient implements ClientModInitializer {
         // Render Layers
         EntityModelLayerRegistry.registerModelLayer(CruncherModel.ENTITY_MODEL_LAYER, CruncherModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(GoopModel.ENTITY_MODEL_LAYER, GoopModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(DripstoneTortoiseModel.LAYER_LOCATION, DripstoneTortoiseModel::texturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(DripstoneTortoiseModel.LAYER_LOCATION, DripstoneTortoiseModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(DripstonePikeModel.LAYER_LOCATION, DripstonePikeModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(RoseQuartzChimesBlockEntityRenderer.LAYER_LOCATION, RoseQuartzChimesBlockEntityRenderer::getTexturedModelData);
 
@@ -55,17 +55,5 @@ public class CaveEnhancementsClient implements ClientModInitializer {
         BlockEntityRendererRegistry.register(ModBlockEntities.ROSE_QUARTZ_CHIMES, RoseQuartzChimesBlockEntityRenderer::new);
         ClientSpriteRegistryCallback.event(TextureAtlas.LOCATION_BLOCKS).register((atlasTexture, registry) ->
                 registry.register(new ResourceLocation(MODID, "entity/rose_quartz_chimes/chime")));
-
-
-        /*
-        ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> {
-            if (renderMode == ItemTransforms.TransformType.GUI || renderMode == ItemTransforms.TransformType.GROUND || renderMode == ItemTransforms.TransformType.FIXED) {
-                out.accept(new ResourceLocation(MODID, "item/amethyst_flute"));
-            }
-            else {
-                out.accept(new ResourceLocation(MODID, "item/amethyst_flute_in_hand"));
-            }
-        });
-        */
     }
 }

@@ -2,87 +2,76 @@ package com.exdrill.cave_enhancements.client.model;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
 import com.exdrill.cave_enhancements.client.animation.DripstoneTortoiseAnimation;
-import com.exdrill.cave_enhancements.entity.DripstoneTortoise;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.*;
+import com.exdrill.cave_enhancements.entity.dripstone_tortoise.DripstoneTortoise;
+import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Mob;
 
-public class DripstoneTortoiseModel<T extends DripstoneTortoise> extends HierarchicalModel<T> {
+public class DripstoneTortoiseModel<E extends Mob> extends HierarchicalModel<DripstoneTortoise> {
+
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(CaveEnhancements.MODID, "dripstone_tortoise"), "main");
 	private final ModelPart root;
-	private final ModelPart shell;
 	private final ModelPart head;
 	private final ModelPart body;
-	private final ModelPart leg0;
-	private final ModelPart leg1;
-	private final ModelPart leg2;
-	private final ModelPart leg3;
+	private final ModelPart left_front_leg;
+	private final ModelPart right_front_leg;
+	private final ModelPart left_hind_leg;
+	private final ModelPart right_hind_leg;
+
 
 	public DripstoneTortoiseModel(ModelPart root) {
 		this.root = root.getChild("root");
-		this.shell = this.root.getChild("shell");
-		this.body = this.shell.getChild("body");
-		this.head = this.body.getChild("head");
-		this.leg0 = this.body.getChild("leg0");
-		this.leg1 = this.shell.getChild("leg1");
-		this.leg2 = this.body.getChild("leg2");
-		this.leg3 = this.shell.getChild("leg3");
+		this.head = this.root.getChild("head");
+		this.body = this.root.getChild("body");
+		this.left_front_leg = this.body.getChild("left_front_leg");
+		this.right_front_leg = this.body.getChild("right_front_leg");
+		this.left_hind_leg = this.body.getChild("left_hind_leg");
+		this.right_hind_leg = this.body.getChild("right_hind_leg");
 	}
 
-	public static LayerDefinition texturedModelData() {
+	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
 		PartDefinition root = partdefinition.addOrReplaceChild("root", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
-		PartDefinition shell = root.addOrReplaceChild("shell", CubeListBuilder.create(), PartPose.offset(0.0F, -6.0F, 0.0F));
 
-		PartDefinition body = shell.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-17.0F, -6.0F, -7.0F, 18.0F, 6.0F, 20.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 26).addBox(-13.5F, 0.0F, -7.0F, 11.0F, 3.0F, 18.0F, new CubeDeformation(0.0F)), PartPose.offset(8.0F, 0.0F, 0.0F));
+		PartDefinition body = root.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-7.5F, 1.0F, -7.0F, 15.0F, 22.0F, 8.0F, new CubeDeformation(0.0F))
+		.texOffs(0, 30).addBox(-5.5F, 3.0F, -10.0F, 11.0F, 18.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -13.0F, -10.0F, 1.5708F, 0.0F, 0.0F));
 
-		PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(40, 26).addBox(-3.0F, -2.0F, -8.0F, 6.0F, 6.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(-8.0F, -2.0F, -7.0F));
+		PartDefinition left_front_leg = body.addOrReplaceChild("left_front_leg", CubeListBuilder.create().texOffs(28, 44).mirror().addBox(-2.0F, -2.0F, -6.0F, 4.0F, 4.0F, 6.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(6.0F, 2.0F, -7.0F));
 
-		PartDefinition leg0 = body.addOrReplaceChild("leg0", CubeListBuilder.create().texOffs(0, 10).addBox(-3.5F, 0.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-14.0F, 0.0F, 7.0F));
+		PartDefinition right_front_leg = body.addOrReplaceChild("right_front_leg", CubeListBuilder.create().texOffs(28, 44).addBox(-2.0F, -2.0F, -6.0F, 4.0F, 4.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(-6.0F, 2.0F, -7.0F));
 
-		PartDefinition leg2 = body.addOrReplaceChild("leg2", CubeListBuilder.create().texOffs(0, 0).addBox(-3.5F, 0.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-14.0F, 0.0F, -4.0F));
+		PartDefinition left_hind_leg = body.addOrReplaceChild("left_hind_leg", CubeListBuilder.create().texOffs(28, 44).mirror().addBox(-2.0F, -2.0F, -6.0F, 4.0F, 4.0F, 6.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(6.0F, 22.0F, -7.0F));
 
-		PartDefinition point0 = body.addOrReplaceChild("point0", CubeListBuilder.create(), PartPose.offset(-12.0F, -6.0F, 8.0F));
+		PartDefinition right_hind_leg = body.addOrReplaceChild("right_hind_leg", CubeListBuilder.create().texOffs(28, 44).addBox(-2.0F, -2.0F, -6.0F, 4.0F, 4.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(-6.0F, 22.0F, -7.0F));
 
-		PartDefinition point0_r1 = point0.addOrReplaceChild("point0_r1", CubeListBuilder.create().texOffs(0, 58).addBox(-3.0F, -9.0F, 0.0F, 6.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
+		PartDefinition head = root.addOrReplaceChild("head", CubeListBuilder.create().texOffs(28, 30).addBox(-3.0F, -2.0F, -5.0F, 6.0F, 6.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -8.0F, -10.0F));
 
-		PartDefinition point0_r2 = point0.addOrReplaceChild("point0_r2", CubeListBuilder.create().texOffs(0, 58).addBox(-3.0F, -9.0F, 0.0F, 6.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -3.1416F, -0.7854F, 3.1416F));
+		PartDefinition spike0 = root.addOrReplaceChild("spike0", CubeListBuilder.create(), PartPose.offset(0.0F, -14.0F, -3.5F));
 
-		PartDefinition point1 = body.addOrReplaceChild("point1", CubeListBuilder.create(), PartPose.offset(-3.0F, -6.0F, 3.0F));
+		PartDefinition cube_r1 = spike0.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(14, 58).addBox(-2.5F, -6.0F, 0.0F, 5.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
 
-		PartDefinition point1_r1 = point1.addOrReplaceChild("point1_r1", CubeListBuilder.create().texOffs(0, 58).addBox(-3.0F, -9.0F, 0.0F, 6.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
+		PartDefinition cube_r2 = spike0.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(14, 58).addBox(-2.5F, -6.0F, 0.0F, 5.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.7854F, 0.0F));
 
-		PartDefinition point1_r2 = point1.addOrReplaceChild("point1_r2", CubeListBuilder.create().texOffs(0, 58).addBox(-3.0F, -9.0F, 0.0F, 6.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -3.1416F, -0.7854F, 3.1416F));
+		PartDefinition spike1 = root.addOrReplaceChild("spike1", CubeListBuilder.create(), PartPose.offset(0.0F, -14.0F, 3.5F));
 
-		PartDefinition point2 = body.addOrReplaceChild("point2", CubeListBuilder.create(), PartPose.offset(-12.0F, -6.0F, -2.0F));
+		PartDefinition cube_r3 = spike1.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(14, 65).addBox(-2.5F, -8.0F, 0.0F, 5.0F, 8.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
 
-		PartDefinition point2_r1 = point2.addOrReplaceChild("point2_r1", CubeListBuilder.create().texOffs(0, 58).addBox(-3.0F, -9.0F, 0.0F, 6.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
+		PartDefinition cube_r4 = spike1.addOrReplaceChild("cube_r4", CubeListBuilder.create().texOffs(14, 65).addBox(-2.5F, -8.0F, 0.0F, 5.0F, 8.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.7854F, 0.0F));
 
-		PartDefinition point2_r2 = point2.addOrReplaceChild("point2_r2", CubeListBuilder.create().texOffs(0, 58).addBox(-3.0F, -9.0F, 0.0F, 6.0F, 9.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -3.1416F, -0.7854F, 3.1416F));
+		PartDefinition spike2 = root.addOrReplaceChild("spike2", CubeListBuilder.create(), PartPose.offset(0.0F, -14.0F, 10.25F));
 
-		PartDefinition leg3 = shell.addOrReplaceChild("leg3", CubeListBuilder.create().texOffs(0, 47).addBox(-0.5F, 0.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(6.0F, 0.0F, -4.0F));
+		PartDefinition cube_r5 = spike2.addOrReplaceChild("cube_r5", CubeListBuilder.create().texOffs(14, 58).addBox(-2.5F, -6.0F, 0.25F, 5.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
 
-		PartDefinition leg1 = shell.addOrReplaceChild("leg1", CubeListBuilder.create().texOffs(0, 26).addBox(-0.5F, 0.0F, -2.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(6.0F, 0.0F, 7.0F));
+		PartDefinition cube_r6 = spike2.addOrReplaceChild("cube_r6", CubeListBuilder.create().texOffs(14, 58).addBox(-2.5F, -6.0F, 0.25F, 5.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.7854F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 128, 128);
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
-		this.root.render(matrices, vertices, light, overlay, red, green, blue, alpha);
 	}
 
 	@Override
@@ -91,13 +80,14 @@ public class DripstoneTortoiseModel<T extends DripstoneTortoise> extends Hierarc
 	}
 
 	@Override
-	public void setupAnim(T entity, float f, float g, float h, float i, float j) {
-		this.root().getAllParts().forEach(ModelPart::resetPose);
-		this.head.yRot = i * 0.017453292F;
-		this.leg0.xRot = Mth.cos(f * 1.1F) * 1.4F * g;
-		this.leg1.xRot = Mth.cos(f * 1.1F + 3.1415927F) * 3F * g;
-		this.leg2.xRot = Mth.cos(f * 1.1F + 3.1415927F) * 3F * g;
-		this.leg3.xRot = Mth.cos(f * 1.1F) * 3F * g;
-		this.animate(entity.stompingAnimationState, DripstoneTortoiseAnimation.STOMPING, h);
+	public void setupAnim(DripstoneTortoise entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		this.root.getAllParts().forEach(ModelPart::resetPose);
+		this.head.xRot = headPitch * 0.017453292F;
+		this.head.yRot = netHeadYaw * 0.017453292F;
+		this.right_hind_leg.xRot = Mth.cos(limbSwing * 0.6F) * 1.4F * limbSwingAmount;
+		this.left_hind_leg.xRot = Mth.cos(limbSwing * 0.662F + 3.1415927F) * limbSwingAmount;
+		this.right_front_leg.xRot = Mth.cos(limbSwing * 0.6662F + 3.1415927F) * limbSwingAmount;
+		this.left_front_leg.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		this.animate(entity.stompingAnimationState, DripstoneTortoiseAnimation.STOMPING, ageInTicks);
 	}
 }

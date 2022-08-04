@@ -2,7 +2,7 @@ package com.exdrill.cave_enhancements.client.renderer.entity;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
 import com.exdrill.cave_enhancements.client.model.GoopModel;
-import com.exdrill.cave_enhancements.entity.Goop;
+import com.exdrill.cave_enhancements.entity.goop.Goop;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;

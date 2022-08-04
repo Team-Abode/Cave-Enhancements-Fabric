@@ -1,7 +1,7 @@
 package com.exdrill.cave_enhancements.client.model;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
-import com.exdrill.cave_enhancements.entity.Goop;
+import com.exdrill.cave_enhancements.entity.goop.Goop;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.*;

@@ -2,7 +2,7 @@ package com.exdrill.cave_enhancements.client.renderer.entity;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
 import com.exdrill.cave_enhancements.client.model.DripstonePikeModel;
-import com.exdrill.cave_enhancements.entity.DripstonePike;
+import com.exdrill.cave_enhancements.entity.dripstone_tortoise.DripstonePike;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;

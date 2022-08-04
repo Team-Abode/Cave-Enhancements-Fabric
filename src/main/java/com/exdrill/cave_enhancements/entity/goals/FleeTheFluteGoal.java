@@ -1,4 +1,4 @@
-package com.exdrill.cave_enhancements.entity.ai.goal;
+package com.exdrill.cave_enhancements.entity.goals;
 
 import com.exdrill.cave_enhancements.item.AmethystFluteItem;
 import org.jetbrains.annotations.Nullable;

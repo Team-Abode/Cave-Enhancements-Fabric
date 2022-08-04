@@ -1,7 +1,7 @@
 package com.exdrill.cave_enhancements.client.renderer.entity.layers;
 
 import com.exdrill.cave_enhancements.client.model.CruncherModel;
-import com.exdrill.cave_enhancements.entity.Cruncher;
+import com.exdrill.cave_enhancements.entity.cruncher.Cruncher;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.fabricmc.api.EnvType;

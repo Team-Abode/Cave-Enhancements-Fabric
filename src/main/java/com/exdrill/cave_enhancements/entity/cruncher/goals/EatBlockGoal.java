@@ -1,6 +1,6 @@
-package com.exdrill.cave_enhancements.entity.ai.goal;
+package com.exdrill.cave_enhancements.entity.cruncher.goals;
 
-import com.exdrill.cave_enhancements.entity.Cruncher;
+import com.exdrill.cave_enhancements.entity.cruncher.Cruncher;
 import java.util.EnumSet;
 
 import com.exdrill.cave_enhancements.registry.ModTags;

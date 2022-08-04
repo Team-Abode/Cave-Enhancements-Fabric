@@ -1,10 +1,11 @@
 package com.exdrill.cave_enhancements.mixin;
 
-import com.exdrill.cave_enhancements.entity.ai.goal.FleeTheFluteGoal;
-import net.minecraft.world.entity.EntitySelector;
+import com.exdrill.cave_enhancements.item.AmethystFluteItem;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,6 +21,6 @@ public abstract class CreeperMixin extends Monster {
 
     @Inject(method = "registerGoals", at = @At("HEAD"))
     protected void initGoals(CallbackInfo ci) {
-        this.goalSelector.addGoal(1, new FleeTheFluteGoal<>(this, EntitySelector.NO_CREATIVE_OR_SPECTATOR, 8.0F, 1.25D, 1.25D));
+        this.goalSelector.addGoal(0, new AvoidEntityGoal<>(this, Player.class, 8.0F, 1.0D, 1.2D, AmethystFluteItem::isScary));
     }
 }

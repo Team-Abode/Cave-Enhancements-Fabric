@@ -20,7 +20,10 @@ public abstract class PhantomMixin extends Goal {
     @ParametersAreNonnullByDefault
     @Inject(method = "canContinueToUse", at = @At(value = "INVOKE", target = "Ljava/util/List;isEmpty()Z"), cancellable = true)
     private void shouldContinue(CallbackInfoReturnable<Boolean> cir) {
-        this.field_7333.level.getEntities(this.field_7333, this.field_7333.getBoundingBox().inflate(16.0D), this.field_7333::hasLineOfSight).forEach(entity -> {
+
+        Phantom phantom = this.field_7333;
+
+        phantom.level.getEntities(phantom, phantom.getBoundingBox().inflate(16.0D), phantom::hasLineOfSight).forEach(entity -> {
             if (entity instanceof LivingEntity livingEntity && AmethystFluteItem.isScary(livingEntity)) {
                 cir.setReturnValue(false);
             }

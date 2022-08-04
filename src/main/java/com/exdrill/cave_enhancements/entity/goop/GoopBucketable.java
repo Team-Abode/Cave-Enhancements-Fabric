@@ -1,4 +1,4 @@
-package com.exdrill.cave_enhancements.entity;
+package com.exdrill.cave_enhancements.entity.goop;
 
 import java.util.Optional;
 import net.minecraft.advancements.CriteriaTriggers;
