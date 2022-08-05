@@ -18,13 +18,13 @@
     "monster": [
       {
         "type": "minecraft:spider",
-        "weight": 75,
+        "weight": 50,
         "minCount": 4,
         "maxCount": 4
       },
       {
         "type": "minecraft:zombie",
-        "weight": 95,
+        "weight": 45,
         "minCount": 4,
         "maxCount": 4
       },
@@ -36,43 +36,43 @@
       },
       {
         "type": "minecraft:skeleton",
-        "weight": 100,
+        "weight": 50,
         "minCount": 4,
         "maxCount": 4
       },
       {
         "type": "minecraft:creeper",
         "weight": 25,
-        "minCount": 4,
-        "maxCount": 4
+        "minCount": 1,
+        "maxCount": 2
       },
       {
         "type": "minecraft:enderman",
         "weight": 5,
         "minCount": 1,
-        "maxCount": 4
+        "maxCount": 2
       },
       {
         "type": "minecraft:witch",
         "weight": 5,
         "minCount": 1,
         "maxCount": 1
-      },
-      {
-        "type": "cave_enhancements:goop",
-        "weight": 60,
-        "minCount": 1,
-        "maxCount": 1
       }
     ],
     "creature": [],
     "ambient": [
-      {
-        "type": "minecraft:bat",
-        "weight": 10,
-        "minCount": 8,
-        "maxCount": 8
-      }
+        {
+            "type": "cave_enhancements:goop",
+            "weight": 50,
+            "minCount": 1,
+            "maxCount": 1
+        },
+        {
+            "type": "minecraft:bat",
+            "weight": 60,
+            "minCount": 1,
+            "maxCount": 1
+        }
     ],
     "axolotls": [],
     "underground_water_creature": [],

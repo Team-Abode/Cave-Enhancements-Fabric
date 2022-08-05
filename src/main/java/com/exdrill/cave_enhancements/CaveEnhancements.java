@@ -2,6 +2,7 @@ package com.exdrill.cave_enhancements;
 
 import com.exdrill.cave_enhancements.entity.cruncher.Cruncher;
 import com.exdrill.cave_enhancements.entity.dripstone_tortoise.DripstoneTortoise;
+import com.exdrill.cave_enhancements.entity.goop.Goop;
 import com.exdrill.cave_enhancements.registry.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
@@ -46,7 +47,7 @@ public class CaveEnhancements implements ModInitializer {
 
         SpawnRestrictionAccessor.callRegister(ModEntities.DRIPSTONE_TORTOISE, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, DripstoneTortoise::checkDripstoneTortoiseSpawnRules);
         SpawnRestrictionAccessor.callRegister(ModEntities.CRUNCHER, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, Cruncher::checkCruncherSpawnRules);
-        SpawnRestrictionAccessor.callRegister(ModEntities.GOOP, SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING, Monster::checkAnyLightMonsterSpawnRules);
+        SpawnRestrictionAccessor.callRegister(ModEntities.GOOP, SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING, Goop::checkGoopSpawnRules);
 
         OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.REDSTONE_RECEIVER, ModBlocks.EXPOSED_REDSTONE_RECEIVER);
         OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.EXPOSED_REDSTONE_RECEIVER, ModBlocks.WEATHERED_REDSTONE_RECEIVER);
