@@ -5,15 +5,6 @@
     ],
     "subtitle": "item.glow_paste.place"
   },
-  "block.rose_quartz.break": {
-    "sounds": [
-      "cave_enhancements:block/rose_quartz/break1",
-      "cave_enhancements:block/rose_quartz/break2",
-      "cave_enhancements:block/rose_quartz/break3",
-      "cave_enhancements:block/rose_quartz/break4"
-    ],
-    "subtitle": "block.rose_quartz.break"
-  },
   "block.goop_block.break": {
     "sounds": [
       "cave_enhancements:block/goop_block/break1",

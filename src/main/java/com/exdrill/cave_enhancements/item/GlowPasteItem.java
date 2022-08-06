@@ -1,75 +1,89 @@
 package com.exdrill.cave_enhancements.item;
 
 import com.exdrill.cave_enhancements.registry.ModBlocks;
+import com.exdrill.cave_enhancements.registry.ModSounds;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class GlowPasteItem extends BlockItem {
-    public GlowPasteItem(Properties settings) {
-        super(ModBlocks.GLOW_SPLOTCH, settings);
+public class GlowPasteItem extends Item {
+
+    public GlowPasteItem(Properties properties) {
+        super(properties);
     }
-
-
-
 
     @Override
-    public InteractionResult place(BlockPlaceContext blockPlaceContext) {
-        if (!blockPlaceContext.canPlace()) {
-            return InteractionResult.FAIL;
-        } else {
-            BlockPlaceContext blockPlaceContext2 = this.updatePlacementContext(blockPlaceContext);
-            if (blockPlaceContext2 == null) {
-                return InteractionResult.FAIL;
-            } else {
-                BlockState blockState = this.getPlacementState(blockPlaceContext2);
-                if (blockState == null) {
-                    return InteractionResult.FAIL;
-                } else if (!this.placeBlock(blockPlaceContext2, blockState)) {
-                    return InteractionResult.FAIL;
-                } else {
-                    BlockPos blockPos = blockPlaceContext2.getClickedPos();
-                    Level level = blockPlaceContext2.getLevel();
-                    Player player = blockPlaceContext2.getPlayer();
-                    ItemStack itemStack = blockPlaceContext2.getItemInHand();
-                    BlockState blockState2 = level.getBlockState(blockPos);
-                    if (blockState2.is(blockState.getBlock())) {
-                        blockState2.getBlock().setPlacedBy(level, blockPos, blockState2, player, itemStack);
-                        if (player instanceof ServerPlayer) {
-                            CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer)player, blockPos, itemStack);
-                        }
-                    }
+    public InteractionResult useOn(UseOnContext context) {
 
-                    SoundType soundType = blockState2.getSoundType();
-                    level.playSound(player, blockPos, this.getPlaceSound(blockState2), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
-                    level.gameEvent(GameEvent.BLOCK_PLACE, blockPos, GameEvent.Context.of(player, blockState2));
-                    if (player == null || !player.getAbilities().instabuild) {
-                        itemStack.hurtAndBreak(1, player, (playerx) -> playerx.broadcastBreakEvent(blockPlaceContext.getHand()));
-                    }
+        BlockPlaceContext blockPlaceContext = new BlockPlaceContext(context);
+        if (!blockPlaceContext.canPlace()) return InteractionResult.FAIL;
 
-                    return InteractionResult.sidedSuccess(level.isClientSide);
-                }
+        Level level = blockPlaceContext.getLevel();
+        BlockPos pos = blockPlaceContext.getClickedPos();
+        Player player = blockPlaceContext.getPlayer();
+        ItemStack itemStack = blockPlaceContext.getItemInHand();
+
+        BlockState state = ModBlocks.GLOW_SPLOTCH.getStateForPlacement(blockPlaceContext);
+        BlockState clickedState = level.getBlockState(pos);
+
+        int itemDamage = itemStack.getDamageValue();
+        if (itemDamage == itemStack.getMaxDamage() - 1 && player.getOffhandItem().is(Items.GLOW_INK_SAC) && !player.getAbilities().instabuild) return InteractionResult.PASS;
+
+        if (state != null) {
+            RandomSource randomSource = level.getRandom();
+
+            level.setBlock(pos, state, 11);
+            level.playSound(player, pos, ModSounds.ITEM_GLOW_PASTE_PLACE, SoundSource.BLOCKS, 0.5F, randomSource.nextFloat() * 0.2F + 0.9F);
+            level.gameEvent(GameEvent.BLOCK_PLACE, pos, GameEvent.Context.of(player, clickedState));
+
+            if (player instanceof ServerPlayer serverPlayer) CriteriaTriggers.PLACED_BLOCK.trigger(serverPlayer, pos, itemStack);
+            clickedState.getBlock().setPlacedBy(level, pos, clickedState, player, itemStack);
+
+            if (level.isClientSide()) {
+                level.addParticle(ParticleTypes.GLOW_SQUID_INK, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 0.0D, 0.0D, 0.0D);
             }
 
+            if (player == null || !player.getAbilities().instabuild) {
+                itemStack.hurtAndBreak(1, player, (entity) -> entity.broadcastBreakEvent(blockPlaceContext.getHand()));
+            }
+            return InteractionResult.SUCCESS;
         }
+        return InteractionResult.FAIL;
     }
 
-    public String getDescriptionId() {
-        return this.getOrCreateDescriptionId();
-    }
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
 
+        ItemStack itemStack = player.getItemInHand(usedHand);
+        ItemStack offHandItemStack = player.getOffhandItem();
+        int itemDurability = itemStack.getDamageValue();
+
+        if (itemDurability == itemStack.getMaxDamage() - 1 && offHandItemStack.is(Items.GLOW_INK_SAC) && !player.getAbilities().instabuild) {
+            level.playSound(player, player.getOnPos(), SoundEvents.BUNDLE_INSERT, SoundSource.BLOCKS, 1.0F, 1.0F);
+            itemStack.setDamageValue(0);
+            offHandItemStack.shrink(1);
+            return InteractionResultHolder.consume(itemStack);
+        }
+
+        return InteractionResultHolder.fail(itemStack);
+    }
 }

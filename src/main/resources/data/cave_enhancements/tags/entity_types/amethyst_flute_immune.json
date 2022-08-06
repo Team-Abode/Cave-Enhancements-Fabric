@@ -2,7 +2,7 @@
     "replace": false,
     "values": [
         "minecraft:wolf",
-        "minercraft:enderman",
+        "minecraft:enderman",
         "minecraft:zombified_piglin"
     ]
 }

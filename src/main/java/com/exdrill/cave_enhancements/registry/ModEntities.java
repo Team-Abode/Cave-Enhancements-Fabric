@@ -18,7 +18,7 @@ public class ModEntities {
     public static final EntityType<Goop> GOOP = Registry.register(
             Registry.ENTITY_TYPE,
             new ResourceLocation(CaveEnhancements.MODID, "goop"),
-            FabricEntityTypeBuilder.create(MobCategory.MONSTER, Goop::new)
+            FabricEntityTypeBuilder.create(MobCategory.AMBIENT, Goop::new)
                     .dimensions(EntityDimensions.fixed(0.6f, 0.9f))
                     .build()
     );

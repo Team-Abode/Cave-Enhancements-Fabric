@@ -61,7 +61,7 @@ public class AmethystFluteItem extends Item {
             if (world.isClientSide()) {
                 world.addParticle(ModParticles.SOOTHING_NOTE, x, y + 1.0D, z, 0, 0.2, 0);
                 if (entity instanceof Mob mob) {
-                    if (!mob.getType().is(ModTags.AMETHYST_FLUTE_IMMUNE) || entity instanceof Vex || entity instanceof Ravager) {
+                    if (!mob.getType().is(ModTags.AMETHYST_FLUTE_IMMUNE) && entity instanceof NeutralMob || entity instanceof Vex || entity instanceof Ravager) {
                         world.addParticle(ModParticles.SOOTHING_NOTE, mob.getX(), mob.getY() + 1.0D, mob.getZ(), 0, 0.2, 0);
                     }
                 }
