@@ -172,7 +172,6 @@ public class Goop extends Monster implements GoopBucketable {
             }
         }
         if (spawnReason == MobSpawnType.NATURAL) {
-            System.out.println("Spawning goop");
             if (!level.isClientSide()) {
                 while(y < level.getMaxBuildHeight() && !serverWorld.getBlockState(blockUpPos).entityCanStandOnFace(level, blockUpPos, this, Direction.DOWN)){
                     x = this.getX();
