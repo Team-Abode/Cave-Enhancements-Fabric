@@ -37,10 +37,13 @@ public class SpectacleCandleBlockEntity extends BlockEntity {
         List<Player> list = level.getEntitiesOfClass(Player.class, box);
         Iterator<Player> iterator = list.iterator();
 
-        Player player;
-        while (iterator.hasNext()) {
-            player = iterator.next();
-            player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0, true, true));
+        if (level.getGameTime() % 40L == 0) {
+            Player player;
+            while (iterator.hasNext()) {
+                player = iterator.next();
+                player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0, true, true));
+
+            }
         }
     }
 }
