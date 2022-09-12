@@ -11,7 +11,7 @@ public class ModEffects {
 
     public static final MobEffect EASING = new EasingStatusEffect(MobEffectCategory.BENEFICIAL, 0xf7addc);
 
-    public static void register() {
+    public static void init() {
         Registry.register(Registry.MOB_EFFECT, new ResourceLocation(CaveEnhancements.MODID, "easing"), EASING);
     }
 }

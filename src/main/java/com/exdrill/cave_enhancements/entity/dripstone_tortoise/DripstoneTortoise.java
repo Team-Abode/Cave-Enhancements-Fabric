@@ -57,7 +57,7 @@ public class DripstoneTortoise extends PathfinderMob implements NeutralMob {
 
     public DripstoneTortoise(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
-        this.xpReward = 30;
+        this.xpReward = 15;
     }
 
     //NBT

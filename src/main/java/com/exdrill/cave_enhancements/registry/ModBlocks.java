@@ -2,22 +2,13 @@ package com.exdrill.cave_enhancements.registry;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
 import com.exdrill.cave_enhancements.block.*;
-import com.exdrill.cave_enhancements.block.entity.*;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Material;
@@ -27,9 +18,7 @@ import java.util.function.ToIntFunction;
 
 public class ModBlocks {
 
-    public static void register() {
-        CaveEnhancements.LOGGER.debug("BLOCKS BEING REGISTERED!!!");
-        System.out.println("BLOCKS BEING REGISTERED!!!");
+    public static void init() {
     }
 
     public static final Block GOOP_BLOCK = register("goop_block", new Block(FabricBlockSettings.of(Material.CLAY).speedFactor(0.3F).strength(0.5F, 1.0F).sound(ModSounds.GOOP_BLOCK).jumpFactor(0.9F)), CreativeModeTab.TAB_BUILDING_BLOCKS);
@@ -81,8 +70,8 @@ public class ModBlocks {
         return Registry.register(Registry.BLOCK, new ResourceLocation(CaveEnhancements.MODID, blockID), block);
     }
 
-    public static Item registerBlockItem(String id, Block block, CreativeModeTab tab) {
-        return Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, id), new BlockItem(block, new Item.Properties().tab(tab)));
+    public static void registerBlockItem(String id, Block block, CreativeModeTab tab) {
+        Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, id), new BlockItem(block, new Item.Properties().tab(tab)));
     }
 
     public static Block registerWithNoItem(String id, Block block) {

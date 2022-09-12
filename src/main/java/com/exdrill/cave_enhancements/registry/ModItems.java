@@ -7,15 +7,14 @@ import com.exdrill.cave_enhancements.item.GoopBucketItem;
 import com.exdrill.cave_enhancements.item.HarmonicArrowItem;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BannerPatternItem;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
-import net.minecraft.world.level.material.Fluids;
 
 public class ModItems {
+
+    public static void init() {}
 
     public static final Item GLOW_PASTE = register("glow_paste", new GlowPasteItem(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1).durability(32)));
     public static final Item ROSE_QUARTZ = register("rose_quartz", new Item(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS)));
@@ -34,5 +33,5 @@ public class ModItems {
         return Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, id), item);
     }
 
-    public static void register() {}
+
 }

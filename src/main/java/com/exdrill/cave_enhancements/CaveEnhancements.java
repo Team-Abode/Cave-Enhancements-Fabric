@@ -14,10 +14,8 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.entity.BannerPattern;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.Heightmap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,27 +26,25 @@ public class CaveEnhancements implements ModInitializer {
 
     public static final BannerPattern GOOP = new BannerPattern("goop");
 
-
-
-    @Override
     public void onInitialize() {
-        ModSounds.register();
-        ModEntities.register();
-        ModBiomes.register();
-        ModParticles.register();
-        ModBlocks.register();
-        ModItems.register();
-        ModBlockEntities.register();
-        ModEffects.register();
+        ModSounds.init();
+        ModEntities.init();
+        ModBiomes.init();
+        ModParticles.init();
+        ModBlocks.init();
+        ModItems.init();
+        ModBlockEntities.init();
+        ModEffects.init();
         Registry.register(Registry.BANNER_PATTERN, new ResourceLocation(MODID, "goop"), GOOP);
 
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DRIPSTONE_CAVES), MobCategory.MONSTER, ModEntities.DRIPSTONE_TORTOISE, 100, 2, 3);
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.LUSH_CAVES), MobCategory.MONSTER, ModEntities.CRUNCHER, 5, 1, 1);
+        registerOxidizableBlockPairs();
+        registerSpawnPlacements();
+        registerBiomeModifications();
 
-        SpawnRestrictionAccessor.callRegister(ModEntities.DRIPSTONE_TORTOISE, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, DripstoneTortoise::checkDripstoneTortoiseSpawnRules);
-        SpawnRestrictionAccessor.callRegister(ModEntities.CRUNCHER, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, Cruncher::checkCruncherSpawnRules);
-        SpawnRestrictionAccessor.callRegister(ModEntities.GOOP, SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.WORLD_SURFACE, Goop::checkGoopSpawnRules);
+        if (!FabricLoaderImpl.INSTANCE.isModLoaded("terrablender")) LOGGER.info("Terrablender not found, skipping integration...");
+    }
 
+    public static void registerOxidizableBlockPairs() {
         OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.REDSTONE_RECEIVER, ModBlocks.EXPOSED_REDSTONE_RECEIVER);
         OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.EXPOSED_REDSTONE_RECEIVER, ModBlocks.WEATHERED_REDSTONE_RECEIVER);
         OxidizableBlocksRegistry.registerOxidizableBlockPair(ModBlocks.WEATHERED_REDSTONE_RECEIVER, ModBlocks.OXIDIZED_REDSTONE_RECEIVER);
@@ -57,15 +53,17 @@ public class CaveEnhancements implements ModInitializer {
         OxidizableBlocksRegistry.registerWaxableBlockPair(ModBlocks.EXPOSED_REDSTONE_RECEIVER, ModBlocks.WAXED_EXPOSED_REDSTONE_RECEIVER);
         OxidizableBlocksRegistry.registerWaxableBlockPair(ModBlocks.WEATHERED_REDSTONE_RECEIVER, ModBlocks.WAXED_WEATHERED_REDSTONE_RECEIVER);
         OxidizableBlocksRegistry.registerWaxableBlockPair(ModBlocks.OXIDIZED_REDSTONE_RECEIVER, ModBlocks.WAXED_OXIDIZED_REDSTONE_RECEIVER);
+    }
 
+    public static void registerSpawnPlacements() {
+        SpawnRestrictionAccessor.callRegister(ModEntities.DRIPSTONE_TORTOISE, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, DripstoneTortoise::checkDripstoneTortoiseSpawnRules);
+        SpawnRestrictionAccessor.callRegister(ModEntities.CRUNCHER, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, Cruncher::checkCruncherSpawnRules);
+        SpawnRestrictionAccessor.callRegister(ModEntities.GOOP, SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.WORLD_SURFACE, Goop::checkGoopSpawnRules);
+    }
 
-        if (FabricLoaderImpl.INSTANCE.isModLoaded("terrablender")) {
-            LOGGER.info("Terrablender detected, integrating...");
-
-        } else {
-            LOGGER.info("Terrablender not found, skipping Terrablender integration");
-        }
-
+    public static void registerBiomeModifications() {
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DRIPSTONE_CAVES), MobCategory.MONSTER, ModEntities.DRIPSTONE_TORTOISE, 100, 2, 3);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.LUSH_CAVES), MobCategory.MONSTER, ModEntities.CRUNCHER, 5, 1, 1);
     }
 }
 

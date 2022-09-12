@@ -15,7 +15,7 @@ public class ModBlockEntities {
     public static BlockEntityType<RoseQuartzChimesBlockEntity> ROSE_QUARTZ_CHIMES;
     public static BlockEntityType<ReceiverBlockEntity> RECEIVER_BLOCK;
 
-    public static void register() {
+    public static void init() {
         SPECTACLE_CANDLE = Registry.register(
                 Registry.BLOCK_ENTITY_TYPE,
                 new ResourceLocation(CaveEnhancements.MODID, "spectacle_candle"),
