@@ -23,11 +23,11 @@ public class ModBlocks {
 
     public static final Block GOOP_BLOCK = register("goop_block", new Block(FabricBlockSettings.of(Material.CLAY).speedFactor(0.3F).strength(0.5F, 1.0F).sound(ModSounds.GOOP_BLOCK).jumpFactor(0.9F)), CreativeModeTab.TAB_BUILDING_BLOCKS);
     public static final Block GOOP_TRAP = register("goop_trap", new GoopTrapBlock(FabricBlockSettings.of(Material.VEGETABLE).strength(2.0F, 5.0F).sound(ModSounds.GOOP_BLOCK).speedFactor( 0.01F).jumpFactor(0.3F).friction(0.8F).color(MaterialColor.SAND)), CreativeModeTab.TAB_BUILDING_BLOCKS);
-    public static final Block GOOP_SPLAT = registerWithAliasedItem("goop_splat", "goop", new SplatBlock(FabricBlockSettings.of(Material.CLAY).instabreak().sound(ModSounds.GOOP_DECORATION).noCollission().noOcclusion().color(MaterialColor.SAND)), CreativeModeTab.TAB_MATERIALS);
+    public static final Block GOOP_SPLAT = registerWithNoItem("goop_splat", new GoopSplatBlock(FabricBlockSettings.of(Material.CLAY).instabreak().sound(ModSounds.GOOP_DECORATION).noCollission().noOcclusion().color(MaterialColor.SAND)));
     public static final Block DRIPPING_GOOP = register("dripping_goop", new DrippingGoopBlock(FabricBlockSettings.of(Material.CLAY).sound(ModSounds.GOOP_DECORATION).noOcclusion().noCollission().lightLevel((state) -> 2).color(MaterialColor.SAND)), CreativeModeTab.TAB_DECORATIONS);
     public static final Block VOLATILE_GOOP = register("volatile_goop", new VolatileGoopBlock(FabricBlockSettings.of(Material.CLAY).strength(2.0F, 5.0F).sound(ModSounds.GOOP_BLOCK).color(MaterialColor.SAND)), CreativeModeTab.TAB_DECORATIONS);
 
-    public static final Block GLOW_SPLOTCH = registerWithNoItem("glow_splotch", new SplatBlock(FabricBlockSettings.of(Material.CLAY).sound(SoundType.HONEY_BLOCK).noOcclusion().noCollission().lightLevel((state) -> 8).color(MaterialColor.SAND)));
+    public static final Block GLOW_SPLOTCH = registerWithNoItem("glow_splotch", new GlowSplotchBlock(FabricBlockSettings.of(Material.CLAY).sound(SoundType.HONEY_BLOCK).noOcclusion().noCollission().lightLevel((state) -> 8).color(MaterialColor.SAND)));
     public static final Block SPECTACLE_CANDLE = register("spectacle_candle", new SpectacleCandleBlock(FabricBlockSettings.of(Material.DECORATION).sound(SoundType.CANDLE).lightLevel(CandleBlock.LIGHT_EMISSION).strength(0.1F, 0F)), CreativeModeTab.TAB_DECORATIONS);
     public static final Block SPECTACLE_CANDLE_CAKE = registerWithNoItem("spectacle_candle_cake", new SpectacleCandleCakeBlock(ModBlocks.SPECTACLE_CANDLE, FabricBlockSettings.of(Material.CAKE).sound(SoundType.CANDLE).lightLevel(litBlockEmission(3)).strength(0.5F, 0F)));
 

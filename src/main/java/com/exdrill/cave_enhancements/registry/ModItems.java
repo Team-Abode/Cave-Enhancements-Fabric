@@ -1,22 +1,17 @@
 package com.exdrill.cave_enhancements.registry;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
-import com.exdrill.cave_enhancements.item.AmethystFluteItem;
-import com.exdrill.cave_enhancements.item.GlowPasteItem;
-import com.exdrill.cave_enhancements.item.GoopBucketItem;
-import com.exdrill.cave_enhancements.item.HarmonicArrowItem;
+import com.exdrill.cave_enhancements.item.*;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BannerPatternItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.*;
 
 public class ModItems {
 
     public static void init() {}
 
     public static final Item GLOW_PASTE = register("glow_paste", new GlowPasteItem(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1).durability(32)));
+    public static final Item GOOP = register("goop", new GoopItem(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS)));
     public static final Item ROSE_QUARTZ = register("rose_quartz", new Item(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS)));
     public static final Item AMETHYST_FLUTE = register("amethyst_flute", new AmethystFluteItem(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1).durability(64)));
     public static final Item HARMONIC_ARROW = register("harmonic_arrow", new HarmonicArrowItem(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));

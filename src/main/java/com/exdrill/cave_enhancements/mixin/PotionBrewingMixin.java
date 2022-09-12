@@ -2,6 +2,7 @@ package com.exdrill.cave_enhancements.mixin;
 
 import com.exdrill.cave_enhancements.CaveEnhancements;
 import com.exdrill.cave_enhancements.registry.ModBlocks;
+import com.exdrill.cave_enhancements.registry.ModItems;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -23,7 +24,7 @@ public abstract class PotionBrewingMixin {
 
     @Inject(at=@At("HEAD"), method = "bootStrap")
     private static void registerDefaults(CallbackInfo info) {
-        addMix(Potions.AWKWARD, Registry.ITEM.get(new ResourceLocation(CaveEnhancements.MODID, "goop")), Potions.SLOWNESS);
+        addMix(Potions.AWKWARD, ModItems.GOOP, Potions.SLOWNESS);
     }
 
 
