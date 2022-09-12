@@ -6,6 +6,7 @@ import com.exdrill.cave_enhancements.registry.ModEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
@@ -45,16 +46,16 @@ public class RoseQuartzChimesBlockEntity extends BlockEntity {
 
             if (otherEntity instanceof Monster) {
                 if (world.isRaining() && entity.ticksTillActivateClear <= 600) {
-                    otherEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 300, 1, false, true));
+                    otherEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 1, false, true));
                 } else if (!world.isRaining() && entity.ticksTillActivateClear <= 0) {
-                    otherEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 300, 0, false, true));
+                    otherEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 0, false, true));
                 }
             }
             if ((otherEntity instanceof AgeableMob || otherEntity instanceof Player)) {
-                if (world.isRaining() && entity.ticksTillActivateClear <= 600 && !otherEntity.hasEffect(ModEffects.EASING) ) {
-                    otherEntity.addEffect(new MobEffectInstance(ModEffects.EASING, 300, 1, false, true));
-                } else if (!world.isRaining() && entity.ticksTillActivateClear <= 0 && !otherEntity.hasEffect(ModEffects.EASING)) {
-                    otherEntity.addEffect(new MobEffectInstance(ModEffects.EASING, 300, 0, false, true));
+                if (world.isRaining() && entity.ticksTillActivateClear <= 600 && !otherEntity.hasEffect(MobEffects.REGENERATION) ) {
+                    otherEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 1, false, true));
+                } else if (!world.isRaining() && entity.ticksTillActivateClear <= 0 && !otherEntity.hasEffect(MobEffects.REGENERATION)) {
+                    otherEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 0, false, true));
                 }
             }
         }

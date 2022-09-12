@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 public class CaveEnhancements implements ModInitializer {
     public static final String MODID = "cave_enhancements";
-    public static final Logger LOGGER = LoggerFactory.getLogger("Cave Enhancements");
+    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
     public static final BannerPattern GOOP = new BannerPattern("goop");
 
@@ -32,13 +32,13 @@ public class CaveEnhancements implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ModBlocks.register();
-        ModItems.register();
-        ModBlockEntities.register();
         ModSounds.register();
         ModEntities.register();
         ModBiomes.register();
         ModParticles.register();
+        ModBlocks.register();
+        ModItems.register();
+        ModBlockEntities.register();
         ModEffects.register();
         Registry.register(Registry.BANNER_PATTERN, new ResourceLocation(MODID, "goop"), GOOP);
 

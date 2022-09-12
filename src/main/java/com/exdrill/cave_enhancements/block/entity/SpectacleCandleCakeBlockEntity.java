@@ -22,17 +22,20 @@ public class SpectacleCandleCakeBlockEntity extends BlockEntity {
 
     public static void tick(Level level, BlockPos pos, BlockState state) {
 
-        if(!state.getValue(SpectacleCandleCakeBlock.LIT)) return;
+        if (level.getGameTime() % 40L == 0) {
+            if (!state.getValue(SpectacleCandleCakeBlock.LIT)) return;
 
-        AABB box = new AABB(pos).inflate(2);
+            AABB box = new AABB(pos).inflate(2);
 
-        List<Player> list = level.getEntitiesOfClass(Player.class, box);
-        Iterator<Player> iterator = list.iterator();
+            List<Player> list = level.getEntitiesOfClass(Player.class, box);
+            Iterator<Player> iterator = list.iterator();
 
-        Player player;
-        while (iterator.hasNext()) {
-            player = iterator.next();
-            player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0, true, true));
+            Player player;
+            while (iterator.hasNext()) {
+                player = iterator.next();
+                player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0, true, true));
+            }
         }
+
     }
 }

@@ -1,8 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "sss",
-    "tgt",
+    "sgs",
+    "t t",
     "r r"
   ],
   "key": {
@@ -13,7 +13,7 @@
       "item": "minecraft:string"
     },
     "g": {
-      "item": "cave_enhancements:goop"
+      "item": "minecraft:ghast_tear"
     },
     "r": {
       "item": "cave_enhancements:rose_quartz"

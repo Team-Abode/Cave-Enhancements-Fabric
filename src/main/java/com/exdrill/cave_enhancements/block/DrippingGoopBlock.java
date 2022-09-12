@@ -76,7 +76,7 @@ public class DrippingGoopBlock extends Block implements SimpleWaterloggedBlock {
         BlockPos pos = getBottomPos(blockPos, level);
         ItemStack itemStack = player.getItemInHand(interactionHand);
 
-        if (level.getBlockState(pos).isAir() && itemStack.getItem() == ModItems.DRIPPING_GOOP) {
+        if (level.getBlockState(pos).isAir() && itemStack.getItem() == ModBlocks.DRIPPING_GOOP.asItem()) {
             level.setBlock(pos, ModBlocks.DRIPPING_GOOP.defaultBlockState(), 3);
             level.playSound(player, pos, ModSounds.BLOCK_GOOP_DECORATION_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
             if (!player.isCreative()) {

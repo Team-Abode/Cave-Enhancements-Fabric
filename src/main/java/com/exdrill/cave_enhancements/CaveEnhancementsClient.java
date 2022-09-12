@@ -14,11 +14,13 @@ import com.exdrill.cave_enhancements.registry.ModParticles;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
@@ -32,7 +34,24 @@ public class CaveEnhancementsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        ModBlocks.registerClient();
+
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.GOOP_SPLAT, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DRIPPING_GOOP, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.GLOW_SPLOTCH, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.SPECTACLE_CANDLE, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.JAGGED_ROSE_QUARTZ, RenderType.cutout());
+
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.REDSTONE_RECEIVER, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.EXPOSED_REDSTONE_RECEIVER, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.WEATHERED_REDSTONE_RECEIVER, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.OXIDIZED_REDSTONE_RECEIVER, RenderType.cutout());
+
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.WAXED_REDSTONE_RECEIVER, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.WAXED_EXPOSED_REDSTONE_RECEIVER, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.WAXED_WEATHERED_REDSTONE_RECEIVER, RenderType.cutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.WAXED_OXIDIZED_REDSTONE_RECEIVER, RenderType.cutout());
+
+
         ModParticles.registerClient();
 
         // Entity Renderers
