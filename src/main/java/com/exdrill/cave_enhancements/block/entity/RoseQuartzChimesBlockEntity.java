@@ -3,6 +3,7 @@ package com.exdrill.cave_enhancements.block.entity;
 import com.exdrill.cave_enhancements.registry.ModBlockEntities;
 import com.exdrill.cave_enhancements.registry.ModParticles;
 import com.exdrill.cave_enhancements.registry.ModEffects;
+import com.exdrill.cave_enhancements.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -21,49 +22,37 @@ import net.minecraft.world.phys.AABB;
 import java.util.List;
 
 public class RoseQuartzChimesBlockEntity extends BlockEntity {
-    public int ticksTillActivateClear = 1200;
-    public int ticking = 0;
 
+    public int ticks;
 
     public RoseQuartzChimesBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ROSE_QUARTZ_CHIMES, pos, state);
     }
 
-    public static void tick(Level world, BlockPos pos, RoseQuartzChimesBlockEntity entity) {
-        ++entity.ticking;
+    public static void tick(Level level, BlockPos pos, RoseQuartzChimesBlockEntity entity) {
+        entity.ticks++;
 
-        if(entity.ticksTillActivateClear > 0) {
-            entity.ticksTillActivateClear--;
-        }
 
         AABB box = new AABB(pos).inflate(8);
 
-        List<LivingEntity> list = world.getEntitiesOfClass(LivingEntity.class, box, (e) -> true);
+        List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, box, (e) -> true);
 
         LivingEntity otherEntity;
         for (LivingEntity livingEntity : list) {
             otherEntity = livingEntity;
 
-            if (otherEntity instanceof Monster) {
-                if (world.isRaining() && entity.ticksTillActivateClear <= 600) {
-                    otherEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 1, false, true));
-                } else if (!world.isRaining() && entity.ticksTillActivateClear <= 0) {
-                    otherEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 0, false, true));
-                }
-            }
-            if ((otherEntity instanceof AgeableMob || otherEntity instanceof Player)) {
-                if (world.isRaining() && entity.ticksTillActivateClear <= 600 && !otherEntity.hasEffect(MobEffects.REGENERATION) ) {
-                    otherEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 1, false, true));
-                } else if (!world.isRaining() && entity.ticksTillActivateClear <= 0 && !otherEntity.hasEffect(MobEffects.REGENERATION)) {
-                    otherEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 0, false, true));
-                }
-            }
-        }
+            long timeToChime = level.isRaining() ? 400L : 800L;
 
-        if ((entity.ticksTillActivateClear <= 600 && world.isRaining()) || (entity.ticksTillActivateClear <= 0 && !world.isRaining())) {
-            entity.ticksTillActivateClear = 1200;
-            world.addParticle(ModParticles.ROSE_CHIMES, entity.getBlockPos().getX() + 0.5D, entity.getBlockPos().getY() + 0.3D, entity.getBlockPos().getZ() + 0.5D, 0D, 0D, 0D);
-            world.playSound(null, pos, SoundEvents.NOTE_BLOCK_CHIME, SoundSource.BLOCKS, 1.0F, 1.0F);
+            if (level.getGameTime() % timeToChime == 0) {
+
+                applyEffects(level, otherEntity, otherEntity instanceof Monster ? MobEffects.WEAKNESS : MobEffects.REGENERATION);
+                level.addParticle(ModParticles.ROSE_CHIMES, entity.getBlockPos().getX() + 0.5D, entity.getBlockPos().getY() + 0.3D, entity.getBlockPos().getZ() + 0.5D, 0D, 0D, 0D);
+                level.playSound(null, pos, ModSounds.BLOCK_ROSE_QUARTZ_CHIMES_CHIME, SoundSource.BLOCKS, 1.0F, 1.0F);
+            }
         }
+    }
+
+    private static void applyEffects(Level level, LivingEntity livingEntity, MobEffect effect) {
+        livingEntity.addEffect(new MobEffectInstance(effect, 100, level.isRaining() ? 1 : 0, false, true));
     }
 }

@@ -14,12 +14,15 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BellRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.entity.BellBlockEntity;
+
 import java.util.Objects;
 
 public class RoseQuartzChimesBlockEntityRenderer implements BlockEntityRenderer<RoseQuartzChimesBlockEntity> {
@@ -79,19 +82,12 @@ public class RoseQuartzChimesBlockEntityRenderer implements BlockEntityRenderer<
         return LayerDefinition.create(meshdefinition, 16, 16);
     }
 
-    @Override
     public void render(RoseQuartzChimesBlockEntity entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay) {
         this.chimes.xRot = 3.141592653589793F;
-        float intensity;
-        float g = entity.ticking + tickDelta;
+        float age = entity.ticks + (tickDelta / 10);
 
-        if (Objects.requireNonNull(entity.getLevel()).isRaining()) {
-            intensity = 3.1415927F * 2 ;
-        } else {
-            intensity = 3.1415927F * 4;
-        }
+        float rot = Mth.sin(age / 3.1415927F) / 15F;
 
-        float rot = Mth.sin(g / intensity) / 10.0F;
 
         this.chime0.zRot = rot;
         this.chime1.zRot = rot;

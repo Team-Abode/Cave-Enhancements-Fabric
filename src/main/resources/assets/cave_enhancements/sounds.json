@@ -5,6 +5,18 @@
     ],
     "subtitle": "item.glow_paste.place"
   },
+  "item.amethyst_flute.use": {
+    "sounds": [
+        "cave_enhancements:item/amethyst_flute/use"
+    ],
+    "subtitle": "subtitles.item.amethyst_flute.use"
+  },
+  "block.rose_quartz_chimes.chime": {
+    "sounds": [
+        "cave_enhancements:block/rose_quartz_chimes/chime"
+    ],
+    "subtitle": "subtitles.block.rose_quartz_chimes.chime"
+  },
   "block.goop_block.break": {
     "sounds": [
       "cave_enhancements:block/goop_block/break1",

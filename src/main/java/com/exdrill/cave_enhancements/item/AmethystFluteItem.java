@@ -2,6 +2,7 @@ package com.exdrill.cave_enhancements.item;
 
 
 import com.exdrill.cave_enhancements.registry.ModParticles;
+import com.exdrill.cave_enhancements.registry.ModSounds;
 import com.exdrill.cave_enhancements.registry.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -34,7 +35,7 @@ public class AmethystFluteItem extends Item {
         double z = user.getZ();
         BlockPos pos = new BlockPos(x, y, z);
 
-        world.playSound(null, pos, SoundEvents.NOTE_BLOCK_FLUTE, SoundSource.PLAYERS, 1.0F, 1.0F);
+        world.playSound(null, pos, ModSounds.ITEM_AMETHYST_FLUTE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
         user.level.getEntities(user, user.getBoundingBox().inflate(10D)).forEach(entity -> {
 
             if (!world.isClientSide()) {

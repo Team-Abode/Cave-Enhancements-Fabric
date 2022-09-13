@@ -1,5 +1,6 @@
 package com.exdrill.cave_enhancements.block;
 
+import com.exdrill.cave_enhancements.registry.ModEffects;
 import com.exdrill.cave_enhancements.registry.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -79,7 +80,7 @@ public class GoopTrapBlock extends Block implements SimpleWaterloggedBlock {
     public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
         if (!world.isClientSide) {
             if (!entity.getType().is(ModTags.GOOP_TRAP_IMMUNE) && entity instanceof LivingEntity livingEntity) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 6, true, true));
+                livingEntity.addEffect(new MobEffectInstance(ModEffects.STICKING, 20, 1, true, true));
             }
         }
     }
