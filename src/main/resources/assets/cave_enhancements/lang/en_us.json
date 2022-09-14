@@ -46,7 +46,8 @@
   "block.cave_enhancements.soul_rose_quartz_lamp": "Soul Rose Quartz Lamp",
 
 
-  "effect.cave_enhancements.easing": "Easing",
+  "effect.cave_enhancements.reversal": "Reversal",
+  "effect.cave_enhancements.viscous": "Viscous",
 
   "block.minecraft.banner.cave_enhancements.goop.black": "Black Dye Splotch",
   "block.minecraft.banner.cave_enhancements.goop.red": "Red Dye Splotch",
@@ -121,5 +122,11 @@
   "entity.cave_enhancements.big_goop_drip": "Big Goop Drip",
 
   "biome.cave_enhancements.goop_caves": "Goop Caves",
-  "biome.cave_enhancements.rose_quartz_caves": "Rose Quartz Caves"
+  "biome.cave_enhancements.rose_quartz_caves": "Rose Quartz Caves",
+
+  "death.attack.viscous": "%1$s was stuck into the ground too hard",
+  "death.attack.viscous.player": "%1$s was glued whilst fighting %2$s",
+
+  "death.attack.goop_drip": "%1$s was soaked in goop",
+  "death.attack.goop_drip.player": "%1$s was overwhelmed by goop whilst fighting %2$s"
 }

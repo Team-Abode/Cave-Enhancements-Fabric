@@ -1,6 +1,6 @@
 package com.exdrill.cave_enhancements.effect;
 
-import net.minecraft.world.damagesource.DamageSource;
+import com.exdrill.cave_enhancements.registry.ModDamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,9 +17,9 @@ public class ViscousMobEffect extends MobEffect {
         Vec3 motion = livingEntity.getDeltaMovement();
 
         if (motion.y > 0.0 && livingEntity.getRandom().nextFloat() > 0.25F) {
-            livingEntity.hurt(DamageSource.MAGIC, 1.0F + (amplifier / 10) );
+            livingEntity.hurt(ModDamageSource.VISCOUS, 1.0F + ((float) amplifier / 10) );
             if (livingEntity instanceof Player player) {
-                player.causeFoodExhaustion(0.5F + (amplifier / 10) );
+                player.causeFoodExhaustion(0.5F + ((float) amplifier / 10) );
             }
         }
     }

@@ -90,6 +90,4 @@ public class BigGoopDripProjectile extends ThrowableItemProjectile {
             this.discard();
         }
     }
-
-
 }
