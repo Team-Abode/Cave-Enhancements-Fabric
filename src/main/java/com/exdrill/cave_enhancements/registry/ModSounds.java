@@ -35,6 +35,7 @@ public class ModSounds {
     // Goop
     public static final SoundEvent ENTITY_GOOP_HURT = register("entity.goop.hurt");
     public static final SoundEvent ENTITY_GOOP_DEATH = register("entity.goop.death");
+    public static final SoundEvent ITEM_GOOP_THROW = register("item.goop.throw");
 
     // Dripstone Tortoise
     public static final SoundEvent ENTITY_DRIPSTONE_TORTOISE_HURT = register("entity.dripstone_tortoise.hurt");

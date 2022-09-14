@@ -66,8 +66,8 @@ public class BigGoopDripProjectile extends ThrowableItemProjectile {
         Entity entity = entityHitResult.getEntity();
 
         if (entity instanceof LivingEntity livingEntity) {
-            livingEntity.hurt(ModDamageSource.GOOP_DRIP, 3);
-            livingEntity.addEffect(new MobEffectInstance(ModEffects.VISCOUS, 100, 0, true, false));
+            livingEntity.hurt(ModDamageSource.GOOP_DRIP, 5.0F);
+            livingEntity.addEffect(new MobEffectInstance(ModEffects.VISCOUS, 100, 1, true, false));
         }
         hitEntity = true;
     }
