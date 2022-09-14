@@ -7,9 +7,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
-public class StickingMobEffect extends MobEffect {
+public class ViscousMobEffect extends MobEffect {
 
-    public StickingMobEffect(MobEffectCategory mobEffectCategory, int i) {
+    public ViscousMobEffect(MobEffectCategory mobEffectCategory, int i) {
         super(mobEffectCategory, i);
     }
 
