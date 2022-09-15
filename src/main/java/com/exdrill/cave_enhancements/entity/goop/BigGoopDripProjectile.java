@@ -8,7 +8,6 @@ import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -27,11 +26,11 @@ public class BigGoopDripProjectile extends ThrowableItemProjectile {
     }
 
     public BigGoopDripProjectile(Level world, LivingEntity owner) {
-        super(ModEntities.BIG_GOOP_DRIP_PROJECTILE_ENTITY, owner, world); // null will be changed later
+        super(ModEntities.BIG_GOOP_DRIP, owner, world); // null will be changed later
     }
 
     public BigGoopDripProjectile(Level world, double x, double y, double z) {
-        super(ModEntities.BIG_GOOP_DRIP_PROJECTILE_ENTITY, x, y, z, world); // null will be changed later
+        super(ModEntities.BIG_GOOP_DRIP, x, y, z, world); // null will be changed later
     }
 
     //Item projectile is rendered as

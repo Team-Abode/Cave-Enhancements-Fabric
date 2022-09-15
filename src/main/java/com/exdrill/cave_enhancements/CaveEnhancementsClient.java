@@ -59,7 +59,7 @@ public class CaveEnhancementsClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.CRUNCHER, CruncherRenderer::new);
         EntityRendererRegistry.register(ModEntities.DRIPSTONE_TORTOISE, DripstoneTortoiseRenderer::new);
         EntityRendererRegistry.register(ModEntities.DRIPSTONE_PIKE, DripstonePikeRenderer::new);
-        EntityRendererRegistry.register(ModEntities.BIG_GOOP_DRIP_PROJECTILE_ENTITY, ThrownItemRenderer::new);
+        EntityRendererRegistry.register(ModEntities.BIG_GOOP_DRIP, ThrownItemRenderer::new);
         EntityRendererRegistry.register(ModEntities.HARMONIC_ARROW, HarmonicArrowRenderer::new);
         EntityRendererRegistry.register(ModEntities.THROWN_GOOP, ThrownItemRenderer::new);
 
