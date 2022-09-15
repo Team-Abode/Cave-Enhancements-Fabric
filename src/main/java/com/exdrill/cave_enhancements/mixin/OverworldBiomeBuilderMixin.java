@@ -1,12 +1,8 @@
 package com.exdrill.cave_enhancements.mixin;
 
-import com.exdrill.cave_enhancements.CaveEnhancements;
 import com.exdrill.cave_enhancements.registry.ModBiomes;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.biome.OverworldBiomeBuilder;
@@ -31,7 +27,6 @@ public abstract class OverworldBiomeBuilderMixin {
 
     public OverworldBiomeBuilderMixin() {
     }
-
 
     @Inject(method="addUndergroundBiomes", at = @At("TAIL"))
     private void writeCaveBiomes(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> parameters, CallbackInfo ci) {
