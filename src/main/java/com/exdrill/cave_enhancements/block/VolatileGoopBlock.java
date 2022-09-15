@@ -3,6 +3,9 @@ package com.exdrill.cave_enhancements.block;
 import com.exdrill.cave_enhancements.registry.ModParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -15,6 +18,7 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.TntBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -32,38 +36,25 @@ public class VolatileGoopBlock extends Block {
         super(properties);
     }
 
-    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
     }
 
-
     @Nullable
-    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Player player = context.getPlayer();
-        if (player.isCrouching()) {
+        if (player != null && player.isCrouching()) {
             return this.defaultBlockState().setValue(FACING, context.getClickedFace());
         }
         return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection());
     }
 
-    @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         ItemStack stack = player.getItemInHand(hand);
 
         if (stack.is(Items.FLINT_AND_STEEL) || stack.is(Items.FIRE_CHARGE)) {
-            Direction direction = state.getValue(FACING);
 
-            for (int i = 0; i < 5; i++) {
-
-                if (level.isClientSide()) {
-                    level.addParticle(ModParticles.GOOP_EXPLOSION, pos.relative(direction, i).getX() + 0.5, pos.relative(direction, i).getY() + 0.5, pos.relative(direction, i).getZ() + 0.5, 0, 0, 0);
-                }
-                this.explode(level, null, pos.relative(direction, i).getX() + 0.5, pos.relative(direction, i).getY() + 0.5, pos.relative(direction, i).getZ() + 0.5, 1.5F, false, Explosion.BlockInteraction.BREAK);
-               //level.explode(null, pos.relative(direction, i).getX() + 0.5, pos.relative(direction, i).getY() + 0.5, pos.relative(direction, i).getZ() + 0.5, 1.5F, false, Explosion.BlockInteraction.BREAK);
-            }
-
+            activate(state, level, pos, true);
             if (!player.isCreative()) {
                 if (stack.is(Items.FLINT_AND_STEEL)) {
                     stack.hurtAndBreak(1, player, (entity) -> entity.broadcastBreakEvent(hand));
@@ -74,6 +65,35 @@ public class VolatileGoopBlock extends Block {
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.FAIL;
+    }
+
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+        if (level.hasNeighborSignal(pos)) {
+            activate(state, level, pos, false);
+        }
+    }
+
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+        if (level.hasNeighborSignal(pos)) {
+            activate(state, level, pos, false);
+        }
+    }
+
+    public void activate(BlockState state, Level level, BlockPos pos, boolean interact) {
+        Direction direction = state.getValue(FACING);
+        for (int i = 0; i < 5; i++) {
+
+            if (level.isClientSide() && interact) {
+                level.addParticle(ModParticles.GOOP_EXPLOSION, pos.relative(direction, i).getX() + 0.5, pos.relative(direction, i).getY() + 0.5, pos.relative(direction, i).getZ() + 0.5, 0, 0, 0);
+            }
+
+            if (level instanceof ServerLevel server && !interact) {
+                server.playSound(null, pos.relative(direction, i), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                server.sendParticles(ModParticles.GOOP_EXPLOSION, pos.relative(direction, i).getX() + 0.5, pos.relative(direction, i).getY() + 0.5, pos.relative(direction, i).getZ() + 0.5, 1, 0, 0, 0, 0);
+            }
+            level.removeBlock(pos, false);
+            this.explode(level, null, pos.relative(direction, i).getX() + 0.5, pos.relative(direction, i).getY() + 0.5, pos.relative(direction, i).getZ() + 0.5, 1.5F, false, Explosion.BlockInteraction.BREAK);
+        }
     }
 
     public Explosion explode(Level level, @Nullable Entity exploder, double x, double y, double z, float size, boolean causesFire, Explosion.BlockInteraction mode) {
