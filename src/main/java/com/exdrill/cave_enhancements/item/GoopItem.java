@@ -31,7 +31,6 @@ public class GoopItem extends Item {
         super(properties);
     }
 
-    @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
         ItemStack itemStack = player.getItemInHand(usedHand);
         level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.ITEM_GOOP_THROW, SoundSource.NEUTRAL, 0.5F, 1.0F);
