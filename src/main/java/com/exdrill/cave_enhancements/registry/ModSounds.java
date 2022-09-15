@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.SoundType;
 
 public class ModSounds {
 
-    public static void register() {}
+    public static void init() {}
 
     public static SoundEvent register(String name) {
         SoundEvent event = new SoundEvent(new ResourceLocation(CaveEnhancements.MODID, name));

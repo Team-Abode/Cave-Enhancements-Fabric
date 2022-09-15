@@ -27,7 +27,7 @@ public class CaveEnhancements implements ModInitializer {
     public static final BannerPattern GOOP = new BannerPattern("goop");
 
     public void onInitialize() {
-        ModSounds.register();
+        ModSounds.init();
         ModEntities.init();
         ModBiomes.init();
         ModParticles.init();
@@ -35,6 +35,10 @@ public class CaveEnhancements implements ModInitializer {
         ModItems.init();
         ModBlockEntities.init();
         ModEffects.init();
+        ModPotions.init();
+
+
+
         Registry.register(Registry.BANNER_PATTERN, new ResourceLocation(MODID, "goop"), GOOP);
 
         registerOxidizableBlockPairs();

@@ -34,7 +34,7 @@ public class GoopItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
         ItemStack itemStack = player.getItemInHand(usedHand);
-        level.playSound((Player)null, player.getX(), player.getY(), player.getZ(), ModSounds.ITEM_GOOP_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.ITEM_GOOP_THROW, SoundSource.NEUTRAL, 0.5F, 1.0F);
         if (!level.isClientSide) {
             ThrownGoop thrownGoop = new ThrownGoop(level, player);
             thrownGoop.setItem(itemStack);

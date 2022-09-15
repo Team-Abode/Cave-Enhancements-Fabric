@@ -26,11 +26,11 @@ public class ThrownGoop extends ThrowableItemProjectile {
     }
 
     public ThrownGoop(Level world, LivingEntity owner) {
-        super(ModEntities.THROWN_GOOP, owner, world); // null will be changed later
+        super(ModEntities.THROWN_GOOP, owner, world);
     }
 
     public ThrownGoop(Level world, double x, double y, double z) {
-        super(ModEntities.THROWN_GOOP, x, y, z, world); // null will be changed later
+        super(ModEntities.THROWN_GOOP, x, y, z, world);
     }
 
     //Item projectile is rendered as
@@ -73,9 +73,7 @@ public class ThrownGoop extends ThrowableItemProjectile {
 
     protected void onHit(HitResult hitResult) {
         super.onHit(hitResult);
-
             this.level.broadcastEntityEvent(this, (byte)3);
-
             this.discard();
         }
     }

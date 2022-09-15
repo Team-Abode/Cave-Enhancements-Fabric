@@ -20,6 +20,7 @@
   "icon": "assets/cave_enhancements/icon.png",
 
   "environment": "*",
+  "accessWidener": "cave_enhancements.accessWidener",
   "entrypoints": {
     "main": [
       "com.exdrill.cave_enhancements.CaveEnhancements"

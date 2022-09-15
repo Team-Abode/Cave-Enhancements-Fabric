@@ -78,6 +78,7 @@
   "item.glow_paste.place": "Block placed",
 
   "subtitles.block.goop_block.slide": "Sliding on block",
+  "subtitles.item.goop.throw": "Goop flies",
 
   "subtitles.entity.goop.hurt": "Goop hurts",
   "subtitles.entity.goop.death": "Goop dies",

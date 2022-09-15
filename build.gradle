@@ -15,6 +15,10 @@ repositories {
 	maven { url = 'https://maven.parchmentmc.org' }
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/cave_enhancements.accesswidener")
+}
+
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings loom.layered() {
