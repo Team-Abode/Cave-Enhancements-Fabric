@@ -31,10 +31,10 @@ public class SmallGoopDripParticle extends SimpleAnimatedParticle {
     }
 
     @Environment(EnvType.CLIENT)
-    public static class SmallGoopDripFactory implements ParticleProvider<SimpleParticleType> {
+    public static class Factory implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet spriteProvider;
 
-        public SmallGoopDripFactory(SpriteSet spriteProvider) {
+        public Factory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 

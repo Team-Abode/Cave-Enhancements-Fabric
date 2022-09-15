@@ -42,13 +42,15 @@ public class CaveEnhancementsClient implements ClientModInitializer {
     }
 
     public static void registerParticleFactories() {
-        ParticleFactoryRegistry.getInstance().register(ModParticles.SMALL_GOOP_DRIP, SmallGoopDripParticle.SmallGoopDripFactory::new);
+        ParticleFactoryRegistry.getInstance().register(ModParticles.SMALL_GOOP_DRIP, SmallGoopDripParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(ModParticles.SHOCKWAVE, ShockwaveParticle.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(ModParticles.ROSE_QUARTZ_AURA, RoseQuartzAuraParticle.RoseQuartzFactory::new);
-        ParticleFactoryRegistry.getInstance().register(ModParticles.SOOTHING_NOTE, SoothingNoteParticle.SoothingNoteFactory::new);
-        ParticleFactoryRegistry.getInstance().register(ModParticles.ROSE_CHIMES, RoseChimesParticle.RoseChimesFactory::new);
-        ParticleFactoryRegistry.getInstance().register(ModParticles.AMETHYST_BLAST, AmethystBlastParticle.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(ModParticles.HOVERING_NOTE, HoveringNoteParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(ModParticles.CHARGE, StagnantParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(ModParticles.SHIMMER, ShimmerParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(ModParticles.STAGNANT_SHIMMER, StagnantParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(ModParticles.SOOTHING_NOTE, SoothingNoteParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(ModParticles.ROSE_CHIME, RoseChimeParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(ModParticles.HARMONIC_WAVE, HarmonicWaveParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(ModParticles.HARMONIC_NOTE, StagnantParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(ModParticles.GOOP_EXPLOSION, HugeExplosionParticle.Provider::new);
     }
 

@@ -1,9 +1,12 @@
 package com.exdrill.cave_enhancements.block;
 
+import com.exdrill.cave_enhancements.registry.ModParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -84,6 +87,25 @@ public class RoseQuartzLampBlock extends Block implements SimpleWaterloggedBlock
         }
 
         return direction == state.getValue(FACING).getOpposite() && !state.canSurvive(world, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, neighborState, world, pos, neighborPos);
+    }
+
+    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource randomSource) {
+        spawnParticles(level, blockPos);
+    }
+
+    private static void spawnParticles(Level level, BlockPos pos) {
+        RandomSource randomSource = level.random;
+
+        for (Direction direction : Direction.values()) {
+            BlockPos blockPos = pos.relative(direction);
+            if (!level.getBlockState(blockPos).isSolidRender(level, blockPos)) {
+                Direction.Axis axis = direction.getAxis();
+                double e = axis == Direction.Axis.X ? 0.5 + 0.5625 * (double) direction.getStepX() : (double) randomSource.nextFloat();
+                double f = axis == Direction.Axis.Y ? 0.5 + 0.5625 * (double) direction.getStepY() : (double) randomSource.nextFloat();
+                double g = axis == Direction.Axis.Z ? 0.25 + 0.5625 * (double) direction.getStepZ() : (double) randomSource.nextFloat();
+                level.addParticle(ModParticles.STAGNANT_SHIMMER, (double) pos.getX() + e, (double) pos.getY() + f, (double) pos.getZ() + g, 0.0, 0.0, 0.0);
+            }
+        }
     }
 
     @Nullable

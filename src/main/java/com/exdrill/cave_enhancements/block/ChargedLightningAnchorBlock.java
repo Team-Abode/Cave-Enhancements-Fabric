@@ -6,10 +6,12 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -19,6 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RedStoneOreBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
@@ -55,6 +58,24 @@ public class ChargedLightningAnchorBlock extends Block {
         return false;
     }
 
+    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource randomSource) {
+        spawnParticles(level, blockPos);
+    }
+
+    private static void spawnParticles(Level level, BlockPos pos) {
+        RandomSource randomSource = level.random;
+
+        for (Direction direction : Direction.values()) {
+            BlockPos blockPos = pos.relative(direction);
+            if (!level.getBlockState(blockPos).isSolidRender(level, blockPos)) {
+                Direction.Axis axis = direction.getAxis();
+                double e = axis == Direction.Axis.X ? 0.7 + 0.5625 * (double) direction.getStepX() : (double) randomSource.nextFloat();
+                double f = axis == Direction.Axis.Y ? 0.7 + 0.5625 * (double) direction.getStepY() : (double) randomSource.nextFloat();
+                double g = axis == Direction.Axis.Z ? 0.7 + 0.5625 * (double) direction.getStepZ() : (double) randomSource.nextFloat();
+                level.addParticle(ModParticles.CHARGE, (double) pos.getX() + e, (double) pos.getY() + f, (double) pos.getZ() + g, 0.0, 0.0, 0.0);
+            }
+        }
+    }
 
     private void activate(Level world, BlockPos pos, boolean interact){
 

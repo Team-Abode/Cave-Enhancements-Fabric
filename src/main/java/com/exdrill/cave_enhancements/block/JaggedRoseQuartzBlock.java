@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -83,7 +82,7 @@ public class JaggedRoseQuartzBlock extends DropExperienceBlock implements Simple
             double d = (double)l + random.nextDouble();
             double e = (double)j + 0.5D;
             double f = (double)k + random.nextDouble();
-            world.addParticle(ModParticles.ROSE_QUARTZ_AURA, d, e, f, Mth.nextFloat(random, -1, 1) / 50, 0.01D, Mth.nextFloat(random, -1, 1) / 50);
+            world.addParticle(ModParticles.SHIMMER, d, e, f, Mth.nextFloat(random, -1, 1) / 50, 0.01D, Mth.nextFloat(random, -1, 1) / 50);
         }
     }
 

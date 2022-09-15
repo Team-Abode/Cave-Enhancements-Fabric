@@ -8,23 +8,23 @@ import net.minecraft.resources.ResourceLocation;
 
 public class ModParticles {
 
-    public static final SimpleParticleType SMALL_GOOP_DRIP = FabricParticleTypes.simple();
-    public static final SimpleParticleType SHOCKWAVE = FabricParticleTypes.simple();
-    public static final SimpleParticleType ROSE_QUARTZ_AURA = FabricParticleTypes.simple();
-    public static final SimpleParticleType SOOTHING_NOTE = FabricParticleTypes.simple();
-    public static final SimpleParticleType ROSE_CHIMES = FabricParticleTypes.simple();
-    public static final SimpleParticleType AMETHYST_BLAST = FabricParticleTypes.simple();
-    public static final SimpleParticleType HOVERING_NOTE = FabricParticleTypes.simple();
-    public static final SimpleParticleType GOOP_EXPLOSION = FabricParticleTypes.simple();
+    public static SimpleParticleType register(String id, SimpleParticleType particleType) {
+        return Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(CaveEnhancements.MODID, id), particleType);
+    }
+
+    public static final SimpleParticleType SMALL_GOOP_DRIP = register("small_goop_drip", FabricParticleTypes.simple());
+    public static final SimpleParticleType GOOP_EXPLOSION = register("goop_explosion", FabricParticleTypes.simple());
+    public static final SimpleParticleType SHOCKWAVE = register("shockwave", FabricParticleTypes.simple());
+    public static final SimpleParticleType CHARGE = register("charge", FabricParticleTypes.simple());
+    public static final SimpleParticleType SHIMMER = register("shimmer", FabricParticleTypes.simple());
+    public static final SimpleParticleType STAGNANT_SHIMMER = register("stagnant_shimmer", FabricParticleTypes.simple());
+    public static final SimpleParticleType SOOTHING_NOTE = register("soothing_note", FabricParticleTypes.simple());
+    public static final SimpleParticleType ROSE_CHIME = register("rose_chime", FabricParticleTypes.simple());
+    public static final SimpleParticleType HARMONIC_WAVE = register("harmonic_wave", FabricParticleTypes.simple());
+    public static final SimpleParticleType HARMONIC_NOTE = register("harmonic_note", FabricParticleTypes.simple());
+
 
     public static void init() {
-        Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(CaveEnhancements.MODID, "small_goop_drip"), SMALL_GOOP_DRIP);
-        Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(CaveEnhancements.MODID, "shockwave"), SHOCKWAVE);
-        Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(CaveEnhancements.MODID, "rose_quartz_aura"), ROSE_QUARTZ_AURA);
-        Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(CaveEnhancements.MODID, "soothing_note"), SOOTHING_NOTE);
-        Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(CaveEnhancements.MODID, "rose_chimes"), ROSE_CHIMES);
-        Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(CaveEnhancements.MODID, "amethyst_blast"), AMETHYST_BLAST);
-        Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(CaveEnhancements.MODID, "hovering_note"), HOVERING_NOTE);
-        Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(CaveEnhancements.MODID, "goop_explosion"), GOOP_EXPLOSION);
+
     }
 }
