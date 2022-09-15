@@ -21,5 +21,5 @@ public class ModPotions {
     }
 
     public static final Potion REVERSAL = register("reversal", new Potion(new MobEffectInstance(ModEffects.REVERSAL, 3600)));
-    public static final Potion LONG_REVERSAL = register("long_reversal", new Potion(new MobEffectInstance(ModEffects.REVERSAL, 8000)));
+    public static final Potion LONG_REVERSAL = register("long_reversal", new Potion(new MobEffectInstance(ModEffects.REVERSAL, 9600)));
 }
