@@ -93,6 +93,8 @@
   "subtitles.entity.dripstone_tortoise.step": "Dripstone Tortoise steps",
   "subtitles.entity.dripstone_tortoise.idle": "Dripstone Tortoise sighs",
 
+  "subtitles.effect.reversal.reverse": "Damage reverse applies",
+
   "advancements.underground.root.title": "The Underground",
   "advancements.underground.root.description": "The deeper you go, the more you can find",
 
@@ -131,5 +133,12 @@
   "death.attack.viscous.player": "%1$s was glued whilst fighting %2$s",
 
   "death.attack.goop_drip": "%1$s was soaked in goop",
-  "death.attack.goop_drip.player": "%1$s was overwhelmed by goop whilst fighting %2$s"
+  "death.attack.goop_drip.player": "%1$s was overwhelmed by goop whilst fighting %2$s",
+
+  "item.minecraft.potion.effect.reversal": "Potion of Reversal",
+  "item.minecraft.potion.effect.long_reversal": "Potion of Reversal",
+  "item.minecraft.splash_potion.effect.reversal": "Splash Potion of Reversal",
+  "item.minecraft.splash_potion.effect.long_reversal": "Splash Potion of Reversal",
+  "item.minecraft.lingering_potion.effect.reversal": "Lingering Potion of Reversal",
+  "item.minecraft.lingering_potion.effect.long_reversal": "Lingering Potion of Reversal"
 }

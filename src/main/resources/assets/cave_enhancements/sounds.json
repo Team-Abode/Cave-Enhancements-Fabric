@@ -24,6 +24,12 @@
     ],
     "subtitle": "subtitles.block.rose_quartz_chimes.chime"
   },
+  "effect.reversal.reverse": {
+    "sounds": [
+        "cave_enhancements:effect/reversal/reverse"
+    ],
+    "subtitle": "subtitles.effect.reversal.reverse"
+  },
   "block.goop_block.break": {
     "sounds": [
       "cave_enhancements:block/goop_block/break1",

@@ -20,6 +20,6 @@ public class ModPotions {
         return Registry.register(Registry.POTION, new ResourceLocation(CaveEnhancements.MODID, id), potion);
     }
 
-    public static final Potion REVERSAL = register("reversal", new Potion(new MobEffectInstance(ModEffects.REVERSAL, 3600)));
-    public static final Potion LONG_REVERSAL = register("long_reversal", new Potion(new MobEffectInstance(ModEffects.REVERSAL, 9600)));
+    public static final Potion REVERSAL = register("reversal", new Potion(new MobEffectInstance(ModEffects.REVERSAL, 1800)));
+    public static final Potion LONG_REVERSAL = register("long_reversal", new Potion(new MobEffectInstance(ModEffects.REVERSAL, 3600)));
 }
