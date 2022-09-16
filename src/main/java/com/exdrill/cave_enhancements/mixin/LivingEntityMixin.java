@@ -76,7 +76,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
             ReversalMobEffect.onReversal(livingEntity);
         }
         if (amount > 0 && this.hasEffect(ModEffects.REVERSAL)) {
-            this.setReversalDamage(Mth.log2(8 + Mth.ceil(amount)));
+            this.setReversalDamage(Mth.log2(Mth.ceil(amount) - 1));
         }
     }
 }
