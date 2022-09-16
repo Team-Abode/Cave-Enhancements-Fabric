@@ -140,5 +140,7 @@
   "item.minecraft.splash_potion.effect.reversal": "Splash Potion of Reversal",
   "item.minecraft.splash_potion.effect.long_reversal": "Splash Potion of Reversal",
   "item.minecraft.lingering_potion.effect.reversal": "Lingering Potion of Reversal",
-  "item.minecraft.lingering_potion.effect.long_reversal": "Lingering Potion of Reversal"
+  "item.minecraft.lingering_potion.effect.long_reversal": "Lingering Potion of Reversal",
+  "item.minecraft.tipped_arrow.effect.reversal": "Arrow of Reversal",
+  "item.minecraft.tipped_arrow.effect.long_reversal": "Arrow of Reversal"
 }
