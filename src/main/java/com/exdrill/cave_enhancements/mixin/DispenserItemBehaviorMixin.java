@@ -61,6 +61,7 @@ public interface DispenserItemBehaviorMixin {
                 if (level.getBlockState(blockPos).isAir()) {
                     level.setBlockAndUpdate(blockPos, ModBlocks.VOLATILE_GOOP.defaultBlockState().setValue(VolatileGoopBlock.FACING, direction));
                     level.gameEvent(null, GameEvent.BLOCK_PLACE, blockPos);
+                    stack.shrink(1);
                 } else {
                     this.setSuccess(false);
                 }
