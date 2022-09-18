@@ -3,16 +3,13 @@ package com.exdrill.cave_enhancements.mixin;
 import com.exdrill.cave_enhancements.accessor.LivingEntityAccess;
 import com.exdrill.cave_enhancements.effect.ReversalMobEffect;
 import com.exdrill.cave_enhancements.registry.ModEffects;
-import com.exdrill.cave_enhancements.registry.ModSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -71,6 +68,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityAc
 
     @Inject(method = "hurt", at = @At("HEAD"))
     private void hurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+
         Entity attacker = source.getDirectEntity();
         if (attacker instanceof LivingEntity livingEntity) {
             ReversalMobEffect.onReversal(livingEntity);
