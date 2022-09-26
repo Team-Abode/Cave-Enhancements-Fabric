@@ -1,8 +1,0 @@
-
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-package com.exdrill.cave_enhancements.entity.dripstone_tortoise.goals;
-
-import net.minecraft.MethodsReturnNonnullByDefault;
-
-import javax.annotation.ParametersAreNonnullByDefault;

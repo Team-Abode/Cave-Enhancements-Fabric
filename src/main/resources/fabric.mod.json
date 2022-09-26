@@ -23,13 +23,13 @@
   "accessWidener": "cave_enhancements.accesswidener",
   "entrypoints": {
     "main": [
-      "com.exdrill.cave_enhancements.CaveEnhancements"
+      "com.teamabode.cave_enhancements.CaveEnhancements"
     ],
     "client": [
-      "com.exdrill.cave_enhancements.CaveEnhancementsClient"
+      "com.teamabode.cave_enhancements.CaveEnhancementsClient"
     ],
     "terrablender": [
-      "com.exdrill.cave_enhancements.terrablender.TerrablenderIntegration"
+      "com.teamabode.cave_enhancements.terrablender.TerrablenderIntegration"
     ]
   },
   "mixins": [
