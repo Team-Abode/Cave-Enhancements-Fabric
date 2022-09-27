@@ -36,6 +36,7 @@ public class CaveEnhancements implements ModInitializer {
         ModBlockEntities.init();
         ModEffects.init();
         ModPotions.init();
+        ModFeatures.init();
 
         Registry.register(Registry.BANNER_PATTERN, new ResourceLocation(MODID, "goop"), GOOP);
 

@@ -35,8 +35,8 @@ public class CaveBiomes {
         spawnSettings.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(ModEntities.GOOP, 10, 1, 1));
 
         // Generation Settings
-        net.minecraft.world.level.biome.BiomeGenerationSettings.Builder builder2 = new net.minecraft.world.level.biome.BiomeGenerationSettings.Builder();
-        addBasicFeatures(builder2);
+        net.minecraft.world.level.biome.BiomeGenerationSettings.Builder generationBuilder = new net.minecraft.world.level.biome.BiomeGenerationSettings.Builder();
+        addBasicFeatures(generationBuilder);
 
         // Feature Settings
         BiomeGenerationSettings.Builder featureSettings = new BiomeGenerationSettings.Builder();
