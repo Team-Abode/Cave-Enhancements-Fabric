@@ -189,5 +189,15 @@
       "cave_enhancements:mob/dripstone_tortoise/idle3"
     ],
     "subtitle": "subtitles.entity.dripstone_tortoise.idle"
+  },
+  "music.biome.goop_caves": {
+    "sounds": [
+        "cave_enhancements:music/melt"
+    ]
+  },
+  "music.biome.rose_quartz_caves": {
+    "sounds": [
+        "cave_enhancements:music/limulidae"
+    ]
   }
 }

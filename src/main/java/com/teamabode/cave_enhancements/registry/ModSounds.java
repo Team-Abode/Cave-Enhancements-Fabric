@@ -49,6 +49,10 @@ public class ModSounds {
     public static final SoundEvent BLOCK_ROSE_QUARTZ_CHIMES_CHIME = register("block.rose_quartz_chimes.chime");
     public static final SoundEvent EFFECT_REVERSAL_REVERSE = register("effect.reversal.reverse");
 
+    // Music
+    public static final SoundEvent MUSIC_BIOME_GOOP_CAVES = register("music.biome.goop_caves");
+    public static final SoundEvent MUSIC_BIOME_ROSE_QUARTZ_CAVES = register("music.biome.rose_quartz_caves");
+
     // Block Sound Types
     public static final SoundType GOOP_BLOCK = new SoundType(1.0F, 1.0F, BLOCK_GOOP_BLOCK_BREAK, BLOCK_GOOP_BLOCK_STEP, BLOCK_GOOP_BLOCK_PLACE, BLOCK_GOOP_BLOCK_HIT, BLOCK_GOOP_BLOCK_FALL);
     public static final SoundType GOOP_DECORATION = new SoundType(1.0F, 1.0F, BLOCK_GOOP_DECORATION_BREAK, BLOCK_GOOP_DECORATION_STEP, BLOCK_GOOP_DECORATION_PLACE, BLOCK_GOOP_DECORATION_HIT, BLOCK_GOOP_DECORATION_FALL);
