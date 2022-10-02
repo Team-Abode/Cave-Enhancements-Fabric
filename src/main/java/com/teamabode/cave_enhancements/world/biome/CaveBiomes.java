@@ -5,7 +5,6 @@ import com.teamabode.cave_enhancements.registry.ModFeatures.ModPlacedFeatures;
 import com.teamabode.cave_enhancements.registry.ModSounds;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.Carvers;
-import net.minecraft.data.worldgen.biome.OverworldBiomes;
 import net.minecraft.sounds.Musics;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -27,10 +26,10 @@ public class CaveBiomes {
     }
 
     private static void goopCavesFeatures(BiomeGenerationSettings.Builder builder) {
+        builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.GOOP_SPLAT);
         builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.FLOOR_GOOP_PATCH);
         builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.CEILING_GOOP_PATCH);
-        builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.ORE_GOOP);
-        builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.GOOP_SPLAT);
+        builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.GOOP_STRAND);
         builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.DRIPPING_GOOP);
     }
 

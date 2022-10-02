@@ -17,7 +17,7 @@ public class ModEffects {
     }
 
     public static final MobEffect REVERSAL = register("reversal", new ReversalMobEffect(MobEffectCategory.BENEFICIAL, 0xf7addc));
-    public static final MobEffect VISCOUS = register("viscous", new ViscousMobEffect(MobEffectCategory.HARMFUL, 0xf0dead).addAttributeModifier(Attributes.MOVEMENT_SPEED, "89266f72-4f61-4151-ac06-104ea9a17f22", -0.5F, AttributeModifier.Operation.MULTIPLY_TOTAL));
+    public static final MobEffect STICKY = register("sticky", new ViscousMobEffect(MobEffectCategory.HARMFUL, 0xf0dead).addAttributeModifier(Attributes.MOVEMENT_SPEED, "89266f72-4f61-4151-ac06-104ea9a17f22", -0.15F, AttributeModifier.Operation.MULTIPLY_TOTAL).addAttributeModifier(Attributes.ATTACK_SPEED, "202186ab-317b-4064-a731-135065f562c8", -0.15F, AttributeModifier.Operation.MULTIPLY_TOTAL));
 
 
     public static void init() {

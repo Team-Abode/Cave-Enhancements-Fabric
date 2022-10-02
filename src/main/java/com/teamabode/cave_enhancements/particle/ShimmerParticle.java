@@ -23,7 +23,7 @@ public class ShimmerParticle extends SimpleAnimatedParticle {
         this.xd = velX;
         this.yd = velY;
         this.zd = velZ;
-        this.quadSize *= 1.5F;
+        this.quadSize = 0.1F;
         this.hasPhysics = false;
         this.gravity = 0.0F;
         this.lifetime = 2500;

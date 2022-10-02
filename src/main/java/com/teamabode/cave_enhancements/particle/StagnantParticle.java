@@ -14,6 +14,7 @@ public class StagnantParticle extends SimpleAnimatedParticle {
     protected StagnantParticle(ClientLevel world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, SpriteSet spriteProvider) {
         super(world, x, y, z, spriteProvider, 0.0F);
         this.lifetime = 10;
+        this.quadSize = 0.1F;
         this.setSpriteFromAge(spriteProvider);
 
     }

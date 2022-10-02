@@ -63,8 +63,8 @@ public class ThrownGoop extends ThrowableItemProjectile {
 
         if (entity instanceof LivingEntity livingEntity) {
             livingEntity.hurt(ModDamageSource.GOOP_DRIP, 2.0F);
-            if (!livingEntity.hasEffect(ModEffects.VISCOUS)) {
-                livingEntity.addEffect(new MobEffectInstance(ModEffects.VISCOUS, 200, 0, false, true));
+            if (!livingEntity.hasEffect(ModEffects.STICKY)) {
+                livingEntity.addEffect(new MobEffectInstance(ModEffects.STICKY, 200, 0, false, true));
             }
         }
         hitEntity = true;

@@ -116,7 +116,7 @@
       "cave_enhancements:block/goop_block/step3",
       "cave_enhancements:block/goop_block/step4"
     ],
-    "subtitle": "block.goop_block.fall"
+    "subtitle": "subtitles.block.generic.big_fall"
   },
   "block.goop_decoration.place": {
     "sounds": [
