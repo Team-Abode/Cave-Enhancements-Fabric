@@ -49,7 +49,7 @@
 
 
   "effect.cave_enhancements.reversal": "Reversal",
-  "effect.cave_enhancements.viscous": "Viscous",
+  "effect.cave_enhancements.sticky": "Sticky",
 
   "block.minecraft.banner.cave_enhancements.goop.black": "Black Dye Splotch",
   "block.minecraft.banner.cave_enhancements.goop.red": "Red Dye Splotch",
@@ -72,10 +72,7 @@
   "item.cave_enhancements.dripstone_tortoise_spawn_egg": "Dripstone Tortoise Spawn Egg",
   "item.cave_enhancements.cruncher_spawn_egg": "Cruncher Spawn Egg",
 
-
-
   "item.cave_enhancements.rose_quartz": "Rose Quartz",
-
 
   "item.glow_paste.place": "Block placed",
 
