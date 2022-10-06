@@ -1,70 +1,70 @@
 package com.teamabode.cave_enhancements.world.feature;
 
 import com.mojang.serialization.Codec;
-import com.teamabode.cave_enhancements.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-public class RoseQuartzCrystalFeature extends Feature<NoneFeatureConfiguration> {
+public class RoseQuartzCrystalFeature extends Feature<RoseQuartzCrystalConfiguration> {
 
-    public RoseQuartzCrystalFeature(Codec<NoneFeatureConfiguration> pCodec) {
-        super(pCodec);
+    public RoseQuartzCrystalFeature() {
+        super(RoseQuartzCrystalConfiguration.CODEC);
     }
 
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+    public boolean place(FeaturePlaceContext<RoseQuartzCrystalConfiguration> context) {
 
         BlockPos pos = context.origin();
         WorldGenLevel level = context.level();
+        RandomSource random = context.random();
+        RoseQuartzCrystalFormation formation = context.config().formation;
 
-        if (level.getBlockState(pos.below()).isAir()) return false;
-
-        placePillar(4, 4, pos, level);
-        for (Direction direction : Direction.Plane.HORIZONTAL) {
-            placePillar(3, 3,  pos.relative(direction), level);
-            placePillar(1, 1,  pos.relative(direction).relative(direction.getClockWise()), level);
-        }
+        Direction direction = Direction.values()[Mth.nextInt(random, 0, Direction.values().length)];
 
         return true;
     }
 
-    private void placePillar(int baseValue, int randomValue, BlockPos pos, LevelAccessor level) {
-        RandomSource random = level.getRandom();
-        int height = random.nextInt(randomValue) + baseValue;
+    private void placeCrystals(RoseQuartzCrystalFormation formation, BlockPos pos, WorldGenLevel level, int length) {
 
-        for (int i = 1; i < 3; i++) {
-            if (level.getBlockState(pos.below(i)).is(Blocks.WATER)) return;
-        }
+        switch (formation) {
+            case DIAGONAL_UP -> {
 
-
-        for (int i = -3; i < height; i++) {
-            BlockPos abovePos = pos.above(i);
-
-            if (level.getBlockState(abovePos.above(1)).isAir()) {
-                break;
             }
+            case DIAGONAL_DOWN -> {
 
-            if (getBlockState(level, abovePos, BlockTags.BASE_STONE_OVERWORLD)) {
-                level.setBlock(abovePos, ModBlocks.ROSE_QUARTZ_BLOCK.defaultBlockState(), 3);
             }
+            case VERTICAL_UP -> {
 
+            }
+            case VERTICAL_DOWN -> {
+
+            }
         }
-        if (getBlockState(level, pos.above(height), BlockTags.BASE_STONE_OVERWORLD) && random.nextFloat() < 0.1 && level.getBlockState(pos.above(height).below()).is(ModBlocks.ROSE_QUARTZ_BLOCK)) {
-            level.setBlock(pos.above(height), ModBlocks.JAGGED_ROSE_QUARTZ.defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, true), 3);
-        }
+
+
+
     }
 
-    private static boolean getBlockState(LevelAccessor level, BlockPos pos, TagKey<Block> blockTag) {
-        return level.getBlockState(pos).is(blockTag) || level.getBlockState(pos).getMaterial().isLiquid();
+    public enum RoseQuartzCrystalFormation implements StringRepresentable {
+        VERTICAL_UP("vertical_up"),
+        VERTICAL_DOWN("vertical_down"),
+        DIAGONAL_UP("diagonal_up"),
+        DIAGONAL_DOWN("diagonal_down");
+
+        private final String id;
+
+        public static final Codec<RoseQuartzCrystalFormation> CODEC = StringRepresentable.fromEnum(RoseQuartzCrystalFormation::values);
+
+        RoseQuartzCrystalFormation(String id) {
+            this.id = id;
+        }
+
+        public String getSerializedName() {
+            return null;
+        }
     }
 }
