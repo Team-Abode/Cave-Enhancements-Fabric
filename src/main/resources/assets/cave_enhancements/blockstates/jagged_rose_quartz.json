@@ -1,5 +1,9 @@
 {
   "variants": {
-    "": { "model": "cave_enhancements:block/jagged_rose_quartz" }
+    "hanging=false": { "model": "cave_enhancements:block/jagged_rose_quartz" },
+    "hanging=true": {
+        "model": "cave_enhancements:block/jagged_rose_quartz",
+        "x": 180
+    }
   }
 }

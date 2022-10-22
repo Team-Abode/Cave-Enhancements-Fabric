@@ -67,7 +67,7 @@ public class CaveEnhancementsClient implements ClientModInitializer {
     }
 
     public static void registerModelLayer() {
-        EntityModelLayerRegistry.registerModelLayer(CruncherModel.ENTITY_MODEL_LAYER, CruncherModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(CruncherModel.LAYER_LOCATION, CruncherModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(GoopModel.ENTITY_MODEL_LAYER, GoopModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(DripstoneTortoiseModel.LAYER_LOCATION, DripstoneTortoiseModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(DripstonePikeModel.LAYER_LOCATION, DripstonePikeModel::getTexturedModelData);

@@ -90,10 +90,10 @@ public class ModItems {
     public static final BlockItem POLISHED_ROSE_QUARTZ_STAIRS = new BlockItem(ModBlocks.POLISHED_ROSE_QUARTZ_STAIRS, new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS));
     public static final BlockItem POLISHED_ROSE_QUARTZ_WALL = new BlockItem(ModBlocks.POLISHED_ROSE_QUARTZ_WALL, new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS));
 
-    public static final BlockItem ROSE_QUARTZ_TILES = new BlockItem(ModBlocks.POLISHED_ROSE_QUARTZ, new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS));
-    public static final BlockItem ROSE_QUARTZ_TILE_SLAB = new BlockItem(ModBlocks.POLISHED_ROSE_QUARTZ_SLAB, new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS));
-    public static final BlockItem ROSE_QUARTZ_TILE_STAIRS = new BlockItem(ModBlocks.POLISHED_ROSE_QUARTZ_STAIRS, new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS));
-    public static final BlockItem ROSE_QUARTZ_TILE_WALL = new BlockItem(ModBlocks.POLISHED_ROSE_QUARTZ_WALL, new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS));
+    public static final BlockItem ROSE_QUARTZ_TILES = new BlockItem(ModBlocks.ROSE_QUARTZ_TILES, new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS));
+    public static final BlockItem ROSE_QUARTZ_TILE_SLAB = new BlockItem(ModBlocks.ROSE_QUARTZ_TILE_SLAB, new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS));
+    public static final BlockItem ROSE_QUARTZ_TILE_STAIRS = new BlockItem(ModBlocks.ROSE_QUARTZ_TILE_STAIRS, new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS));
+    public static final BlockItem ROSE_QUARTZ_TILE_WALL = new BlockItem(ModBlocks.ROSE_QUARTZ_TILE_WALL, new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS));
 
     public static final BlockItem ROSE_QUARTZ_CHIMES = new BlockItem(ModBlocks.ROSE_QUARTZ_CHIMES, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
     public static final BlockItem ROSE_QUARTZ_LAMP = new BlockItem(ModBlocks.ROSE_QUARTZ_LAMP, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));

@@ -1,7 +1,7 @@
 package com.teamabode.cave_enhancements.registry;
 
 import com.teamabode.cave_enhancements.CaveEnhancements;
-import com.teamabode.cave_enhancements.entity.*;
+import com.teamabode.cave_enhancements.entity.HarmonicArrow;
 import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
 import com.teamabode.cave_enhancements.entity.dripstone_tortoise.DripstonePike;
 import com.teamabode.cave_enhancements.entity.dripstone_tortoise.DripstoneTortoise;
@@ -12,7 +12,9 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 
 public class ModEntities {
 

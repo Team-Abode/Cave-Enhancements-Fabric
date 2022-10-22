@@ -14,7 +14,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -24,6 +23,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CaveVinesPlantBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -35,7 +35,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation")
 public class DrippingGoopBlock extends Block implements SimpleWaterloggedBlock {
@@ -75,8 +74,8 @@ public class DrippingGoopBlock extends Block implements SimpleWaterloggedBlock {
         BlockPos pos = getBottomPos(blockPos, level);
         ItemStack itemStack = player.getItemInHand(interactionHand);
 
-        if (level.getBlockState(pos).isAir() && itemStack.getItem() == ModBlocks.DRIPPING_GOOP.asItem()) {
-            level.setBlock(pos, ModBlocks.DRIPPING_GOOP.defaultBlockState(), 3);
+        if (level.getBlockState(pos).getMaterial().isReplaceable() && itemStack.getItem() == ModBlocks.DRIPPING_GOOP.asItem()) {
+            level.setBlockAndUpdate(pos, ModBlocks.DRIPPING_GOOP.defaultBlockState().setValue(WATERLOGGED, level.isWaterAt(pos)));
             level.playSound(player, pos, ModSounds.BLOCK_GOOP_DECORATION_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
             if (!player.isCreative()) {
                 itemStack.shrink(1);
@@ -143,14 +142,6 @@ public class DrippingGoopBlock extends Block implements SimpleWaterloggedBlock {
         return !entity.isOnGround();
     }
 
-    // Block Placement
-
-    @Override
-    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
-        super.setPlacedBy(world, pos, state, placer, itemStack);
-        this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, world.getFluidState(pos).getType() == Fluids.WATER));
-    }
-
     @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter blockView, BlockPos pos, CollisionContext shapeContext) {
         return SHAPE;
@@ -160,10 +151,10 @@ public class DrippingGoopBlock extends Block implements SimpleWaterloggedBlock {
         if (state.getValue(WATERLOGGED)) {
             world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
         }
-        return direction == Direction.DOWN ? state.setValue(HANGING, this.HangingState(neighborState)) : direction == Direction.UP && !this.canSurvive(state, world, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, neighborState, world, pos, neighborPos);
+        return direction == Direction.DOWN ? state.setValue(HANGING, this.getHangingState(neighborState)) : direction == Direction.UP && !this.canSurvive(state, world, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, neighborState, world, pos, neighborPos);
     }
 
-    private boolean HangingState(BlockState state) {
+    private boolean getHangingState(BlockState state) {
         return !state.is(ModBlocks.DRIPPING_GOOP);
     }
 
@@ -171,13 +162,8 @@ public class DrippingGoopBlock extends Block implements SimpleWaterloggedBlock {
         return Block.canSupportCenter(world, pos.above(), Direction.DOWN) || world.getBlockState(pos.above()).is(ModBlocks.DRIPPING_GOOP);
     }
 
-    public static boolean canDrip(BlockState state) {
-        return state.getValue(HANGING) && !(Boolean)state.getValue(WATERLOGGED);
-    }
-
-    // Particles
     public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
-        if (canDrip(state)) {
+        if (state.getValue(HANGING)) {
             float f = random.nextFloat();
             if (!(f > 0.1F)) {
                 createParticle(world, pos, state);
@@ -194,10 +180,5 @@ public class DrippingGoopBlock extends Block implements SimpleWaterloggedBlock {
             ParticleOptions particleEffect = ModParticles.SMALL_GOOP_DRIP;
             world.addParticle(particleEffect, e, f, g, 0.0D, -0.5D, 0.0D);
         }
-    }
-
-    // Etc
-    public boolean propagatesSkylightDown(BlockState state, BlockGetter world, BlockPos pos) {
-        return state.getFluidState().isEmpty();
     }
 }

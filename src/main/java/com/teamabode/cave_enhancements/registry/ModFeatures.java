@@ -35,7 +35,7 @@ import java.util.List;
 
 public class ModFeatures {
 
-    public static final Feature<RoseQuartzCrystalConfiguration> ROSE_QUARTZ_CRYSTAL = new RoseQuartzCrystalFeature();
+    public static final Feature<NoneFeatureConfiguration> ROSE_QUARTZ_CRYSTAL = new RoseQuartzCrystalFeature();
     public static final Feature<NoneFeatureConfiguration> GOOP_STRAND = new GoopStrandFeature();
 
     public static void init() {
@@ -52,12 +52,13 @@ public class ModFeatures {
         public static final Holder<ConfiguredFeature<BlockColumnConfiguration, ?>> DRIPPING_GOOP = register("dripping_goop", new ConfiguredFeature<>(Feature.BLOCK_COLUMN, new BlockColumnConfiguration( List.of(BlockColumnConfiguration.layer(new WeightedListInt(SimpleWeightedRandomList.<IntProvider>builder().add(UniformInt.of(6, 12), 1).add(UniformInt.of(2, 5), 1).add(UniformInt.of(8, 10), 2).build()), BlockStateProvider.simple(ModBlocks.DRIPPING_GOOP.defaultBlockState().setValue(DrippingGoopBlock.HANGING, false))), BlockColumnConfiguration.layer(ConstantInt.of(1), BlockStateProvider.simple(ModBlocks.DRIPPING_GOOP.defaultBlockState().setValue(DrippingGoopBlock.HANGING, true)))), Direction.DOWN, BlockPredicate.ONLY_IN_AIR_OR_WATER_PREDICATE, true)));
         public static final Holder<ConfiguredFeature<NoneFeatureConfiguration, ?>> GOOP_STRAND = register("goop_strand", new ConfiguredFeature<>(ModFeatures.GOOP_STRAND, new NoneFeatureConfiguration()));
 
-        //public static final Holder<ConfiguredFeature<RoseQuartzCrystalConfiguration, ?>> ROSE_QUARTZ_CRYSTALS = register("rose_quartz_crystals", new ConfiguredFeature<>(ModFeatures.ROSE_QUARTZ_CRYSTAL, new RoseQuartzCrystalConfiguration(RoseQuartzCrystalFeature.RoseQuartzCrystalFormation.DIAGONAL_DOWN)));
+        public static final Holder<ConfiguredFeature<NoneFeatureConfiguration, ?>> ROSE_QUARTZ_CRYSTALS = register("rose_quartz_crystals", new ConfiguredFeature<>(ModFeatures.ROSE_QUARTZ_CRYSTAL, new NoneFeatureConfiguration()));
         public static final Holder<ConfiguredFeature<OreConfiguration, ?>> ORE_CALCITE = register("ore_calcite", new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(OreFeatures.NATURAL_STONE, Blocks.CALCITE.defaultBlockState(), 64, 1.0F)));
 
         public static <FC extends FeatureConfiguration> Holder<ConfiguredFeature<FC, ?>> register(String name, ConfiguredFeature<FC, ?> feature) {
             return BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(CaveEnhancements.MODID, name).toString(), feature);
         }
+
     }
 
     public static class ModPlacedFeatures {
@@ -101,7 +102,7 @@ public class ModFeatures {
                 BiomeFilter.biome()
         ));
 
-        /*
+
         public static final Holder<PlacedFeature> ROSE_QUARTZ_CRYSTALS = register("rose_quartz_crystals", ModConfiguredFeatures.ROSE_QUARTZ_CRYSTALS, List.of(
                 CountPlacement.of(188),
                 InSquarePlacement.spread(),
@@ -109,8 +110,8 @@ public class ModFeatures {
                 EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.hasSturdyFace(Direction.UP), BlockPredicate.matchesBlocks(Blocks.WATER), 12),
                 RandomOffsetPlacement.vertical(ConstantInt.of(1)),
                 BiomeFilter.biome()
-        ));ç
-       */
+        ));
+
 
         public static final Holder<PlacedFeature> ORE_CALCITE = register("ore_calcite", ModConfiguredFeatures.ORE_CALCITE, List.of(
                 CountPlacement.of(25),

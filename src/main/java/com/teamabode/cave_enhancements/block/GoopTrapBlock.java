@@ -28,12 +28,16 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("deprecation")
 public class GoopTrapBlock extends Block implements SimpleWaterloggedBlock {
 
-    protected static final VoxelShape SHAPE;
+    protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public GoopTrapBlock(Properties settings) {
         super(settings);
         this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, false));
+    }
+
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(WATERLOGGED);
     }
 
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
@@ -43,7 +47,6 @@ public class GoopTrapBlock extends Block implements SimpleWaterloggedBlock {
         return blockState.setValue(WATERLOGGED, waterCheck);
     }
 
-    @Override
     public BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2) {
         if (blockState.getValue(WATERLOGGED)) {
             levelAccessor.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
@@ -55,12 +58,6 @@ public class GoopTrapBlock extends Block implements SimpleWaterloggedBlock {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
-    @Override
-    public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
-        super.setPlacedBy(world, pos, state, placer, itemStack);
-        this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, world.getFluidState(pos).getType() == Fluids.WATER));
-    }
-
     public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
@@ -70,12 +67,11 @@ public class GoopTrapBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     public void fallOn(Level world, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
-        if (entity.causeFallDamage(fallDistance, 0.5F, DamageSource.FALL)) {
+        if (entity.causeFallDamage(fallDistance, 0.25F, DamageSource.FALL)) {
             entity.playSound(this.soundType.getFallSound(), this.soundType.getVolume() * 0.5F, this.soundType.getPitch() * 0.75F);
         }
     }
 
-    @Override
     public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
         if (!world.isClientSide) {
             if (!entity.getType().is(ModTags.GOOP_TRAP_IMMUNE) && entity instanceof LivingEntity livingEntity) {
@@ -83,15 +79,4 @@ public class GoopTrapBlock extends Block implements SimpleWaterloggedBlock {
             }
         }
     }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(WATERLOGGED);
-    }
-
-    static {
-        SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
-    }
-
-
 }

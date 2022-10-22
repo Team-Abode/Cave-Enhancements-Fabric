@@ -1,9 +1,9 @@
 package com.teamabode.cave_enhancements.client.renderer.entity.layers;
 
-import com.teamabode.cave_enhancements.client.model.CruncherModel;
-import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import com.teamabode.cave_enhancements.client.model.CruncherModel;
+import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -15,11 +15,11 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
 @Environment(EnvType.CLIENT)
-public class CruncherHeldItemLayer extends RenderLayer<Cruncher, CruncherModel<Cruncher>> {
+public class CruncherHeldItemLayer extends RenderLayer<Cruncher, CruncherModel> {
 
     private final ItemInHandRenderer heldItemRenderer;
 
-    public CruncherHeldItemLayer(RenderLayerParent<Cruncher, CruncherModel<Cruncher>> featureRendererContext, ItemInHandRenderer heldItemRenderer) {
+    public CruncherHeldItemLayer(RenderLayerParent<Cruncher, CruncherModel> featureRendererContext, ItemInHandRenderer heldItemRenderer) {
         super(featureRendererContext);
         this.heldItemRenderer = heldItemRenderer;
     }
@@ -29,8 +29,8 @@ public class CruncherHeldItemLayer extends RenderLayer<Cruncher, CruncherModel<C
 
         matrixStack.translate(0, 1.25, 0);
 
-        matrixStack.mulPose(Vector3f.YP.rotation(getParentModel().head.yRot));
-        matrixStack.mulPose(Vector3f.XP.rotation(getParentModel().head.xRot));
+        matrixStack.mulPose(Vector3f.YP.rotation(getParentModel().root().getChild("body").getChild("head").yRot));
+        matrixStack.mulPose(Vector3f.XP.rotation(getParentModel().root().getChild("body").getChild("head").xRot));
 
         matrixStack.translate(0, -.2, -.5);
 

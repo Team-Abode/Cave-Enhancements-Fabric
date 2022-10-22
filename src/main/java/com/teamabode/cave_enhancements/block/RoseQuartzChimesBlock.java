@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -27,39 +28,33 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @SuppressWarnings("deprecation")
 public class RoseQuartzChimesBlock extends BaseEntityBlock {
 
-    public RoseQuartzChimesBlock (FabricBlockSettings settings){
+    public RoseQuartzChimesBlock (BlockBehaviour.Properties settings){
         super(settings);
     }
 
     public static final VoxelShape COLLISION_SHAPE;
     public static final VoxelShape RAYCAST_SHAPE;
 
-    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new RoseQuartzChimesBlockEntity(pos, state);
     }
 
-    @Override
     public boolean propagatesSkylightDown(BlockState state, BlockGetter world, BlockPos pos) {
         return super.propagatesSkylightDown(state, world, pos);
     }
 
-    @Override
     public VoxelShape getInteractionShape(BlockState state, BlockGetter world, BlockPos pos) {
         return RAYCAST_SHAPE;
     }
 
-    @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return COLLISION_SHAPE;
     }
 
-    @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
-    @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
         return createTickerHelper(type, ModBlockEntities.ROSE_QUARTZ_CHIMES, (world1, pos, state1, entity) -> RoseQuartzChimesBlockEntity.tick(world1, pos, entity));
     }
@@ -68,7 +63,6 @@ public class RoseQuartzChimesBlock extends BaseEntityBlock {
         return Block.canSupportCenter(world, pos.above(), Direction.DOWN) || world.getBlockState(pos.above()).is(BlockTags.LEAVES);
     }
 
-    @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         return direction == Direction.UP && !this.canSurvive(state, world, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, neighborState, world, pos, neighborPos);
     }
