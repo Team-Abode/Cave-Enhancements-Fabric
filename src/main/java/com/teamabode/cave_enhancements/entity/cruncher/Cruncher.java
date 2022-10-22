@@ -28,10 +28,12 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
@@ -41,6 +43,8 @@ public class Cruncher extends Animal {
     private static final EntityDataAccessor<Boolean> IS_SEARCHING = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> CAN_MINE = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> SEARCH_COOLDOWN_TIME = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> TARGET_BLOCK_X = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> TARGET_BLOCK_Z = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
 
     public static final Predicate<ItemEntity> GLOW_BERRIES_ONLY = (itemEntity -> itemEntity.isAlive() && !itemEntity.hasPickUpDelay() && itemEntity.getItem().is(Items.GLOW_BERRIES));
     private int ticksSinceEaten = 0;
@@ -69,6 +73,8 @@ public class Cruncher extends Animal {
         this.entityData.define(IS_SEARCHING, false);
         this.entityData.define(CAN_MINE, false);
         this.entityData.define(SEARCH_COOLDOWN_TIME, 0);
+        this.entityData.define(TARGET_BLOCK_X, 0);
+        this.entityData.define(TARGET_BLOCK_Z, 0);
     }
 
     public boolean isSearching() {
@@ -82,6 +88,22 @@ public class Cruncher extends Animal {
     public boolean canMine() { return this.entityData.get(CAN_MINE); }
 
     public void setCanMine(Boolean value) { this.entityData.set(CAN_MINE, value); }
+
+    public int getTargetBlockX() {
+        return this.entityData.get(TARGET_BLOCK_X);
+    }
+
+    public int getTargetBlockZ() {
+        return this.entityData.get(TARGET_BLOCK_Z);
+    }
+
+    public void setTargetBlockX(int value) {
+        this.entityData.set(TARGET_BLOCK_X, value);
+    }
+
+    public void setTargetBlockZ(int value) {
+        this.entityData.set(TARGET_BLOCK_Z, value);
+    }
 
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
@@ -131,7 +153,6 @@ public class Cruncher extends Animal {
         } else {
             super.handleEntityEvent(id);
         }
-
     }
 
     public boolean canHoldItem(ItemStack stack) {

@@ -4,17 +4,17 @@ import com.teamabode.cave_enhancements.CaveEnhancements;
 import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
 import com.teamabode.cave_enhancements.registry.ModBlocks;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class CruncherEatBlockGoal extends Goal {
 
     private final Cruncher cruncher;
     int currentTick = 0;
-    boolean isFinished = true;
-    boolean hasSuccessfullyFinished = true;
 
     public CruncherEatBlockGoal(Cruncher cruncher) {
         this.cruncher = cruncher;
@@ -35,9 +35,20 @@ public class CruncherEatBlockGoal extends Goal {
 
         cruncher.getLookControl().setLookAt(pos.getX(), pos.getY(), pos.getZ());
 
-        if (currentTick % 40 == 0 && level.getBlockState(pos).is(BlockTags.BASE_STONE_OVERWORLD)) {
-            level.destroyBlock(pos, true);
-            currentTick = 0;
+        Vec3 vec3 = new Vec3(cruncher.getTargetBlockX() + 0.5D, cruncher.getY(), cruncher.getTargetBlockZ() + 0.5D);
+
+        if(cruncher.position().distanceTo(vec3) <=  1){
+            if(cruncher.position().distanceTo(vec3) > 0.2){
+                cruncher.setDeltaMovement(0.0, 0.0, 0.0);
+                cruncher.teleportToWithTicket(vec3.x, vec3.y, vec3.z);
+            }
+
+            if (currentTick > 40 && level.getBlockState(pos).is(BlockTags.BASE_STONE_OVERWORLD)) {
+                level.destroyBlock(pos, true);
+                currentTick = 0;
+            }
+        }else {
+            cruncher.getNavigation().moveTo(cruncher.getNavigation().createPath(new BlockPos(vec3), 0), 2F);
         }
     }
 
