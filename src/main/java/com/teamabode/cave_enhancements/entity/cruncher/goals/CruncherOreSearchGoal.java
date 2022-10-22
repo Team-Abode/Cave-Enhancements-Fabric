@@ -22,6 +22,7 @@ public class CruncherOreSearchGoal extends Goal {
     boolean isFinished = false;
     boolean hasSuccessfullyFinished = false;
     @Nullable BlockPos finishedPos = null;
+    int goalTickDuration = 0;
 
     public CruncherOreSearchGoal(Cruncher cruncher) {
         this.cruncher = cruncher;
@@ -59,6 +60,7 @@ public class CruncherOreSearchGoal extends Goal {
     }
 
     public void tick() {
+        goalTickDuration++;
         if (finishedPos == null) {
             isFinished = true;
             return;
@@ -68,6 +70,9 @@ public class CruncherOreSearchGoal extends Goal {
 
         if (cruncher.blockPosition().distToCenterSqr(finishedPos.getX(), finishedPos.getY(), finishedPos.getZ()) <= 2.5) {
             hasSuccessfullyFinished = true;
+            isFinished = true;
+        }
+        if (goalTickDuration % 300 == 0) {
             isFinished = true;
         }
     }
@@ -91,7 +96,7 @@ public class CruncherOreSearchGoal extends Goal {
             }
         }
 
-        CaveEnhancements.LOGGER.info("Finished");
+        CaveEnhancements.LOGGER.info("Finished CruncherOreSearchGoal");
 
         cruncher.setSearching(false);
         cruncher.getNavigation().stop();

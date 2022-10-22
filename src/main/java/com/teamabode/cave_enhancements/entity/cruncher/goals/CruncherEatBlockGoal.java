@@ -42,7 +42,7 @@ public class CruncherEatBlockGoal extends Goal {
     }
 
     public void stop() {
-        CaveEnhancements.LOGGER.info("Finished!");
+        CaveEnhancements.LOGGER.info("Finished CruncherEatBlockGoal");
         cruncher.setCanMine(false);
     }
 

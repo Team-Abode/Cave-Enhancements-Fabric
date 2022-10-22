@@ -1,14 +1,13 @@
 package com.teamabode.cave_enhancements.entity.cruncher;
 
 import com.teamabode.cave_enhancements.CaveEnhancements;
-import com.teamabode.cave_enhancements.entity.cruncher.goals.CruncherEatBlockGoal;
-import com.teamabode.cave_enhancements.entity.cruncher.goals.CruncherMoveToItemGoal;
-import com.teamabode.cave_enhancements.entity.cruncher.goals.CruncherOreSearchGoal;
-import com.teamabode.cave_enhancements.entity.cruncher.goals.CruncherRandomStrollGoal;
+import com.teamabode.cave_enhancements.entity.cruncher.goals.*;
 import com.teamabode.cave_enhancements.registry.ModEntities;
 import com.teamabode.cave_enhancements.registry.ModTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -21,6 +20,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -28,6 +28,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -39,11 +40,10 @@ public class Cruncher extends Animal {
 
     private static final EntityDataAccessor<Boolean> IS_SEARCHING = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> CAN_MINE = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> SEARCH_COOLDOWN_TIME = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
 
     public static final Predicate<ItemEntity> GLOW_BERRIES_ONLY = (itemEntity -> itemEntity.isAlive() && !itemEntity.hasPickUpDelay() && itemEntity.getItem().is(Items.GLOW_BERRIES));
     private int ticksSinceEaten = 0;
-
-    //public final AnimationState walkAnimationState = new AnimationState();
 
     public Cruncher(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
@@ -55,7 +55,7 @@ public class Cruncher extends Animal {
         this.goalSelector.addGoal(0, new CruncherOreSearchGoal(this));
         this.goalSelector.addGoal(0, new CruncherEatBlockGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.5F));
-        this.goalSelector.addGoal(1, new LookAtPlayerGoal(this, Player.class, 5.0F));
+        this.goalSelector.addGoal(1, new CruncherLookAtPlayerGoal(this));
         this.goalSelector.addGoal(1, new CruncherMoveToItemGoal(this));
         this.goalSelector.addGoal(2, new CruncherRandomStrollGoal(this));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.25, Ingredient.of(Items.GLOW_BERRIES), false));
@@ -68,6 +68,7 @@ public class Cruncher extends Animal {
         super.defineSynchedData();
         this.entityData.define(IS_SEARCHING, false);
         this.entityData.define(CAN_MINE, false);
+        this.entityData.define(SEARCH_COOLDOWN_TIME, 0);
     }
 
     public boolean isSearching() {
@@ -94,25 +95,6 @@ public class Cruncher extends Animal {
         setCanMine(compound.getBoolean("CanMine"));
     }
 
-    // Animation Conditions
-    /*
-    private boolean isMovingOnLand() {
-        return this.onGround && this.getDeltaMovement().horizontalDistanceSqr() > 1.0E-6 && !this.isInWaterOrBubble();
-    }
-
-    // Tick
-    public void tick() {
-        if (this.level.isClientSide()) {
-            if (this.isMovingOnLand()) {
-                this.walkAnimationState.start(tickCount);
-            } else {
-                this.walkAnimationState.stop();
-            }
-        }
-        super.tick();
-    }
-     */
-
     // Ai Step
     public void aiStep() {
         if (!this.level.isClientSide() && this.isAlive() && this.isEffectiveAi()) {
@@ -128,13 +110,28 @@ public class Cruncher extends Animal {
                     this.ticksSinceEaten = 0;
                     this.setSearching(true);
                     CaveEnhancements.LOGGER.info("Consumed");
-                } else if (this.ticksSinceEaten > 160 && this.random.nextFloat() < 0.1F) {
+                } else if (this.ticksSinceEaten > 160 && this.random.nextBoolean()) {
                     this.playSound(this.getEatingSound(itemStack), 1.0F, 1.0F);
                     this.level.broadcastEntityEvent(this, (byte)45);
                 }
             }
         }
         super.aiStep();
+    }
+
+    public void handleEntityEvent(byte id) {
+        if (id == 45) {
+            ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+            if (!itemStack.isEmpty()) {
+                for(int i = 0; i < 8; ++i) {
+                    Vec3 vec3 = (new Vec3(((double)this.random.nextFloat() - 0.5) * 0.1, Math.random() * 0.1 + 0.1, 0.0)).xRot(-this.getXRot() * 0.017453292F).yRot(-this.getYRot() * 0.017453292F);
+                    this.level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, itemStack), this.getX() + this.getLookAngle().x / 2.0, this.getY(), this.getZ() + this.getLookAngle().z / 2.0, vec3.x, vec3.y + 0.05, vec3.z);
+                }
+            }
+        } else {
+            super.handleEntityEvent(id);
+        }
+
     }
 
     public boolean canHoldItem(ItemStack stack) {
