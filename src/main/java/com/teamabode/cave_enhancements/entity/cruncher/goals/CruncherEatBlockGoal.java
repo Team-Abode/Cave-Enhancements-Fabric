@@ -22,6 +22,10 @@ public class CruncherEatBlockGoal extends Goal {
         return cruncher.canMine();
     }
 
+    public void start(){
+        System.out.println("Started Ore Eat Goal!");
+    }
+
     public boolean canContinueToUse() {
         return cruncher.canMine() && !cruncher.level.getBlockState(cruncher.blockPosition().below()).is(ModTags.CRUNCHER_SEARCHABLES) && cruncher.getLastHurtByMob() == null;
     }
@@ -33,7 +37,9 @@ public class CruncherEatBlockGoal extends Goal {
 
         cruncher.getLookControl().setLookAt(pos.getX(), pos.getY(), pos.getZ());
 
-        Vec3 vec3 = new Vec3(cruncher.getTargetBlockX() + 0.5D, cruncher.getY(), cruncher.getTargetBlockZ() + 0.5D);
+        if(cruncher.getTargetPos() == null) return;
+
+        Vec3 vec3 = new Vec3(cruncher.getTargetPos().getX() + 0.5D, cruncher.getY(), cruncher.getTargetPos().getZ() + 0.5D);
 
         if(cruncher.position().distanceTo(vec3) <=  1){
             if(cruncher.position().distanceTo(vec3) > 0.2){
@@ -56,6 +62,8 @@ public class CruncherEatBlockGoal extends Goal {
     }
 
     public void stop() {
+        System.out.println("Started Ore Eat Goal!");
+
         CaveEnhancements.LOGGER.info("Finished CruncherEatBlockGoal");
         cruncher.setCanMine(false);
         cruncher.setSearchCooldownTime(240);

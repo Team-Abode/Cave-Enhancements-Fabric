@@ -35,6 +35,8 @@ public class CruncherOreSearchGoal extends Goal {
     }
 
     public void start(){
+        System.out.println("Started Ore Search Goal!");
+
         targetPos = getOrePosition(cruncher.getLevel(), 15, 150);
     }
 
@@ -59,12 +61,13 @@ public class CruncherOreSearchGoal extends Goal {
     }
 
     public void stop() {
+        System.out.println("Stopped Ore Search Goal!");
+
         if (reachedPosition) {
             cruncher.setDeltaMovement(0.0, 0.0, 0.0);
             cruncher.teleportToWithTicket(targetPos.getX() + 0.5D, targetPos.getY(), targetPos.getZ() + 0.5D);
             cruncher.setCanMine(true);
-            cruncher.setTargetBlockX(targetPos.getX());
-            cruncher.setTargetBlockZ(targetPos.getZ());
+            cruncher.setTargetPos(targetPos);
         }else {
             if (cruncher.getLevel() instanceof ServerLevel server) {
                 server.sendParticles(ParticleTypes.ANGRY_VILLAGER, cruncher.getX(), cruncher.getY(), cruncher.getZ(), 1, 0, 0, 0, 0);

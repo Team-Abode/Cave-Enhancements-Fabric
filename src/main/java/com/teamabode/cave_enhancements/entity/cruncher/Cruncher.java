@@ -36,6 +36,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
@@ -46,8 +47,7 @@ public class Cruncher extends Animal {
     private static final EntityDataAccessor<Boolean> CAN_MINE = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> SHEARED = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> SEARCH_COOLDOWN_TIME = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> TARGET_BLOCK_X = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> TARGET_BLOCK_Z = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Optional<BlockPos>> TARGET_POS = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
 
     public final AnimationState chompAnimationState = new AnimationState();
     public final AnimationState walkAnimationState = new AnimationState();
@@ -79,8 +79,7 @@ public class Cruncher extends Animal {
         this.entityData.define(CAN_MINE, false);
         this.entityData.define(SHEARED, false);
         this.entityData.define(SEARCH_COOLDOWN_TIME, 0);
-        this.entityData.define(TARGET_BLOCK_X, 0);
-        this.entityData.define(TARGET_BLOCK_Z, 0);
+        this.entityData.define(TARGET_POS, Optional.empty());
     }
 
     public boolean isSearching() {
@@ -95,20 +94,12 @@ public class Cruncher extends Animal {
 
     public void setCanMine(Boolean value) { this.entityData.set(CAN_MINE, value); }
 
-    public int getTargetBlockX() {
-        return this.entityData.get(TARGET_BLOCK_X);
+    @Nullable
+    public BlockPos getTargetPos() {
+        return this.entityData.get(TARGET_POS).orElse(null);
     }
-
-    public int getTargetBlockZ() {
-        return this.entityData.get(TARGET_BLOCK_Z);
-    }
-
-    public void setTargetBlockX(int value) {
-        this.entityData.set(TARGET_BLOCK_X, value);
-    }
-
-    public void setTargetBlockZ(int value) {
-        this.entityData.set(TARGET_BLOCK_Z, value);
+    public void setTargetPos(@Nullable BlockPos value) {
+        this.entityData.set(TARGET_POS, value == null ? Optional.empty() : Optional.of(value));
     }
 
     public int getSearchCooldownTime() { return this.entityData.get(SEARCH_COOLDOWN_TIME); }
