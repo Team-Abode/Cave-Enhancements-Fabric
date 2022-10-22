@@ -49,7 +49,8 @@ public class Cruncher extends Animal {
     private static final EntityDataAccessor<Integer> TARGET_BLOCK_X = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> TARGET_BLOCK_Z = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
 
-    public final AnimationState chompingAnimationState = new AnimationState();
+    public final AnimationState chompAnimationState = new AnimationState();
+    public final AnimationState walkAnimationState = new AnimationState();
 
     public static final Predicate<ItemEntity> GLOW_BERRIES_ONLY = (itemEntity -> itemEntity.isAlive() && !itemEntity.hasPickUpDelay() && itemEntity.getItem().is(Items.GLOW_BERRIES));
     private int ticksSinceEaten = 0;
@@ -61,8 +62,8 @@ public class Cruncher extends Animal {
 
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(0, new CruncherOreSearchGoal(this));
-        this.goalSelector.addGoal(0, new CruncherEatBlockGoal(this));
+        this.goalSelector.addGoal(1, new CruncherOreSearchGoal(this));
+        this.goalSelector.addGoal(1, new CruncherEatBlockGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.5F));
         this.goalSelector.addGoal(1, new CruncherLookAtPlayerGoal(this));
         this.goalSelector.addGoal(1, new CruncherMoveToItemGoal(this));
@@ -157,14 +158,30 @@ public class Cruncher extends Animal {
         }
     }
 
+    private boolean isMovingOnLand() {
+        return this.onGround && this.getDeltaMovement().horizontalDistanceSqr() > 1.0E-6 && !this.isInWaterOrBubble();
+    }
+
     public void tick() {
         if (this.getSearchCooldownTime() > 0 && this.tickCount % 20 == 0) {
             this.setSearchCooldownTime(getSearchCooldownTime() - 1);
         }
         if (this.getPose() == Pose.DIGGING) {
-            chompingAnimationState.startIfStopped(this.tickCount);
+            if (level.isClientSide()) {
+                chompAnimationState.startIfStopped(this.tickCount);
+            }
+
         } else {
-            chompingAnimationState.stop();
+            if (level.isClientSide()) {
+                chompAnimationState.stop();
+            }
+        }
+        if (level.isClientSide()) {
+            if (isMovingOnLand()) {
+                walkAnimationState.startIfStopped(this.tickCount);
+            } else {
+                walkAnimationState.stop();
+            }
         }
         super.tick();
     }

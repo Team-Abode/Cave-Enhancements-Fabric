@@ -9,17 +9,17 @@ public class CruncherRandomStrollGoal extends RandomStrollGoal {
     private final Cruncher cruncher;
 
     public CruncherRandomStrollGoal(PathfinderMob pathfinderMob) {
-        super(pathfinderMob, 1.0F);
+        super(pathfinderMob, 1.0F, 40);
         this.cruncher = (Cruncher) pathfinderMob;
     }
 
     public boolean canUse() {
-        if (cruncher.isSearching()) return false;
+        if (!cruncher.isSearching()) return true;
+        if (!cruncher.canMine()) return true;
         return super.canUse();
     }
 
     public boolean canContinueToUse() {
-        if (cruncher.isSearching()) return false;
         return super.canContinueToUse();
     }
 }

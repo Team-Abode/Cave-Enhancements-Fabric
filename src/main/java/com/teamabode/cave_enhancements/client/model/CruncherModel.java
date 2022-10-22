@@ -5,8 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamabode.cave_enhancements.CaveEnhancements;
 import com.teamabode.cave_enhancements.client.animation.CruncherAnimation;
 import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.FrogModel;
+import net.minecraft.client.animation.definitions.FrogAnimation;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -14,7 +13,6 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.animal.Animal;
 
 public class CruncherModel extends HierarchicalModel<Cruncher> {
 
@@ -84,14 +82,17 @@ public class CruncherModel extends HierarchicalModel<Cruncher> {
 
 	public void setupAnim(Cruncher entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		this.animate(entity.chompingAnimationState, CruncherAnimation.CHOMPING, ageInTicks);
+		float k = Math.min((float)entity.getDeltaMovement().lengthSqr() * 200.0F, 8.0F);
+		this.animate(entity.chompAnimationState, CruncherAnimation.CHOMPING, ageInTicks);
+		this.animate(entity.walkAnimationState, CruncherAnimation.WALKING, ageInTicks, k);
+
 
 		this.head.xRot = headPitch * 0.017453292F;
 		this.head.yRot = netHeadYaw * 0.017453292F;
-		this.rightHindLeg.xRot = Mth.cos(limbSwing * 1.5708F) * 1.4F * limbSwingAmount;
-		this.leftHindLeg.xRot = Mth.cos(limbSwing * 1.5708F + 3.1415927F) * 1.4F * limbSwingAmount;
-		this.rightFrontLeg.xRot = Mth.cos(limbSwing * 1.5708F + 3.1415927F) * 1.4F * limbSwingAmount;
-		this.leftFrontLeg.xRot = Mth.cos(limbSwing * 1.5708F) * 1.4F * limbSwingAmount;
+		//this.rightHindLeg.xRot = Mth.cos(limbSwing * 1.5708F) * 1.4F * limbSwingAmount;
+		//this.leftHindLeg.xRot = Mth.cos(limbSwing * 1.5708F + 3.1415927F) * 1.4F * limbSwingAmount;
+		//this.rightFrontLeg.xRot = Mth.cos(limbSwing * 1.5708F + 3.1415927F) * 1.4F * limbSwingAmount;
+		//this.leftFrontLeg.xRot = Mth.cos(limbSwing * 1.5708F) * 1.4F * limbSwingAmount;
 	}
 
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
