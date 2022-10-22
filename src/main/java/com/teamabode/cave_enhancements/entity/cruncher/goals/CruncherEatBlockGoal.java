@@ -2,11 +2,9 @@ package com.teamabode.cave_enhancements.entity.cruncher.goals;
 
 import com.teamabode.cave_enhancements.CaveEnhancements;
 import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
-import com.teamabode.cave_enhancements.registry.ModBlocks;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
-import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
+import com.teamabode.cave_enhancements.registry.ModTags;
 import net.minecraft.core.BlockPos;
-import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -14,7 +12,7 @@ import net.minecraft.world.phys.Vec3;
 public class CruncherEatBlockGoal extends Goal {
 
     private final Cruncher cruncher;
-    int currentTick = 0;
+    public int currentTick = 0;
 
     public CruncherEatBlockGoal(Cruncher cruncher) {
         this.cruncher = cruncher;
@@ -25,7 +23,7 @@ public class CruncherEatBlockGoal extends Goal {
     }
 
     public boolean canContinueToUse() {
-        return cruncher.canMine() && !cruncher.level.getBlockState(cruncher.blockPosition().below()).is(ConventionalBlockTags.ORES);
+        return cruncher.canMine() && !cruncher.level.getBlockState(cruncher.blockPosition().below()).is(ModTags.CRUNCHER_SEARCHABLES) && cruncher.getLastHurtByMob() == null;
     }
 
     public void tick() {
@@ -43,10 +41,15 @@ public class CruncherEatBlockGoal extends Goal {
                 cruncher.teleportToWithTicket(vec3.x, vec3.y, vec3.z);
             }
 
-            if (currentTick > 40 && level.getBlockState(pos).is(BlockTags.BASE_STONE_OVERWORLD)) {
+            if (currentTick % 40 == 0 && level.getBlockState(pos).is(ModTags.CRUNCHER_CONSUMABLES)) {
+                cruncher.setPose(Pose.DIGGING);
                 level.destroyBlock(pos, true);
+            }
+            if (currentTick % 60 == 0) {
+                cruncher.setPose(Pose.STANDING);
                 currentTick = 0;
             }
+
         }else {
             cruncher.getNavigation().moveTo(cruncher.getNavigation().createPath(new BlockPos(vec3), 0), 2F);
         }
@@ -55,6 +58,7 @@ public class CruncherEatBlockGoal extends Goal {
     public void stop() {
         CaveEnhancements.LOGGER.info("Finished CruncherEatBlockGoal");
         cruncher.setCanMine(false);
+        cruncher.setSearchCooldownTime(240);
     }
 
     public boolean requiresUpdateEveryTick() {

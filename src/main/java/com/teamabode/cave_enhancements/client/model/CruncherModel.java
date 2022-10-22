@@ -83,11 +83,9 @@ public class CruncherModel extends HierarchicalModel<Cruncher> {
 	}
 
 	public void setupAnim(Cruncher entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		/*
-		this.root.getAllParts().forEach(ModelPart::resetPose);
-		float k = (float) entity.getDeltaMovement().lengthSqr();
-		this.animate(entity.walkAnimationState, CruncherAnimation.WALKING, ageInTicks);
-		 */
+		this.root().getAllParts().forEach(ModelPart::resetPose);
+		this.animate(entity.chompingAnimationState, CruncherAnimation.CHOMPING, ageInTicks);
+
 		this.head.xRot = headPitch * 0.017453292F;
 		this.head.yRot = netHeadYaw * 0.017453292F;
 		this.rightHindLeg.xRot = Mth.cos(limbSwing * 1.5708F) * 1.4F * limbSwingAmount;

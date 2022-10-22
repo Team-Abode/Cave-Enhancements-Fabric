@@ -1,20 +1,19 @@
 package com.teamabode.cave_enhancements.entity.cruncher.goals;
 
 import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import com.teamabode.cave_enhancements.registry.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.lighting.LevelLightEngine;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class CruncherOreSearchGoal extends Goal {
 
@@ -36,11 +35,11 @@ public class CruncherOreSearchGoal extends Goal {
     }
 
     public void start(){
-        targetPos = getOrePosition(cruncher.getLevel(), 10, 50);
+        targetPos = getOrePosition(cruncher.getLevel(), 15, 150);
     }
 
     public boolean canContinueToUse() {
-        return cruncher.isSearching() && !isFinished && targetPos != null && goalTickTime < 300;
+        return cruncher.isSearching() && !isFinished && targetPos != null && goalTickTime < 300 && cruncher.getLastHurtByMob() == null;
     }
 
     public void tick() {
@@ -86,7 +85,7 @@ public class CruncherOreSearchGoal extends Goal {
         List<BlockPos> potentialPositions = new ArrayList<>();
 
         for (int i = 0; i < tries; i++) {
-            Vec3 vec = DefaultRandomPos.getPos(cruncher, radius, 0);
+            Vec3 vec = DefaultRandomPos.getPos(cruncher, radius, 5);
 
             if(vec == null) continue;
 
@@ -95,13 +94,18 @@ public class CruncherOreSearchGoal extends Goal {
             for (int j = 0; j <= 10; j++) {
                 BlockPos pos = potentialPos.below(j);
 
-                if (level.getBlockState(pos).is(ConventionalBlockTags.ORES)) {
+                if (level.getBlockState(pos).getMaterial().isLiquid()) continue;
+                if (level.getBlockState(pos).isAir()) continue;
+                if (level.getBlockState(pos).is(Blocks.BEDROCK)) continue;
+                if (!level.getBlockState(pos.below()).is(ModTags.CRUNCHER_CONSUMABLES)) continue;
+
+                if (level.getBlockState(pos).is(ModTags.CRUNCHER_SEARCHABLES)) {
                     potentialPositions.add(potentialPos);
                 }
             }
         }
 
-        if(potentialPositions.size() == 0) return null;
+        if (potentialPositions.size() == 0) return null;
 
         return potentialPositions.get(level.getRandom().nextInt(potentialPositions.size()));
     }

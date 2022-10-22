@@ -22,6 +22,8 @@ public class ModTags {
     public static final TagKey<Block> GOOP_SPAWNABLE_ON = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "goop_spawnable_on"));
     public static final TagKey<Block> RECEIVERS = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "receivers"));
     public static final TagKey<Block> PIKE_DESTROYABLES = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "pike_destroyables"));
+
     public static final TagKey<Block> CRUNCHER_CONSUMABLES = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "cruncher_consumables"));
+    public static final TagKey<Block> CRUNCHER_SEARCHABLES = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "cruncher_searchables"));
     public static final TagKey<Block> CRUNCHERS_SPAWNABLE_ON = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "crunchers_spawnable_on"));
 }

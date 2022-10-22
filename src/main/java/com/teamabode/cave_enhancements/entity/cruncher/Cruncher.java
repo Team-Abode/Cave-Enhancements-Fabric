@@ -15,12 +15,16 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -28,12 +32,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Optional;
 import java.util.function.Predicate;
 
 @ParametersAreNonnullByDefault
@@ -42,9 +44,12 @@ public class Cruncher extends Animal {
 
     private static final EntityDataAccessor<Boolean> IS_SEARCHING = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> CAN_MINE = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> SHEARED = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> SEARCH_COOLDOWN_TIME = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> TARGET_BLOCK_X = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> TARGET_BLOCK_Z = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
+
+    public final AnimationState chompingAnimationState = new AnimationState();
 
     public static final Predicate<ItemEntity> GLOW_BERRIES_ONLY = (itemEntity -> itemEntity.isAlive() && !itemEntity.hasPickUpDelay() && itemEntity.getItem().is(Items.GLOW_BERRIES));
     private int ticksSinceEaten = 0;
@@ -64,7 +69,6 @@ public class Cruncher extends Animal {
         this.goalSelector.addGoal(2, new CruncherRandomStrollGoal(this));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.25, Ingredient.of(Items.GLOW_BERRIES), false));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-
     }
 
     // Save Data
@@ -72,6 +76,7 @@ public class Cruncher extends Animal {
         super.defineSynchedData();
         this.entityData.define(IS_SEARCHING, false);
         this.entityData.define(CAN_MINE, false);
+        this.entityData.define(SHEARED, false);
         this.entityData.define(SEARCH_COOLDOWN_TIME, 0);
         this.entityData.define(TARGET_BLOCK_X, 0);
         this.entityData.define(TARGET_BLOCK_Z, 0);
@@ -105,16 +110,63 @@ public class Cruncher extends Animal {
         this.entityData.set(TARGET_BLOCK_Z, value);
     }
 
+    public int getSearchCooldownTime() { return this.entityData.get(SEARCH_COOLDOWN_TIME); }
+
+    public void setSearchCooldownTime(int value) { this.entityData.set(SEARCH_COOLDOWN_TIME, value); }
+
+    public boolean isSheared() {
+        return this.entityData.get(SHEARED);
+    }
+
+    public void setSheared(boolean value) {
+        this.entityData.set(SHEARED, value);
+    }
+
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("IsSearching", isSearching());
         compound.putBoolean("CanMine", canMine());
+        compound.putBoolean("Sheared", isSheared());
+        compound.putInt("SearchCooldownTime", getSearchCooldownTime());
     }
 
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         setSearching(compound.getBoolean("IsSearching"));
         setCanMine(compound.getBoolean("CanMine"));
+        setSheared(compound.getBoolean("Sheared"));
+        setSearchCooldownTime(compound.getInt("SearchCooldownTime"));
+    }
+
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (player.getItemInHand(hand).is(Items.GLOW_BERRIES) && this.getMainHandItem().isEmpty() && !this.isSearching() && !this.canMine() && this.getSearchCooldownTime() == 0) {
+            ItemStack itemStack = player.getItemInHand(hand);
+            this.setSearching(true);
+            this.eatingEffects(itemStack);
+
+            if (!player.getAbilities().instabuild) {
+                itemStack.shrink(1);
+            }
+
+            return InteractionResult.SUCCESS;
+        } else if (player.getItemInHand(hand).is(Items.SHEARS) && !this.isSheared()) {
+            this.setSheared(true);
+            return InteractionResult.SUCCESS;
+        } else {
+            return super.mobInteract(player, hand);
+        }
+    }
+
+    public void tick() {
+        if (this.getSearchCooldownTime() > 0 && this.tickCount % 20 == 0) {
+            this.setSearchCooldownTime(getSearchCooldownTime() - 1);
+        }
+        if (this.getPose() == Pose.DIGGING) {
+            chompingAnimationState.startIfStopped(this.tickCount);
+        } else {
+            chompingAnimationState.stop();
+        }
+        super.tick();
     }
 
     // Ai Step
@@ -122,7 +174,7 @@ public class Cruncher extends Animal {
         if (!this.level.isClientSide() && this.isAlive() && this.isEffectiveAi()) {
             ++this.ticksSinceEaten;
             ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
-            if (itemStack.is(Items.GLOW_BERRIES)) {
+            if (itemStack.is(Items.GLOW_BERRIES) && this.getSearchCooldownTime() == 0) {
                 if (this.ticksSinceEaten > 200) {
                     ItemStack itemStack2 = itemStack.finishUsingItem(this.level, this);
                     if (!itemStack2.isEmpty()) {
@@ -133,12 +185,16 @@ public class Cruncher extends Animal {
                     this.setSearching(true);
                     CaveEnhancements.LOGGER.info("Consumed");
                 } else if (this.ticksSinceEaten > 160 && this.random.nextBoolean()) {
-                    this.playSound(this.getEatingSound(itemStack), 1.0F, 1.0F);
-                    this.level.broadcastEntityEvent(this, (byte)45);
+                    this.eatingEffects(itemStack);
                 }
             }
         }
         super.aiStep();
+    }
+
+    private void eatingEffects(ItemStack itemStack) {
+        this.playSound(this.getEatingSound(itemStack), 1.0F, 1.0F);
+        this.level.broadcastEntityEvent(this, (byte)45);
     }
 
     public void handleEntityEvent(byte id) {
@@ -157,7 +213,7 @@ public class Cruncher extends Animal {
 
     public boolean canHoldItem(ItemStack stack) {
         ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
-        return itemStack.isEmpty() && stack.is(Items.GLOW_BERRIES) && ticksSinceEaten > 0 && !canMine() && !isSearching();
+        return itemStack.isEmpty() && stack.is(Items.GLOW_BERRIES) && ticksSinceEaten > 0 && !this.canMine() && !this.isSearching() && this.getSearchCooldownTime() == 0;
     }
 
     private void spitOutItem(ItemStack stack) {
