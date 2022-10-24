@@ -1,170 +1,91 @@
 package com.teamabode.cave_enhancements.entity.dripstone_tortoise;
 
-import com.teamabode.cave_enhancements.registry.ModTags;
-import net.minecraft.core.BlockPos;
+import com.teamabode.cave_enhancements.registry.ModEntities;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.DifficultyInstance;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-public class DripstonePike extends Mob {
+public class DripstonePike extends Entity {
 
-    public int dieTimer = 20;
-    public int damageDelay = 4;
-    public boolean didDamage = false;
-    public LivingEntity owner;
-    public boolean checkedSight =  false;
-
-    public final AnimationState risingAnimationState = new AnimationState();
-
-    private static final EntityDataAccessor<Boolean> INVULNERABLE = SynchedEntityData.defineId(DripstonePike.class, EntityDataSerializers.BOOLEAN);
+    @Nullable
+    private LivingEntity owner;
+    @Nullable
+    private UUID ownerUUID;
 
     public DripstonePike(EntityType<? extends DripstonePike> entityType, Level world) {
         super(entityType, world);
-
-        noPhysics = true;
     }
 
-    public void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(INVULNERABLE, true);
+    public DripstonePike(Level level, double x, double y, double z, LivingEntity owner) {
+        this(ModEntities.DRIPSTONE_PIKE, level);
+        this.setPos(x, y, z);
+        this.setOwner(owner);
     }
 
-    @Override
-    @ParametersAreNonnullByDefault
-    public boolean isInvulnerableTo(DamageSource damageSource) {
-        return damageSource != DamageSource.OUT_OF_WORLD;
-    }
-
-    @Override
-
-    public boolean isInvulnerable() {
-        return this.entityData.get(INVULNERABLE);
-    }
-
-    @Override
-    public Iterable<ItemStack> getArmorSlots() {
-        return new ArrayList<ItemStack>() {};
-    }
-
-    @Override
-    public ItemStack getItemBySlot(EquipmentSlot slot) {
-        return new ItemStack(Items.DIAMOND, 0);
-    }
-
-    @Override
-    public void setItemSlot(EquipmentSlot slot, ItemStack stack) {
-
+    public void setOwner(@Nullable LivingEntity owner) {
+        this.owner = owner;
+        this.ownerUUID = owner == null ? null : owner.getUUID();
     }
 
     @Nullable
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt) {
+    public LivingEntity getOwner() {
+        if (this.owner == null && this.ownerUUID != null && this.level instanceof ServerLevel) {
+            Entity entity = ((ServerLevel)this.level).getEntity(this.ownerUUID);
+            if (entity instanceof LivingEntity) {
+                this.owner = (LivingEntity)entity;
+            }
+        }
 
-
-
-        return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityNbt);
+        return this.owner;
     }
 
-    @Override
-    public HumanoidArm getMainArm() {
-        return HumanoidArm.RIGHT;
+    protected void addAdditionalSaveData(CompoundTag compound) {
+        if (this.ownerUUID != null) {
+            compound.putUUID("Owner", this.ownerUUID);
+        }
     }
 
-    public static AttributeSupplier.Builder createDripstonePikeAttributes() {
-        return Monster.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 1)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 1);
-    }
-
-    @Override
-    public boolean isNoGravity() {
-        return true;
-    }
-
-    @Override
     public void tick() {
-        super.tick();
+        if (this.tickCount % 2 == 0) {
+            List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(0.5D));
 
-        if (this.tickCount == 5) {
-            BlockPos pos = new BlockPos(this.getX(), this.getY(), this.getZ());
-            RandomSource random = level.getRandom();
-
-            if (random.nextInt(50) == 0) {
-                if (level.getBlockState(pos.above()).is(ModTags.PIKE_DESTROYABLES) || level.getBlockState(pos.below()).is(ModTags.PIKE_DESTROYABLES)) {
-                    level.playSound(null, pos, SoundEvents.POINTED_DRIPSTONE_LAND, SoundSource.BLOCKS, 1.0F, 1.0F);
-                    ItemEntity itemEntity = new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), Items.POINTED_DRIPSTONE.getDefaultInstance());
-                    this.level.levelEvent(2001, pos, Block.getId(Blocks.POINTED_DRIPSTONE.defaultBlockState()));
-                    this.level.addFreshEntity(itemEntity);
-                    this.discard();
-                }
+            for (LivingEntity livingEntity : list) {
+                this.dealDamageTo(livingEntity);
             }
 
         }
-
-
-        if (this.level.isClientSide) {
-            this.risingAnimationState.startIfStopped(this.tickCount);
+        if (this.tickCount % 10 == 0) {
+            this.discard();
         }
-        if(!level.isClientSide()) {
-            if(!checkedSight){
-                checkedSight = true;
+    }
 
-                if(owner != null && !hasLineOfSight(owner)){
-                    discard();
-                }
-            }
-
-            damageDelay--;
-
-            if(!didDamage && damageDelay <= 0){
-                didDamage = true;
-
-                AABB box = new AABB(new BlockPos(position().x(), position().y(), position().z())).inflate(.1);
-
-                List<Entity> list = level.getEntitiesOfClass(Entity.class, box, (e) -> LivingEntity.class.isAssignableFrom(e.getClass()));
-
-                Entity otherEntity;
-
-                for (Entity entity : list) {
-                    otherEntity = entity;
-
-                    otherEntity.hurt(DamageSource.STALAGMITE, 8);
-
-                    if (otherEntity instanceof Creeper) {
-                        otherEntity.hurt(DamageSource.STALAGMITE, 20);
-                    }
-                }
-            }
-
-            dieTimer--;
-
-            if (dieTimer <= 0) {
-                discard();
-            }
+    private void dealDamageTo(LivingEntity target) {
+        LivingEntity owner = this.getOwner();
+        if (target.isAlive() && !target.isInvulnerable() && target != owner && !(target instanceof DripstoneTortoise))  {
+            target.hurt(DamageSource.STALAGMITE, 2.0F);
         }
+    }
+
+    protected void readAdditionalSaveData(CompoundTag compound) {
+        if (compound.hasUUID("Owner")) {
+            this.ownerUUID = compound.getUUID("Owner");
+        }
+    }
+
+    public Packet<?> getAddEntityPacket() {
+        return new ClientboundAddEntityPacket(this);
+    }
+
+    protected void defineSynchedData() {
     }
 }

@@ -3,9 +3,11 @@ package com.teamabode.cave_enhancements.entity.cruncher;
 import com.teamabode.cave_enhancements.CaveEnhancements;
 import com.teamabode.cave_enhancements.entity.cruncher.goals.*;
 import com.teamabode.cave_enhancements.registry.ModEntities;
+import com.teamabode.cave_enhancements.registry.ModItems;
 import com.teamabode.cave_enhancements.registry.ModTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -20,11 +22,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.PanicGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -32,10 +32,12 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -43,10 +45,10 @@ import java.util.function.Predicate;
 @MethodsReturnNonnullByDefault
 public class Cruncher extends Animal {
 
-    private static final EntityDataAccessor<Boolean> IS_SEARCHING = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> CAN_MINE = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<String> EATING_STATE = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Boolean> SHEARED = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> SEARCH_COOLDOWN_TIME = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> ORE_POS_Y = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Optional<BlockPos>> TARGET_POS = SynchedEntityData.defineId(Cruncher.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
 
     public final AnimationState chompAnimationState = new AnimationState();
@@ -58,46 +60,46 @@ public class Cruncher extends Animal {
     public Cruncher(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
         this.setCanPickUpLoot(true);
+        this.setEatingState("none");
     }
 
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new CruncherOreSearchGoal(this));
         this.goalSelector.addGoal(1, new CruncherEatBlockGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.5F));
-        this.goalSelector.addGoal(1, new CruncherLookAtPlayerGoal(this));
-        this.goalSelector.addGoal(1, new CruncherMoveToItemGoal(this));
-        this.goalSelector.addGoal(2, new CruncherRandomStrollGoal(this));
-        this.goalSelector.addGoal(3, new TemptGoal(this, 1.25, Ingredient.of(Items.GLOW_BERRIES), false));
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(1, new BreedGoal(this, 1.0F));
+        this.goalSelector.addGoal(2, new CruncherOreSearchGoal(this));
+        this.goalSelector.addGoal(2, new CruncherTemptGoal(this));
+        this.goalSelector.addGoal(2, new FollowParentGoal(this, 1.25F));
+        this.goalSelector.addGoal(3, new CruncherLookAtPlayerGoal(this));
+        this.goalSelector.addGoal(3, new CruncherMoveToItemGoal(this));
+        this.goalSelector.addGoal(3, new CruncherRandomStrollGoal(this));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
     }
 
     // Save Data
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(IS_SEARCHING, false);
-        this.entityData.define(CAN_MINE, false);
+        this.entityData.define(EATING_STATE, "none");
         this.entityData.define(SHEARED, false);
         this.entityData.define(SEARCH_COOLDOWN_TIME, 0);
+        this.entityData.define(ORE_POS_Y, 0);
         this.entityData.define(TARGET_POS, Optional.empty());
     }
 
-    public boolean isSearching() {
-        return this.entityData.get(IS_SEARCHING);
+    public String getEatingState() {
+        return this.entityData.get(EATING_STATE);
     }
 
-    public void setSearching(boolean value) {
-        this.entityData.set(IS_SEARCHING, value);
+    public void setEatingState(String value) {
+        this.entityData.set(EATING_STATE, value);
     }
-
-    public boolean canMine() { return this.entityData.get(CAN_MINE); }
-
-    public void setCanMine(Boolean value) { this.entityData.set(CAN_MINE, value); }
 
     @Nullable
     public BlockPos getTargetPos() {
         return this.entityData.get(TARGET_POS).orElse(null);
     }
+
     public void setTargetPos(@Nullable BlockPos value) {
         this.entityData.set(TARGET_POS, value == null ? Optional.empty() : Optional.of(value));
     }
@@ -105,6 +107,10 @@ public class Cruncher extends Animal {
     public int getSearchCooldownTime() { return this.entityData.get(SEARCH_COOLDOWN_TIME); }
 
     public void setSearchCooldownTime(int value) { this.entityData.set(SEARCH_COOLDOWN_TIME, value); }
+
+    public int getOrePosY() { return this.entityData.get(ORE_POS_Y); }
+
+    public void setOrePosY(int value) { this.entityData.set(ORE_POS_Y, value); }
 
     public boolean isSheared() {
         return this.entityData.get(SHEARED);
@@ -116,32 +122,41 @@ public class Cruncher extends Animal {
 
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putBoolean("IsSearching", isSearching());
-        compound.putBoolean("CanMine", canMine());
+        compound.putString("EatingState", getEatingState());
         compound.putBoolean("Sheared", isSheared());
         compound.putInt("SearchCooldownTime", getSearchCooldownTime());
     }
 
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        setSearching(compound.getBoolean("IsSearching"));
-        setCanMine(compound.getBoolean("CanMine"));
+        setEatingState("EatingState");
         setSheared(compound.getBoolean("Sheared"));
         setSearchCooldownTime(compound.getInt("SearchCooldownTime"));
     }
 
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (player.getItemInHand(hand).is(Items.GLOW_BERRIES) && this.getMainHandItem().isEmpty() && !this.isSearching() && !this.canMine() && this.getSearchCooldownTime() == 0) {
-            ItemStack itemStack = player.getItemInHand(hand);
-            this.setSearching(true);
-            this.eatingEffects(itemStack);
+        if (player.getItemInHand(hand).is(Items.GLOW_BERRIES) && this.getMainHandItem().isEmpty() && Objects.equals(this.getEatingState(), "none") && !this.isBaby()) {
+            if (this.getSearchCooldownTime() == 0) {
+                ItemStack itemStack = player.getItemInHand(hand);
+                this.setEatingState("searching");
+                this.eatingEffects(itemStack);
 
-            if (!player.getAbilities().instabuild) {
-                itemStack.shrink(1);
+                if (!player.getAbilities().instabuild) {
+                    itemStack.shrink(1);
+                }
+                return InteractionResult.SUCCESS;
+            } else {
+                if (level instanceof ServerLevel server) {
+                    server.sendParticles(ParticleTypes.ANGRY_VILLAGER, this.getX(), this.getEyeY(), this.getZ(), 1, 0.0D,0.0D, 0.0D, 0.0F);
+                }
+                return InteractionResult.SUCCESS;
             }
 
-            return InteractionResult.SUCCESS;
-        } else if (player.getItemInHand(hand).is(Items.SHEARS) && !this.isSheared()) {
+        } else if (player.getItemInHand(hand).is(Items.SHEARS) && !this.isSheared() && !this.isBaby()) {
+            this.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
+            ItemEntity itemEntity = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), new ItemStack(Items.MOSS_CARPET));
+            itemEntity.setDeltaMovement(0.0D, 0.4D, 0.0D);
+            level.addFreshEntity(itemEntity);
             this.setSheared(true);
             return InteractionResult.SUCCESS;
         } else {
@@ -190,7 +205,7 @@ public class Cruncher extends Animal {
                     }
 
                     this.ticksSinceEaten = 0;
-                    this.setSearching(true);
+                    this.setEatingState("searching");
                     CaveEnhancements.LOGGER.info("Consumed");
                 } else if (this.ticksSinceEaten > 160 && this.random.nextBoolean()) {
                     this.eatingEffects(itemStack);
@@ -198,6 +213,10 @@ public class Cruncher extends Animal {
             }
         }
         super.aiStep();
+    }
+
+    public boolean isFood(ItemStack stack) {
+        return stack.is(ModItems.GLOW_BERRY_JUICE);
     }
 
     private void eatingEffects(ItemStack itemStack) {
@@ -221,7 +240,7 @@ public class Cruncher extends Animal {
 
     public boolean canHoldItem(ItemStack stack) {
         ItemStack itemStack = this.getItemBySlot(EquipmentSlot.MAINHAND);
-        return itemStack.isEmpty() && stack.is(Items.GLOW_BERRIES) && ticksSinceEaten > 0 && !this.canMine() && !this.isSearching() && this.getSearchCooldownTime() == 0;
+        return itemStack.isEmpty() && stack.is(Items.GLOW_BERRIES) && ticksSinceEaten > 0 && Objects.equals(this.getEatingState(), "none") && this.getSearchCooldownTime() == 0 && !this.isBaby();
     }
 
     private void spitOutItem(ItemStack stack) {

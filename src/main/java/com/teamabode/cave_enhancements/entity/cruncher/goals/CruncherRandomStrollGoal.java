@@ -5,12 +5,12 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Objects;
+
 public class CruncherRandomStrollGoal extends Goal {
 
     private final Cruncher cruncher;
-
     private Vec3 targetPos;
-
     private int walkTime = 0;
 
     public CruncherRandomStrollGoal(Cruncher cruncher) {
@@ -20,21 +20,13 @@ public class CruncherRandomStrollGoal extends Goal {
     public boolean canUse() {
         if(cruncher.getRandom().nextInt(reducedTickDelay(120)) != 0) return false;
 
-        return !cruncher.isSearching() && !cruncher.canMine();
+        return Objects.equals(cruncher.getEatingState(), "none");
     }
 
     public void start(){
-        System.out.println("Started Stroll Goal!");
-
         targetPos = DefaultRandomPos.getPos(cruncher, 10, 7);
-
         walkTime = 0;
-
-        System.out.println(cruncher.position());
-        System.out.println(targetPos);
-
         if(targetPos == null) return;
-
         cruncher.getNavigation().moveTo(targetPos.x, targetPos.y, targetPos.z, 1.0D);
     }
 
@@ -47,8 +39,6 @@ public class CruncherRandomStrollGoal extends Goal {
     }
 
     public void stop(){
-        System.out.println("Stopped Stroll Goal!");
-
         cruncher.getNavigation().stop();
     }
 

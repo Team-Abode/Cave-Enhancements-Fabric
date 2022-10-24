@@ -4,6 +4,7 @@ import com.teamabode.cave_enhancements.CaveEnhancements;
 import com.teamabode.cave_enhancements.item.*;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 
 public class ModItems {
@@ -15,6 +16,7 @@ public class ModItems {
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "goop_trap"), GOOP_TRAP);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "dripping_goop"), DRIPPING_GOOP);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "volatile_goop"), VOLATILE_GOOP);
+        Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "glow_berry_juice"), GLOW_BERRY_JUICE);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "goop_bucket"), GOOP_BUCKET);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "goop_banner_pattern"), GOOP_BANNER_PATTERN);
 
@@ -68,6 +70,7 @@ public class ModItems {
     public static final Item ROSE_QUARTZ = new Item(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS));
     public static final Item AMETHYST_FLUTE = new AmethystFluteItem(new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).stacksTo(1).durability(64));
     public static final Item HARMONIC_ARROW = new HarmonicArrowItem(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT));
+    public static final Item GLOW_BERRY_JUICE = new GlowBerryJuiceItem(new Item.Properties().tab(CreativeModeTab.TAB_FOOD).stacksTo(16).food(new FoodProperties.Builder().saturationMod(0.6F).nutrition(4).build()));
     public static final Item GOOP_BUCKET = new GoopBucketItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC).stacksTo(1));
     public static final Item GOOP_BANNER_PATTERN = new BannerPatternItem(ModTags.GOOP_PATTERN_ITEM,new Item.Properties().tab(CreativeModeTab.TAB_MISC));
 

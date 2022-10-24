@@ -6,6 +6,7 @@ import com.teamabode.cave_enhancements.CaveEnhancements;
 import com.teamabode.cave_enhancements.client.animation.CruncherAnimation;
 import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
 import net.minecraft.client.animation.definitions.FrogAnimation;
+import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -80,6 +81,20 @@ public class CruncherModel extends HierarchicalModel<Cruncher> {
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+		if (this.young) {
+			poseStack.pushPose();
+			poseStack.scale(0.75F, 0.75F, 0.75F);
+			poseStack.translate(0.0F, 0.5F, 0.0F);
+			root.render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+
+			poseStack.popPose();
+		} else {
+			root.render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+		}
+
+	}
+
 	public void setupAnim(Cruncher entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 		float k = Math.min((float)entity.getDeltaMovement().lengthSqr() * 200.0F, 8.0F);
@@ -93,10 +108,6 @@ public class CruncherModel extends HierarchicalModel<Cruncher> {
 		//this.leftHindLeg.xRot = Mth.cos(limbSwing * 1.5708F + 3.1415927F) * 1.4F * limbSwingAmount;
 		//this.rightFrontLeg.xRot = Mth.cos(limbSwing * 1.5708F + 3.1415927F) * 1.4F * limbSwingAmount;
 		//this.leftFrontLeg.xRot = Mth.cos(limbSwing * 1.5708F) * 1.4F * limbSwingAmount;
-	}
-
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		root.render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
 	public ModelPart root() {

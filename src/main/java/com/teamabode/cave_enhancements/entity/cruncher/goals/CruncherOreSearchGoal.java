@@ -1,5 +1,6 @@
 package com.teamabode.cave_enhancements.entity.cruncher.goals;
 
+import com.mojang.datafixers.util.Pair;
 import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
 import com.teamabode.cave_enhancements.registry.ModTags;
 import net.minecraft.core.BlockPos;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CruncherOreSearchGoal extends Goal {
 
@@ -31,7 +33,7 @@ public class CruncherOreSearchGoal extends Goal {
     }
 
     public boolean canUse() {
-        return cruncher.isSearching();
+        return Objects.equals(cruncher.getEatingState(), "searching");
     }
 
     public void start(){
@@ -41,7 +43,7 @@ public class CruncherOreSearchGoal extends Goal {
     }
 
     public boolean canContinueToUse() {
-        return cruncher.isSearching() && !isFinished && targetPos != null && goalTickTime < 300 && cruncher.getLastHurtByMob() == null;
+        return Objects.equals(cruncher.getEatingState(), "searching") && !isFinished && targetPos != null && goalTickTime < 300 && cruncher.getLastHurtByMob() == null;
     }
 
     public void tick() {
@@ -51,7 +53,7 @@ public class CruncherOreSearchGoal extends Goal {
 
         if (targetPos == null) return;
 
-        cruncher.getNavigation().moveTo(cruncher.getNavigation().createPath(targetPos, 0), 2.0F);
+        cruncher.getNavigation().moveTo(cruncher.getNavigation().createPath(targetPos, 0), 1.5F);
 
         if (cruncher.position().distanceTo(Vec3.atCenterOf(targetPos)) <= 1D) {
             reachedPosition = true;
@@ -66,17 +68,17 @@ public class CruncherOreSearchGoal extends Goal {
         if (reachedPosition) {
             cruncher.setDeltaMovement(0.0, 0.0, 0.0);
             cruncher.teleportToWithTicket(targetPos.getX() + 0.5D, targetPos.getY(), targetPos.getZ() + 0.5D);
-            cruncher.setCanMine(true);
+            cruncher.setEatingState("mining");
+            System.out.println(cruncher.getEatingState());
             cruncher.setTargetPos(targetPos);
-        }else {
+        } else {
             if (cruncher.getLevel() instanceof ServerLevel server) {
                 server.sendParticles(ParticleTypes.ANGRY_VILLAGER, cruncher.getX(), cruncher.getY(), cruncher.getZ(), 1, 0, 0, 0, 0);
             }
+
+            cruncher.setEatingState("none");
+            cruncher.getNavigation().stop();
         }
-
-        cruncher.setSearching(false);
-        cruncher.getNavigation().stop();
-
         goalTickTime = 0;
         targetPos = null;
         reachedPosition = false;
@@ -84,8 +86,9 @@ public class CruncherOreSearchGoal extends Goal {
     }
 
     @Nullable
+    @SuppressWarnings("SameParameterValue")
     private BlockPos getOrePosition(Level level, int radius, int tries) {
-        List<BlockPos> potentialPositions = new ArrayList<>();
+        List<Pair<BlockPos, Integer>> potentialPositions = new ArrayList<>();
 
         for (int i = 0; i < tries; i++) {
             Vec3 vec = DefaultRandomPos.getPos(cruncher, radius, 5);
@@ -103,14 +106,19 @@ public class CruncherOreSearchGoal extends Goal {
                 if (!level.getBlockState(pos.below()).is(ModTags.CRUNCHER_CONSUMABLES)) continue;
 
                 if (level.getBlockState(pos).is(ModTags.CRUNCHER_SEARCHABLES)) {
-                    potentialPositions.add(potentialPos);
+                    potentialPositions.add(Pair.of(potentialPos, pos.getY()));
+                    break;
                 }
             }
         }
 
         if (potentialPositions.size() == 0) return null;
 
-        return potentialPositions.get(level.getRandom().nextInt(potentialPositions.size()));
+        int randomSelection = level.getRandom().nextInt(potentialPositions.size());
+
+        cruncher.setOrePosY(potentialPositions.get(randomSelection).getSecond());
+        System.out.println(cruncher.getOrePosY());
+        return potentialPositions.get(randomSelection).getFirst();
     }
 
     public boolean requiresUpdateEveryTick() {

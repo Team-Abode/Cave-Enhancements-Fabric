@@ -1,6 +1,5 @@
 package com.teamabode.cave_enhancements.entity.cruncher.goals;
 
-import com.teamabode.cave_enhancements.CaveEnhancements;
 import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
 import com.teamabode.cave_enhancements.registry.ModTags;
 import net.minecraft.core.BlockPos;
@@ -8,6 +7,8 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.Objects;
 
 public class CruncherEatBlockGoal extends Goal {
 
@@ -19,15 +20,15 @@ public class CruncherEatBlockGoal extends Goal {
     }
 
     public boolean canUse() {
-        return cruncher.canMine();
-    }
-
-    public void start(){
-        System.out.println("Started Ore Eat Goal!");
+        return Objects.equals(cruncher.getEatingState(), "mining");
     }
 
     public boolean canContinueToUse() {
-        return cruncher.canMine() && !cruncher.level.getBlockState(cruncher.blockPosition().below()).is(ModTags.CRUNCHER_SEARCHABLES) && cruncher.getLastHurtByMob() == null;
+        if (cruncher.getTargetPos() == null) return false;
+        if (cruncher.getBlockY() == cruncher.getOrePosY() + 1) return false;
+        if (cruncher.getLastHurtByMob() == null) return true;
+
+        return Objects.equals(cruncher.getEatingState(), "mining");
     }
 
     public void tick() {
@@ -57,15 +58,12 @@ public class CruncherEatBlockGoal extends Goal {
             }
 
         }else {
-            cruncher.getNavigation().moveTo(cruncher.getNavigation().createPath(new BlockPos(vec3), 0), 2F);
+            cruncher.getNavigation().moveTo(cruncher.getNavigation().createPath(new BlockPos(vec3), 0), 1.5F);
         }
     }
 
     public void stop() {
-        System.out.println("Started Ore Eat Goal!");
-
-        CaveEnhancements.LOGGER.info("Finished CruncherEatBlockGoal");
-        cruncher.setCanMine(false);
+        cruncher.setEatingState("none");
         cruncher.setSearchCooldownTime(240);
     }
 

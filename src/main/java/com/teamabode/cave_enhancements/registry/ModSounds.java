@@ -49,6 +49,9 @@ public class ModSounds {
     public static final SoundEvent BLOCK_ROSE_QUARTZ_CHIMES_CHIME = register("block.rose_quartz_chimes.chime");
     public static final SoundEvent EFFECT_REVERSAL_REVERSE = register("effect.reversal.reverse");
 
+    // Glow Berry Juice
+    public static final SoundEvent ITEM_GLOW_BERRY_JUICE_DRINK = register("item.glow_berry_juice.drink");
+
     // Music
     public static final SoundEvent MUSIC_BIOME_GOOP_CAVES = register("music.biome.goop_caves");
     public static final SoundEvent MUSIC_BIOME_ROSE_QUARTZ_CAVES = register("music.biome.rose_quartz_caves");
