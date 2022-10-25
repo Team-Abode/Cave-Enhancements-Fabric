@@ -89,8 +89,14 @@
 
   "subtitles.entity.dripstone_tortoise.hurt": "Dripstone Tortoise hurts",
   "subtitles.entity.dripstone_tortoise.death": "Dripstone Tortoise dies",
-  "subtitles.entity.dripstone_tortoise.step": "Dripstone Tortoise steps",
+  "subtitles.entity.dripstone_tortoise.step": "Dripstone Tortoise stomps",
   "subtitles.entity.dripstone_tortoise.idle": "Dripstone Tortoise sighs",
+
+  "subtitles.entity.cruncher.idle": "Cruncher squeaks",
+  "subtitles.entity.cruncher.hurt": "Cruncher hurts",
+  "subtitles.entity.cruncher.step": "Cruncher steps",
+  "subtitles.entity.cruncher.eat": "Cruncher eats",
+  "subtitles.entity.cruncher.death": "Cruncher dies",
 
   "subtitles.effect.reversal.reverse": "Damage reverse applies",
 

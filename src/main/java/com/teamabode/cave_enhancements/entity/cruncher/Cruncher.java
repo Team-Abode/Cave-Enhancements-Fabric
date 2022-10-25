@@ -4,6 +4,7 @@ import com.teamabode.cave_enhancements.CaveEnhancements;
 import com.teamabode.cave_enhancements.entity.cruncher.goals.*;
 import com.teamabode.cave_enhancements.registry.ModEntities;
 import com.teamabode.cave_enhancements.registry.ModItems;
+import com.teamabode.cave_enhancements.registry.ModSounds;
 import com.teamabode.cave_enhancements.registry.ModTags;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -15,10 +16,12 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -33,6 +36,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -285,6 +289,24 @@ public class Cruncher extends Animal {
     // Attribute Builder
     public static AttributeSupplier.Builder createCruncherAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 15.0D).add(Attributes.ATTACK_DAMAGE, 5.0D).add(Attributes.MOVEMENT_SPEED, 0.2D);
+    }
+
+    // Sounds
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.ENTITY_CRUNCHER_IDLE;
+    }
+
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        SoundEvent sound = ModSounds.ENTITY_CRUNCHER_STEP;
+        this.playSound(sound, 0.15F, 1.0F);
+    }
+
+    protected SoundEvent getDeathSound() {
+        return ModSounds.ENTITY_CRUNCHER_DEATH;
+    }
+
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return ModSounds.ENTITY_CRUNCHER_HURT;
     }
 
     @Nullable

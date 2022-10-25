@@ -115,10 +115,11 @@ public class CruncherOreSearchGoal extends Goal {
         if (potentialPositions.size() == 0) return null;
 
         int randomSelection = level.getRandom().nextInt(potentialPositions.size());
+        Pair<BlockPos, Integer> pair = potentialPositions.get(randomSelection);
 
-        cruncher.setOrePosY(potentialPositions.get(randomSelection).getSecond());
+        cruncher.setOrePosY(pair.getSecond());
         System.out.println(cruncher.getOrePosY());
-        return potentialPositions.get(randomSelection).getFirst();
+        return pair.getFirst();
     }
 
     public boolean requiresUpdateEveryTick() {

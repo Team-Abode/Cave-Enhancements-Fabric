@@ -43,6 +43,13 @@ public class ModSounds {
     public static final SoundEvent ENTITY_DRIPSTONE_TORTOISE_STEP = register("entity.dripstone_tortoise.step");
     public static final SoundEvent ENTITY_DRIPSTONE_TORTOISE_IDLE = register("entity.dripstone_tortoise.idle");
 
+    // Cruncher
+    public static final SoundEvent ENTITY_CRUNCHER_IDLE = register("entity.cruncher.idle");
+    public static final SoundEvent ENTITY_CRUNCHER_HURT = register("entity.cruncher.hurt");
+    public static final SoundEvent ENTITY_CRUNCHER_DEATH = register("entity.cruncher.death");
+    public static final SoundEvent ENTITY_CRUNCHER_STEP = register("entity.cruncher.step");
+    public static final SoundEvent ENTITY_CRUNCHER_EAT = register("entity.cruncher.eat");
+
     // Misc
     public static final SoundEvent ITEM_BUCKET_FILL_GOOP = register("item.bucket.fill.goop");
     public static final SoundEvent ITEM_BUCKET_EMPTY_GOOP = register("item.bucket.empty.goop");

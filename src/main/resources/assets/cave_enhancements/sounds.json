@@ -198,6 +198,44 @@
     ],
     "subtitle": "subtitles.entity.dripstone_tortoise.idle"
   },
+  "entity.cruncher.idle": {
+    "sounds": [
+      "cave_enhancements:mob/cruncher/idle1",
+      "cave_enhancements:mob/cruncher/idle2"
+    ],
+    "subtitle": "subtitles.entity.cruncher.idle"
+  },
+  "entity.cruncher.hurt": {
+    "sounds": [
+      "cave_enhancements:mob/cruncher/hurt1",
+      "cave_enhancements:mob/cruncher/hurt2"
+    ],
+    "subtitle": "subtitles.entity.cruncher.hurt"
+  },
+  "entity.cruncher.step": {
+    "sounds": [
+      "cave_enhancements:mob/cruncher/step1",
+      "cave_enhancements:mob/cruncher/step2",
+      "cave_enhancements:mob/cruncher/step3",
+      "cave_enhancements:mob/cruncher/step4",
+      "cave_enhancements:mob/cruncher/step5"
+    ],
+    "subtitle": "subtitles.entity.cruncher.step"
+  },
+  "entity.cruncher.eat": {
+    "sounds": [
+      "cave_enhancements:mob/cruncher/eat1",
+      "cave_enhancements:mob/cruncher/eat2",
+      "cave_enhancements:mob/cruncher/eat3"
+    ],
+    "subtitle": "subtitles.entity.cruncher.eat"
+  },
+  "entity.cruncher.death": {
+    "sounds": [
+      "cave_enhancements:mob/cruncher/death"
+    ],
+    "subtitle": "subtitles.entity.cruncher.death"
+  },
   "music.biome.goop_caves": {
     "sounds": [
         "cave_enhancements:music/melt"
