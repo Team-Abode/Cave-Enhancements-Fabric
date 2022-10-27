@@ -41,6 +41,7 @@ public class DripstonePike extends Entity {
     public LivingEntity getOwner() {
         if (this.owner == null && this.ownerUUID != null && this.level instanceof ServerLevel) {
             Entity entity = ((ServerLevel)this.level).getEntity(this.ownerUUID);
+
             if (entity instanceof LivingEntity) {
                 this.owner = (LivingEntity)entity;
             }
@@ -71,6 +72,7 @@ public class DripstonePike extends Entity {
 
     private void dealDamageTo(LivingEntity target) {
         LivingEntity owner = this.getOwner();
+
         if (target.isAlive() && !target.isInvulnerable() && target != owner && !(target instanceof DripstoneTortoise))  {
             target.hurt(DamageSource.STALAGMITE, 2.0F);
         }

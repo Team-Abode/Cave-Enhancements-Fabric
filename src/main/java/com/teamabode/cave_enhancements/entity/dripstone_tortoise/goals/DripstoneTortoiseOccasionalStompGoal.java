@@ -8,7 +8,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 
 public class DripstoneTortoiseOccasionalStompGoal extends Goal {
 
-    private static final UniformInt OCCASIONAL_STOMP_COOLDOWN = TimeUtil.rangeOfSeconds(50, 70);
+    private static final UniformInt OCCASIONAL_STOMP_COOLDOWN = TimeUtil.rangeOfSeconds(1, 2);
     private final DripstoneTortoise dripstoneTortoise;
 
     public DripstoneTortoiseOccasionalStompGoal(DripstoneTortoise dripstoneTortoise) {
@@ -16,7 +16,7 @@ public class DripstoneTortoiseOccasionalStompGoal extends Goal {
     }
 
     public boolean canUse() {
-        return dripstoneTortoise.getOccasionalStompCooldown() == 0 && dripstoneTortoise.isOnGround();
+        return dripstoneTortoise.getOccasionalStompCooldown() == 0 && dripstoneTortoise.isOnGround() && !dripstoneTortoise.isAggressive();
     }
 
     public boolean canContinueToUse() {
@@ -24,12 +24,15 @@ public class DripstoneTortoiseOccasionalStompGoal extends Goal {
     }
 
     public void start() {
-        System.out.println("DripstoneTortoiseOccasionalStompGoal initialized.");
         for (int i = 0; i <= 10; i++) {
             double randomX = dripstoneTortoise.getRandomX(i * 0.65);
             double randomZ = dripstoneTortoise.getRandomZ(i * 0.65);
+
             dripstoneTortoise.summonPike(randomX, randomZ, dripstoneTortoise.getY(), dripstoneTortoise.getY() + 1);
         }
-        dripstoneTortoise.setOccasionalStompCooldown(OCCASIONAL_STOMP_COOLDOWN.sample(dripstoneTortoise.getRandom()));
+
+        int newTime = OCCASIONAL_STOMP_COOLDOWN.sample(dripstoneTortoise.getRandom());
+
+        dripstoneTortoise.setOccasionalStompCooldown(newTime);
     }
 }

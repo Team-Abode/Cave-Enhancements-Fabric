@@ -1,5 +1,6 @@
 package com.teamabode.cave_enhancements.entity.dripstone_tortoise;
 
+import com.teamabode.cave_enhancements.entity.dripstone_tortoise.goals.DripstoneTortoiseAttackGoal;
 import com.teamabode.cave_enhancements.entity.dripstone_tortoise.goals.DripstoneTortoiseOccasionalStompGoal;
 import com.teamabode.cave_enhancements.registry.ModSounds;
 import net.minecraft.core.BlockPos;
@@ -47,7 +48,7 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
 
     public DripstoneTortoise(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
-        this.setOccasionalStompCooldown(1200);
+        this.setOccasionalStompCooldown(5);
         this.xpReward = 15;
     }
 
@@ -98,9 +99,8 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
     // Goals
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new HurtByTargetGoal(this).setAlertOthers());
-        // Note to OC, please create a new goal and replace this one with it, also add in the occasional stomp goal.
-        // What I have set now is currently placeholder to test out HurtByTargetGoal, thanks :)
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.25F, false));
+        this.goalSelector.addGoal(1, new DripstoneTortoiseAttackGoal(this));
+        this.goalSelector.addGoal(2, new DripstoneTortoiseOccasionalStompGoal(this));
         this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1.5D));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
@@ -178,10 +178,7 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
         boolean finishedCalculation = false;
         double d = 0.0D;
 
-
-
-
-        do {
+        while(pos.getY() >= Mth.floor(minY) - 1) {
             BlockPos belowPos = pos.below();
             BlockState state = level.getBlockState(belowPos);
             if (state.isFaceSturdy(level, belowPos, Direction.UP)) {
@@ -195,7 +192,9 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
                 finishedCalculation = true;
                 break;
             }
-        }  while(pos.getY() >= Mth.floor(minY) - 1);
+
+            pos = pos.below(1);
+        }
 
         if (finishedCalculation) {
             DripstonePike dripstonePike = new DripstonePike(level, x, this.getY() + d, z, this);
