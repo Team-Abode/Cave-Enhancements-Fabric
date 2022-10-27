@@ -1,15 +1,25 @@
 package com.teamabode.cave_enhancements.entity.dripstone_tortoise;
 
 import com.teamabode.cave_enhancements.registry.ModEntities;
+import com.teamabode.cave_enhancements.registry.ModTags;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -21,6 +31,7 @@ public class DripstonePike extends Entity {
     private LivingEntity owner;
     @Nullable
     private UUID ownerUUID;
+    public final AnimationState risingAnimationState = new AnimationState();
 
     public DripstonePike(EntityType<? extends DripstonePike> entityType, Level world) {
         super(entityType, world);
@@ -57,17 +68,41 @@ public class DripstonePike extends Entity {
     }
 
     public void tick() {
-        if (this.tickCount % 2 == 0) {
-            List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(0.5D));
+        if (this.level.isClientSide) {
+            risingAnimationState.startIfStopped(this.tickCount);
+        }
+        if (this.tickCount % 4 == 0) {
+            if (level.getBlockState(blockPosition().below()).is(ModTags.PIKE_DESTROYABLES)) {
+                if (random.nextBoolean()) {
+                    ItemEntity itemEntity = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), new ItemStack(Items.POINTED_DRIPSTONE));
+                    level.addFreshEntity(itemEntity);
+                }
+                level.playSound(null, blockPosition(), SoundEvents.DRIPSTONE_BLOCK_BREAK, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                level.broadcastEntityEvent(this, (byte) 45);
+                this.remove(RemovalReason.DISCARDED);
+            }
 
+            List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox());
             for (LivingEntity livingEntity : list) {
                 this.dealDamageTo(livingEntity);
             }
-
         }
         if (this.tickCount % 10 == 0) {
-            this.discard();
+            level.playSound(null, blockPosition(), SoundEvents.DRIPSTONE_BLOCK_BREAK, SoundSource.NEUTRAL, 1.0F, 1.0F);
+            level.broadcastEntityEvent(this, (byte) 45);
+            this.remove(RemovalReason.DISCARDED);
         }
+    }
+
+    public void handleEntityEvent(byte id) {
+        if (id == 45) {
+            for (int i = 0; i <= 5; i++) {
+                this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.DRIPSTONE_BLOCK.defaultBlockState()), this.getX(), this.getY() + 0.5, this.getZ(), 0.0D, 0.0D, 0.0D);
+            }
+        } else {
+            super.handleEntityEvent(id);
+        }
+
     }
 
     private void dealDamageTo(LivingEntity target) {

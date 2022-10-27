@@ -21,12 +21,11 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -40,6 +39,7 @@ import java.util.UUID;
 
 public class DripstoneTortoise extends Animal implements NeutralMob {
     private static final EntityDataAccessor<Integer> DATA_REMAINING_ANGER_TIME = SynchedEntityData.defineId(DripstoneTortoise.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> STOMP_TIME = SynchedEntityData.defineId(DripstoneTortoise.class, EntityDataSerializers.INT);
     private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(10, 22);
 
     public final AnimationState stompingAnimationState = new AnimationState();
@@ -52,12 +52,13 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
         this.xpReward = 15;
     }
 
-    //NBT
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_REMAINING_ANGER_TIME, 0);
+        this.entityData.define(STOMP_TIME, 0);
     }
 
+    // NBT
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         addPersistentAngerSaveData(compound);
@@ -68,14 +69,6 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
         super.readAdditionalSaveData(compound);
         readPersistentAngerSaveData(this.level, compound);
         this.setOccasionalStompCooldown(compound.getInt("OccasionalStompCooldown"));
-    }
-
-    public int getOccasionalStompCooldown() {
-        return occasionalStompCooldown;
-    }
-
-    public void setOccasionalStompCooldown(int value) {
-        occasionalStompCooldown = value;
     }
 
     // Sounds
@@ -121,7 +114,21 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
         return super.isInvulnerableTo(damageSource);
     }
 
+    public void tick() {
+        if (this.level.isClientSide) {
+            if (this.getStompTime() > 0) {
+                stompingAnimationState.startIfStopped(this.tickCount);
+            } else {
+                stompingAnimationState.stop();
+            }
+        }
+        super.tick();
+    }
+
     public void aiStep() {
+        if (this.getStompTime() > 0) {
+            this.setStompTime(this.getStompTime() - 1);
+        }
         if (tickCount % 20 == 0 && this.getOccasionalStompCooldown() > 0) {
             this.setOccasionalStompCooldown(this.getOccasionalStompCooldown() - 1);
         }
@@ -173,30 +180,48 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
         this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
     }
 
+    public int getStompTime() {
+        return this.entityData.get(STOMP_TIME);
+    }
+
+    public void setStompTime(int value) {
+        this.entityData.set(STOMP_TIME, value);
+    }
+
+    public int getOccasionalStompCooldown() {
+        return occasionalStompCooldown;
+    }
+
+    public void setOccasionalStompCooldown(int value) {
+        occasionalStompCooldown = value;
+    }
+
     public void summonPike(double x, double z, double minY, double maxY){
-        BlockPos pos = new BlockPos(x, maxY, z);
+        BlockPos blockPos = new BlockPos(x, maxY, z);
         boolean finishedCalculation = false;
         double d = 0.0D;
 
-        while(pos.getY() >= Mth.floor(minY) - 1) {
-            BlockPos belowPos = pos.below();
+        do {
+            BlockPos belowPos = blockPos.below();
             BlockState state = level.getBlockState(belowPos);
             if (state.isFaceSturdy(level, belowPos, Direction.UP)) {
-                if (!level.isEmptyBlock(pos)) {
-                    BlockState blockState2 = level.getBlockState(pos);
-                    VoxelShape voxelShape = blockState2.getCollisionShape(level, pos);
+                if (!level.isEmptyBlock(blockPos)) {
+                    BlockState blockState2 = level.getBlockState(blockPos);
+                    VoxelShape voxelShape = blockState2.getCollisionShape(level, blockPos);
                     if (!voxelShape.isEmpty()) {
                         d = voxelShape.max(Direction.Axis.Y);
                     }
                 }
+
                 finishedCalculation = true;
                 break;
             }
-
-            pos = pos.below(1);
-        }
+            blockPos = blockPos.below();
+        } while (blockPos.getY() >= Mth.floor(minY) - 1);
 
         if (finishedCalculation) {
+            this.setStompTime(5);
+            this.setDeltaMovement(0.0D, 0.25D, 0.0D);
             DripstonePike dripstonePike = new DripstonePike(level, x, this.getY() + d, z, this);
             level.addFreshEntity(dripstonePike);
         }

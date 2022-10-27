@@ -200,8 +200,9 @@
   },
   "entity.cruncher.idle": {
     "sounds": [
-      "cave_enhancements:mob/cruncher/idle1",
-      "cave_enhancements:mob/cruncher/idle2"
+      "cave_enhancements:mob/cruncher/say1",
+      "cave_enhancements:mob/cruncher/say2",
+      "cave_enhancements:mob/cruncher/say3"
     ],
     "subtitle": "subtitles.entity.cruncher.idle"
   },

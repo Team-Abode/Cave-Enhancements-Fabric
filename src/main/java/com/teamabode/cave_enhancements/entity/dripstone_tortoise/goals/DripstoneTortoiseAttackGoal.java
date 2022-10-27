@@ -7,6 +7,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
 
@@ -118,7 +119,10 @@ public class DripstoneTortoiseAttackGoal extends Goal {
             double randomX = dripstoneTortoise.getRandom().nextFloat() * 3F - 3F / 2F;
             double randomZ = dripstoneTortoise.getRandom().nextFloat() * 3F - 3F / 2F;
 
-            dripstoneTortoise.summonPike(enemy.getX() + randomX, enemy.getZ() + randomZ, enemy.getY(), enemy.getY() + 1);
+            double minY = Math.min(enemy.getY(), dripstoneTortoise.getY());
+            double maxY = Math.max(enemy.getY(), dripstoneTortoise.getY()) + 1.0;
+
+            dripstoneTortoise.summonPike(enemy.getX() + randomX, enemy.getZ() + randomZ, minY, maxY);
         }
     }
 
@@ -128,7 +132,7 @@ public class DripstoneTortoiseAttackGoal extends Goal {
     }
 
     protected void resetAttackCooldown() {
-        this.ticksUntilNextAttack = this.adjustedTickDelay(60);
+        this.ticksUntilNextAttack = this.adjustedTickDelay(30);
     }
 
     public boolean requiresUpdateEveryTick() {

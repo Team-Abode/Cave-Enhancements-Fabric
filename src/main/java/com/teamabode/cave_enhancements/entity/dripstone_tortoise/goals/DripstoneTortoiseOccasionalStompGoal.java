@@ -25,10 +25,10 @@ public class DripstoneTortoiseOccasionalStompGoal extends Goal {
 
     public void start() {
         for (int i = 0; i <= 10; i++) {
-            double randomX = dripstoneTortoise.getRandomX(i * 0.65);
-            double randomZ = dripstoneTortoise.getRandomZ(i * 0.65);
+            double randomX = dripstoneTortoise.getX(dripstoneTortoise.getRandom().nextInt(-1, 1));
+            double randomZ = dripstoneTortoise.getRandomZ(dripstoneTortoise.getRandom().nextInt(-1, 1));
 
-            dripstoneTortoise.summonPike(randomX, randomZ, dripstoneTortoise.getY(), dripstoneTortoise.getY() + 1);
+            dripstoneTortoise.summonPike(randomX, randomZ, dripstoneTortoise.getY() - 2, dripstoneTortoise.getY() + 5);
         }
 
         int newTime = OCCASIONAL_STOMP_COOLDOWN.sample(dripstoneTortoise.getRandom());
