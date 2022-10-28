@@ -1,7 +1,10 @@
 package com.teamabode.cave_enhancements.entity.dripstone_tortoise;
 
 import com.teamabode.cave_enhancements.entity.dripstone_tortoise.goals.DripstoneTortoiseAttackGoal;
+import com.teamabode.cave_enhancements.entity.dripstone_tortoise.goals.DripstoneTortoiseBreedGoal;
+import com.teamabode.cave_enhancements.entity.dripstone_tortoise.goals.DripstoneTortoiseLayEggGoal;
 import com.teamabode.cave_enhancements.entity.dripstone_tortoise.goals.DripstoneTortoiseOccasionalStompGoal;
+import com.teamabode.cave_enhancements.registry.ModEntities;
 import com.teamabode.cave_enhancements.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,13 +23,15 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -40,6 +45,7 @@ import java.util.UUID;
 public class DripstoneTortoise extends Animal implements NeutralMob {
     private static final EntityDataAccessor<Integer> DATA_REMAINING_ANGER_TIME = SynchedEntityData.defineId(DripstoneTortoise.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> STOMP_TIME = SynchedEntityData.defineId(DripstoneTortoise.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> PREGNANT = SynchedEntityData.defineId(DripstoneTortoise.class, EntityDataSerializers.BOOLEAN);
     private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(10, 22);
 
     public final AnimationState stompingAnimationState = new AnimationState();
@@ -56,18 +62,21 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
         super.defineSynchedData();
         this.entityData.define(DATA_REMAINING_ANGER_TIME, 0);
         this.entityData.define(STOMP_TIME, 0);
+        this.entityData.define(PREGNANT, false);
     }
 
     // NBT
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         addPersistentAngerSaveData(compound);
+        compound.putBoolean("Pregnant", this.isPregnant());
         compound.putInt("OccasionalStompCooldown", this.getOccasionalStompCooldown());
     }
 
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         readPersistentAngerSaveData(this.level, compound);
+        this.setPregnant(compound.getBoolean("Pregnant"));
         this.setOccasionalStompCooldown(compound.getInt("OccasionalStompCooldown"));
     }
 
@@ -91,8 +100,11 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
 
     // Goals
     protected void registerGoals() {
+        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(0, new HurtByTargetGoal(this).setAlertOthers());
         this.goalSelector.addGoal(1, new DripstoneTortoiseAttackGoal(this));
+        this.goalSelector.addGoal(1, new DripstoneTortoiseBreedGoal(this, 1.0D));
+        this.goalSelector.addGoal(1, new DripstoneTortoiseLayEggGoal(this, 1.0D));
         this.goalSelector.addGoal(2, new DripstoneTortoiseOccasionalStompGoal(this));
         this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1.5D));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8F));
@@ -114,6 +126,10 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
         return super.isInvulnerableTo(damageSource);
     }
 
+    public float getScale() {
+        return this.isBaby() ? 0.5F : 1.0F;
+    }
+
     public void tick() {
         if (this.level.isClientSide) {
             if (this.getStompTime() > 0) {
@@ -125,6 +141,10 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
         super.tick();
     }
 
+    public boolean isFood(ItemStack stack) {
+        return stack.is(Items.BROWN_MUSHROOM);
+    }
+
     public void aiStep() {
         if (this.getStompTime() > 0) {
             this.setStompTime(this.getStompTime() - 1);
@@ -134,7 +154,6 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
         }
         super.aiStep();
     }
-
     public boolean canBeLeashed(Player player) {
         return false;
     }
@@ -196,6 +215,14 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
         occasionalStompCooldown = value;
     }
 
+    public boolean isPregnant() {
+        return this.entityData.get(PREGNANT);
+    }
+
+    public void setPregnant(boolean value) {
+        this.entityData.set(PREGNANT, value);
+    }
+
     public void summonPike(double x, double z, double minY, double maxY){
         BlockPos blockPos = new BlockPos(x, maxY, z);
         boolean finishedCalculation = false;
@@ -229,6 +256,6 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
 
     @Nullable
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
-        return null;
+        return ModEntities.DRIPSTONE_TORTOISE.create(level);
     }
 }

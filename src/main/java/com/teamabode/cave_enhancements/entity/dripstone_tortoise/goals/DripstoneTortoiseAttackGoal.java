@@ -39,6 +39,8 @@ public class DripstoneTortoiseAttackGoal extends Goal {
 
             if (!livingEntity.isAlive()) return false;
 
+            if (livingEntity.isBaby()) return false;
+
             path = dripstoneTortoise.getNavigation().createPath(livingEntity, 0);
 
             if(this.path == null) return false;

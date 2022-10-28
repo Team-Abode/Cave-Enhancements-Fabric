@@ -1,5 +1,7 @@
 package com.teamabode.cave_enhancements.client.model;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamabode.cave_enhancements.CaveEnhancements;
 import com.teamabode.cave_enhancements.client.animation.DripstoneTortoiseAnimation;
 import com.teamabode.cave_enhancements.entity.dripstone_tortoise.DripstoneTortoise;
@@ -74,12 +76,22 @@ public class DripstoneTortoiseModel<E extends Mob> extends HierarchicalModel<Dri
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
 
-	@Override
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+		if (this.young) {
+			poseStack.pushPose();
+			poseStack.scale(0.4F, 0.4F, 0.4F);
+			poseStack.translate(0.0F, 2.2F, 0.0F);
+			root.render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+			poseStack.popPose();
+		} else {
+			root.render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+		}
+	}
+
 	public ModelPart root() {
 		return this.root;
 	}
 
-	@Override
 	public void setupAnim(DripstoneTortoise entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root.getAllParts().forEach(ModelPart::resetPose);
 		this.head.xRot = headPitch * 0.017453292F;

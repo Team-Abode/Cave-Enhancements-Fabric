@@ -16,7 +16,7 @@ public class DripstoneTortoiseOccasionalStompGoal extends Goal {
     }
 
     public boolean canUse() {
-        return dripstoneTortoise.getOccasionalStompCooldown() == 0 && dripstoneTortoise.isOnGround() && !dripstoneTortoise.isAggressive();
+        return dripstoneTortoise.getOccasionalStompCooldown() == 0 && !dripstoneTortoise.isPregnant() && dripstoneTortoise.getTarget() == null && dripstoneTortoise.isOnGround() && !dripstoneTortoise.isAggressive() && !dripstoneTortoise.isBaby();
     }
 
     public boolean canContinueToUse() {
@@ -25,8 +25,8 @@ public class DripstoneTortoiseOccasionalStompGoal extends Goal {
 
     public void start() {
         for (int i = 0; i <= 10; i++) {
-            double randomX = dripstoneTortoise.getX(dripstoneTortoise.getRandom().nextInt(-1, 1));
-            double randomZ = dripstoneTortoise.getRandomZ(dripstoneTortoise.getRandom().nextInt(-1, 1));
+            double randomX = dripstoneTortoise.getRandomX(1);
+            double randomZ = dripstoneTortoise.getRandomZ(1);
 
             dripstoneTortoise.summonPike(randomX, randomZ, dripstoneTortoise.getY() - 2, dripstoneTortoise.getY() + 5);
         }

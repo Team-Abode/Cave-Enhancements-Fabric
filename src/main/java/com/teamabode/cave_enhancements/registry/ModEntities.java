@@ -20,9 +20,9 @@ public class ModEntities {
 
     public static final EntityType<Goop> GOOP = Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "goop"), FabricEntityTypeBuilder.create(MobCategory.AMBIENT, Goop::new).dimensions(EntityDimensions.fixed(0.6f, 0.9f)).build());
 
-    public static final EntityType<Cruncher> CRUNCHER = Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "cruncher"), FabricEntityTypeBuilder.create(MobCategory.CREATURE, Cruncher::new).dimensions(EntityDimensions.fixed(0.8f, 0.8f)).build());
+    public static final EntityType<Cruncher> CRUNCHER = Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "cruncher"), FabricEntityTypeBuilder.create(MobCategory.CREATURE, Cruncher::new).dimensions(EntityDimensions.scalable(0.8f, 0.8f)).build());
 
-    public static final EntityType<DripstoneTortoise> DRIPSTONE_TORTOISE = Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "dripstone_tortoise"), FabricEntityTypeBuilder.create(MobCategory.MONSTER, DripstoneTortoise::new).dimensions(EntityDimensions.fixed(1.3F, 0.8F)).build());
+    public static final EntityType<DripstoneTortoise> DRIPSTONE_TORTOISE = Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "dripstone_tortoise"), FabricEntityTypeBuilder.create(MobCategory.CREATURE, DripstoneTortoise::new).dimensions(EntityDimensions.scalable(1.3F, 0.8F)).build());
 
     public static final EntityType<BigGoopDripProjectile> BIG_GOOP_DRIP = Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "big_goop_drip"), FabricEntityTypeBuilder.<BigGoopDripProjectile>create(MobCategory.MISC, BigGoopDripProjectile::new).dimensions(EntityDimensions.fixed(0.25F, 0.25F)).trackedUpdateRate(10).trackRangeBlocks(4).build());
 

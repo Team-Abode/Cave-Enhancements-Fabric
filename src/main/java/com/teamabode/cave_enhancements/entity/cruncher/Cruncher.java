@@ -91,6 +91,10 @@ public class Cruncher extends Animal {
         this.entityData.define(TARGET_POS, Optional.empty());
     }
 
+    public float getScale() {
+        return this.isBaby() ? 0.7F : 1.0F;
+    }
+
     public String getEatingState() {
         return this.entityData.get(EATING_STATE);
     }

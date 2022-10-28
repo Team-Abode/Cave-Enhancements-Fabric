@@ -73,7 +73,7 @@ public class DripstonePike extends Entity {
         }
         if (this.tickCount % 4 == 0) {
             if (level.getBlockState(blockPosition().below()).is(ModTags.PIKE_DESTROYABLES)) {
-                if (random.nextBoolean()) {
+                if (random.nextInt(4) == 0) {
                     ItemEntity itemEntity = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), new ItemStack(Items.POINTED_DRIPSTONE));
                     level.addFreshEntity(itemEntity);
                 }
