@@ -1,9 +1,6 @@
 package com.teamabode.cave_enhancements.entity.dripstone_tortoise;
 
-import com.teamabode.cave_enhancements.entity.dripstone_tortoise.goals.DripstoneTortoiseAttackGoal;
-import com.teamabode.cave_enhancements.entity.dripstone_tortoise.goals.DripstoneTortoiseBreedGoal;
-import com.teamabode.cave_enhancements.entity.dripstone_tortoise.goals.DripstoneTortoiseLayEggGoal;
-import com.teamabode.cave_enhancements.entity.dripstone_tortoise.goals.DripstoneTortoiseOccasionalStompGoal;
+import com.teamabode.cave_enhancements.entity.dripstone_tortoise.goals.*;
 import com.teamabode.cave_enhancements.registry.ModEntities;
 import com.teamabode.cave_enhancements.registry.ModSounds;
 import net.minecraft.core.BlockPos;
@@ -14,6 +11,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
@@ -23,12 +21,10 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -82,19 +78,20 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
 
     // Sounds
     protected SoundEvent getDeathSound() {
-        return ModSounds.ENTITY_DRIPSTONE_TORTOISE_DEATH;
+        return this.isBaby() ? ModSounds.ENTITY_DRIPSTONE_TORTOISE_BABY_DEATH : ModSounds.ENTITY_DRIPSTONE_TORTOISE_DEATH;
     }
 
     protected SoundEvent getHurtSound(DamageSource source) {
-        return ModSounds.ENTITY_DRIPSTONE_TORTOISE_HURT;
+        return this.isBaby() ? ModSounds.ENTITY_DRIPSTONE_TORTOISE_BABY_HURT : ModSounds.ENTITY_DRIPSTONE_TORTOISE_HURT;
     }
 
+    @Nullable
     protected SoundEvent getAmbientSound() {
-        return ModSounds.ENTITY_DRIPSTONE_TORTOISE_IDLE;
+        return this.isBaby() ? null : ModSounds.ENTITY_DRIPSTONE_TORTOISE_IDLE;
     }
 
     protected void playStepSound(BlockPos pos, BlockState state) {
-        SoundEvent sound = ModSounds.ENTITY_DRIPSTONE_TORTOISE_STEP;
+        SoundEvent sound = this.isBaby() ? SoundEvents.WOLF_STEP : ModSounds.ENTITY_DRIPSTONE_TORTOISE_STEP;
         this.playSound(sound, 0.15F, 1.0F);
     }
 
@@ -102,11 +99,14 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(0, new HurtByTargetGoal(this).setAlertOthers());
+        this.goalSelector.addGoal(1, new DripstoneTortoisePanicGoal(this));
+
         this.goalSelector.addGoal(1, new DripstoneTortoiseAttackGoal(this));
         this.goalSelector.addGoal(1, new DripstoneTortoiseBreedGoal(this, 1.0D));
         this.goalSelector.addGoal(1, new DripstoneTortoiseLayEggGoal(this, 1.0D));
         this.goalSelector.addGoal(2, new DripstoneTortoiseOccasionalStompGoal(this));
         this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1.5D));
+        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Monster.class, 7.0F, 1.5D, 1.5D, (entity) -> this.isBaby()));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
     }

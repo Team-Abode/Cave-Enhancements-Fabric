@@ -198,6 +198,34 @@
     ],
     "subtitle": "subtitles.entity.dripstone_tortoise.idle"
   },
+  "entity.dripstone_tortoise.baby_hurt": {
+    "sounds": [
+      "minecraft:mob/turtle/baby/hurt1",
+      "minecraft:mob/turtle/baby/hurt2"
+    ],
+    "subtitle": "subtitles.entity.dripstone_tortoise.baby_hurt"
+  },
+  "entity.dripstone_tortoise.baby_death": {
+    "sounds": [
+      "minecraft:mob/turtle/baby/death1",
+      "minecraft:mob/turtle/baby/death2"
+    ],
+    "subtitle": "subtitles.entity.dripstone_tortoise.baby_death"
+  },
+  "entity.dripstone_tortoise.crack_egg": {
+    "sounds": [
+      "minecraft:mob/turtle/egg/egg_crack1",
+      "minecraft:mob/turtle/egg/egg_crack2"
+    ],
+    "subtitle": "subtitles.entity.dripstone_tortoise.crack_egg"
+  },
+  "entity.dripstone_tortoise.break_egg": {
+    "sounds": [
+      "minecraft:mob/turtle/egg/egg_break1",
+      "minecraft:mob/turtle/egg/egg_break2"
+    ],
+    "subtitle": "subtitles.entity.dripstone_tortoise.break_egg"
+  },
   "entity.cruncher.idle": {
     "sounds": [
       "cave_enhancements:mob/cruncher/say1",

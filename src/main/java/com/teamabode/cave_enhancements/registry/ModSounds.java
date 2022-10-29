@@ -42,6 +42,10 @@ public class ModSounds {
     public static final SoundEvent ENTITY_DRIPSTONE_TORTOISE_DEATH = register("entity.dripstone_tortoise.death");
     public static final SoundEvent ENTITY_DRIPSTONE_TORTOISE_STEP = register("entity.dripstone_tortoise.step");
     public static final SoundEvent ENTITY_DRIPSTONE_TORTOISE_IDLE = register("entity.dripstone_tortoise.idle");
+    public static final SoundEvent ENTITY_DRIPSTONE_TORTOISE_BABY_HURT = register("entity.dripstone_tortoise.baby_hurt");
+    public static final SoundEvent ENTITY_DRIPSTONE_TORTOISE_BABY_DEATH = register("entity.dripstone_tortoise.baby_death");
+    public static final SoundEvent ENTITY_DRIPSTONE_TORTOISE_BREAK_EGG = register("entity.dripstone_tortoise.break_egg");
+    public static final SoundEvent ENTITY_DRIPSTONE_TORTOISE_CRACK_EGG = register("entity.dripstone_tortoise.crack_egg");
 
     // Cruncher
     public static final SoundEvent ENTITY_CRUNCHER_IDLE = register("entity.cruncher.idle");

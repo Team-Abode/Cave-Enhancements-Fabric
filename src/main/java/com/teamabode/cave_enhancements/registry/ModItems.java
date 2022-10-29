@@ -21,6 +21,7 @@ public class ModItems {
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "goop_banner_pattern"), GOOP_BANNER_PATTERN);
 
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "spectacle_candle"), SPECTACLE_CANDLE);
+        Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "dripstone_tortoise_egg"), DRIPSTONE_TORTOISE_EGG);
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "glow_paste"), GLOW_PASTE);
 
         Registry.register(Registry.ITEM, new ResourceLocation(CaveEnhancements.MODID, "lightning_anchor"), LIGHTNING_ANCHOR);
@@ -81,6 +82,7 @@ public class ModItems {
     public static final BlockItem VOLATILE_GOOP = new BlockItem(ModBlocks.VOLATILE_GOOP, new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE));
 
     public static final BlockItem SPECTACLE_CANDLE = new BlockItem(ModBlocks.SPECTACLE_CANDLE, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
+    public static final BlockItem DRIPSTONE_TORTOISE_EGG = new BlockItem(ModBlocks.DRIPSTONE_TORTOISE_EGG, new Item.Properties().tab(CreativeModeTab.TAB_MISC));
 
     public static final BlockItem LIGHTNING_ANCHOR = new BlockItem(ModBlocks.LIGHTNING_ANCHOR, new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE));
     public static final BlockItem CHARGED_LIGHTNING_ANCHOR = new BlockItem(ModBlocks.CHARGED_LIGHTNING_ANCHOR, new Item.Properties().tab(CreativeModeTab.TAB_REDSTONE));

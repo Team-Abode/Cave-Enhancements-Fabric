@@ -1,11 +1,12 @@
 package com.teamabode.cave_enhancements.entity.dripstone_tortoise.goals;
 
+import com.teamabode.cave_enhancements.block.DripstoneTortoiseEggBlock;
 import com.teamabode.cave_enhancements.entity.dripstone_tortoise.DripstoneTortoise;
+import com.teamabode.cave_enhancements.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class DripstoneTortoiseLayEggGoal extends MoveToBlockGoal {
     private final DripstoneTortoise dripstoneTortoise;
@@ -28,13 +29,13 @@ public class DripstoneTortoiseLayEggGoal extends MoveToBlockGoal {
     public void tick() {
         super.tick();
         if (this.isReachedTarget() && !hasLayedEggs) {
-            dripstoneTortoise.level.setBlock(blockPos.above(), Blocks.TURTLE_EGG.defaultBlockState().setValue(BlockStateProperties.EGGS, dripstoneTortoise.getRandom().nextInt(4) + 1), 3);
+            dripstoneTortoise.level.setBlock(blockPos.below(), ModBlocks.DRIPSTONE_TORTOISE_EGG.defaultBlockState().setValue(DripstoneTortoiseEggBlock.WATERLOGGED, true).setValue(DripstoneTortoiseEggBlock.HATCH, 0), 3);
             dripstoneTortoise.setPregnant(false);
             hasLayedEggs = true;
         }
     }
 
     protected boolean isValidTarget(LevelReader level, BlockPos pos) {
-        return level.getBlockState(pos).is(Blocks.DRIPSTONE_BLOCK);
+        return level.getBlockState(pos.below()).is(Blocks.WATER);
     }
 }

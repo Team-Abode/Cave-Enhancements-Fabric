@@ -25,6 +25,7 @@ public class ModBlocks {
         Registry.register(Registry.BLOCK, new ResourceLocation(CaveEnhancements.MODID, "glow_splotch"), GLOW_SPLOTCH);
         Registry.register(Registry.BLOCK, new ResourceLocation(CaveEnhancements.MODID, "spectacle_candle"), SPECTACLE_CANDLE);
         Registry.register(Registry.BLOCK, new ResourceLocation(CaveEnhancements.MODID, "spectacle_candle_cake"), SPECTACLE_CANDLE_CAKE);
+        Registry.register(Registry.BLOCK, new ResourceLocation(CaveEnhancements.MODID, "dripstone_tortoise_egg"), DRIPSTONE_TORTOISE_EGG);
 
         Registry.register(Registry.BLOCK, new ResourceLocation(CaveEnhancements.MODID, "lightning_anchor"), LIGHTNING_ANCHOR);
         Registry.register(Registry.BLOCK, new ResourceLocation(CaveEnhancements.MODID, "charged_lightning_anchor"), CHARGED_LIGHTNING_ANCHOR);
@@ -66,6 +67,7 @@ public class ModBlocks {
     public static final Block GLOW_SPLOTCH = new GlowSplotchBlock(FabricBlockSettings.of(Material.CLAY).sound(SoundType.HONEY_BLOCK).noOcclusion().noCollission().lightLevel((state) -> 8).color(MaterialColor.SAND));
     public static final Block SPECTACLE_CANDLE = new SpectacleCandleBlock(FabricBlockSettings.of(Material.DECORATION).sound(SoundType.CANDLE).lightLevel(CandleBlock.LIGHT_EMISSION).strength(0.1F, 0F));
     public static final Block SPECTACLE_CANDLE_CAKE = new SpectacleCandleCakeBlock(ModBlocks.SPECTACLE_CANDLE, FabricBlockSettings.of(Material.CAKE).sound(SoundType.CANDLE).lightLevel(litBlockEmission(3)).strength(0.5F, 0F));
+    public static final Block DRIPSTONE_TORTOISE_EGG = new DripstoneTortoiseEggBlock(FabricBlockSettings.of(Material.EGG).strength(1.0F).sound(SoundType.METAL).noOcclusion().randomTicks());
 
     public static final Block LIGHTNING_ANCHOR = new LightningAnchorBlock((FabricBlockSettings) FabricBlockSettings.of(Material.METAL).strength(4, 100).requiresCorrectToolForDrops().color(MaterialColor.COLOR_ORANGE).sound(SoundType.COPPER));
     public static final Block CHARGED_LIGHTNING_ANCHOR = new ChargedLightningAnchorBlock((FabricBlockSettings) FabricBlockSettings.of(Material.METAL).strength(4, 100).requiresCorrectToolForDrops().color(MaterialColor.COLOR_ORANGE).sound(SoundType.COPPER).lightLevel((state) -> 15));
