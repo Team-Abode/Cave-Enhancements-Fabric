@@ -50,7 +50,7 @@ public class DripstoneTortoiseEggBlock extends Block implements SimpleWaterlogge
                 serverLevel.playSound(null, blockPos, ModSounds.ENTITY_DRIPSTONE_TORTOISE_CRACK_EGG, SoundSource.BLOCKS, 0.7F, 0.9F + randomSource.nextFloat() * 0.2F);
                 serverLevel.setBlock(blockPos, blockState.setValue(HATCH, i + 1), 2);
             } else {
-                serverLevel.playSound(null, blockPos, SoundEvents.TURTLE_EGG_HATCH, SoundSource.BLOCKS, 0.7F, 0.9F + randomSource.nextFloat() * 0.2F);
+                serverLevel.playSound(null, blockPos, ModSounds.ENTITY_DRIPSTONE_TORTOISE_HATCH_EGG, SoundSource.BLOCKS, 0.7F, 0.9F + randomSource.nextFloat() * 0.2F);
                 serverLevel.removeBlock(blockPos, false);
                 serverLevel.levelEvent(2001, blockPos, Block.getId(blockState));
 

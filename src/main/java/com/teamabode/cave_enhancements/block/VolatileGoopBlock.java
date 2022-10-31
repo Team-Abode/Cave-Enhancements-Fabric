@@ -78,7 +78,7 @@ public class VolatileGoopBlock extends Block {
 
     public void activate(BlockState state, Level level, BlockPos pos, boolean interact) {
         Direction direction = state.getValue(FACING);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 1; i < 7; i++) {
 
             if (level.isClientSide() && interact) {
                 level.addParticle(ModParticles.GOOP_EXPLOSION, pos.relative(direction, i).getX() + 0.5, pos.relative(direction, i).getY() + 0.5, pos.relative(direction, i).getZ() + 0.5, 0, 0, 0);
@@ -93,11 +93,10 @@ public class VolatileGoopBlock extends Block {
         }
     }
 
-    public Explosion explode(Level level, @Nullable Entity exploder, double x, double y, double z, float size, boolean causesFire, Explosion.BlockInteraction mode) {
+    public void explode(Level level, @Nullable Entity exploder, double x, double y, double z, float size, boolean causesFire, Explosion.BlockInteraction mode) {
         Explosion explosion = new Explosion(level, exploder, x, y, z, size, causesFire, mode);
         explosion.explode();
         explosion.finalizeExplosion(false);
-        return explosion;
     }
 
 }

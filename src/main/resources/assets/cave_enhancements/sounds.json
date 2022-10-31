@@ -226,6 +226,14 @@
     ],
     "subtitle": "subtitles.entity.dripstone_tortoise.break_egg"
   },
+  "entity.dripstone_tortoise.hatch_egg": {
+    "sounds": [
+      "minecraft:mob/turtle/baby/egg_hatched1",
+      "minecraft:mob/turtle/baby/egg_hatched2",
+      "minecraft:mob/turtle/baby/egg_hatched3"
+    ],
+    "subtitle": "subtitles.entity.dripstone_tortoise.hatch_egg"
+  },
   "entity.cruncher.idle": {
     "sounds": [
       "cave_enhancements:mob/cruncher/say1",
@@ -250,14 +258,6 @@
       "cave_enhancements:mob/cruncher/step5"
     ],
     "subtitle": "subtitles.entity.cruncher.step"
-  },
-  "entity.cruncher.eat": {
-    "sounds": [
-      "cave_enhancements:mob/cruncher/eat1",
-      "cave_enhancements:mob/cruncher/eat2",
-      "cave_enhancements:mob/cruncher/eat3"
-    ],
-    "subtitle": "subtitles.entity.cruncher.eat"
   },
   "entity.cruncher.death": {
     "sounds": [

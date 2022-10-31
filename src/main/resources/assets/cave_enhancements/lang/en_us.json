@@ -97,11 +97,11 @@
   "subtitles.entity.dripstone_tortoise.baby_death": "Dripstone Tortoise dies",
   "subtitles.entity.dripstone_tortoise.break_egg": "Egg breaks",
   "subtitles.entity.dripstone_tortoise.crack_egg": "Egg cracks",
+  "subtitles.entity.dripstone_tortoise.hatch_egg": "Egg hatches",
 
   "subtitles.entity.cruncher.idle": "Cruncher squeaks",
   "subtitles.entity.cruncher.hurt": "Cruncher hurts",
   "subtitles.entity.cruncher.step": "Cruncher steps",
-  "subtitles.entity.cruncher.eat": "Cruncher eats",
   "subtitles.entity.cruncher.death": "Cruncher dies",
 
   "subtitles.effect.reversal.reverse": "Damage reverse applies",

@@ -6,7 +6,6 @@
   "mixins": [
     "CreeperMixin",
     "DigDurabilityEnchantmentMixin",
-    "DispenserItemBehaviorMixin",
     "EnchantmentMixin",
     "LivingEntityMixin",
     "OverworldBiomeBuilderMixin",
