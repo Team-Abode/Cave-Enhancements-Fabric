@@ -50,7 +50,7 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
 
     public DripstoneTortoise(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
-        this.setOccasionalStompCooldown(5);
+        this.setOccasionalStompCooldown(1200);
         this.xpReward = 15;
     }
 

@@ -50,7 +50,6 @@ public class DrippingGoopBlock extends Block implements SimpleWaterloggedBlock {
         this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, false));
     }
 
-    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateManager) {
         stateManager.add(HANGING).add(WATERLOGGED);
     }
@@ -68,7 +67,6 @@ public class DrippingGoopBlock extends Block implements SimpleWaterloggedBlock {
 
 
     // "Scaffold"-like Mechanic
-    @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
 
         BlockPos pos = getBottomPos(blockPos, level);
@@ -98,21 +96,14 @@ public class DrippingGoopBlock extends Block implements SimpleWaterloggedBlock {
         return pos;
     }
 
-
-
-
     // Dripping Goop Sliding
-    @Override
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
         if (this.isSlidingDown(entity)) {
             doSlideMovement(entity);
             slidingEffects(level, entity);
         }
-
-
         super.entityInside(blockState, level, blockPos, entity);
     }
-
 
     private void slidingEffects(Level level, Entity entity) {
         if (level.random.nextInt(30) == 0) {
@@ -124,7 +115,6 @@ public class DrippingGoopBlock extends Block implements SimpleWaterloggedBlock {
 
             server.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, blockState), entity.getX(), entity.getY(), entity.getZ(), 5, 0.0, 0.0, 0.0, 0.0);
         }
-
     }
 
     private void doSlideMovement(Entity entity) {
@@ -142,7 +132,6 @@ public class DrippingGoopBlock extends Block implements SimpleWaterloggedBlock {
         return !entity.isOnGround();
     }
 
-    @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter blockView, BlockPos pos, CollisionContext shapeContext) {
         return SHAPE;
     }
