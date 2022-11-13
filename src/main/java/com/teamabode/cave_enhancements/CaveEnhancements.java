@@ -11,7 +11,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
-import net.fabricmc.fabric.mixin.object.builder.SpawnRestrictionAccessor;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.minecraft.Util;
 import net.minecraft.core.*;
@@ -75,9 +74,9 @@ public class CaveEnhancements implements ModInitializer {
     }
 
     public static void registerSpawnPlacements() {
-        SpawnRestrictionAccessor.callRegister(ModEntities.DRIPSTONE_TORTOISE, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, DripstoneTortoise::checkDripstoneTortoiseSpawnRules);
-        SpawnRestrictionAccessor.callRegister(ModEntities.CRUNCHER, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, Cruncher::checkCruncherSpawnRules);
-        SpawnRestrictionAccessor.callRegister(ModEntities.GOOP, SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.WORLD_SURFACE, Goop::checkGoopSpawnRules);
+        SpawnPlacements.register(ModEntities.DRIPSTONE_TORTOISE, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, DripstoneTortoise::checkDripstoneTortoiseSpawnRules);
+        SpawnPlacements.register(ModEntities.CRUNCHER, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, Cruncher::checkCruncherSpawnRules);
+        SpawnPlacements.register(ModEntities.GOOP, SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.WORLD_SURFACE, Goop::checkGoopSpawnRules);
     }
 
     public static void registerBiomeModifications() {

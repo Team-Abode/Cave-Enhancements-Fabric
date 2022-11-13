@@ -37,9 +37,7 @@ public class CaveBiomes {
         builder.addCarver(GenerationStep.Carving.LIQUID, Carvers.CAVE);
         builder.addCarver(GenerationStep.Carving.LIQUID, Carvers.CAVE_EXTRA_UNDERGROUND);
         builder.addCarver(GenerationStep.Carving.LIQUID, Carvers.CANYON);
-        builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.ROSE_QUARTZ_CRYSTALS);
         BiomeDefaultFeatures.addDefaultCrystalFormations(builder);
-        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ModPlacedFeatures.ORE_CALCITE);
         BiomeDefaultFeatures.addDefaultOres(builder);
     }
 
