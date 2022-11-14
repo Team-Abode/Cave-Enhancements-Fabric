@@ -67,7 +67,9 @@ public class ChargedLightningAnchorBlock extends Block {
                 double e = axis == Direction.Axis.X ? 0.7 + 0.5625 * (double) direction.getStepX() : (double) randomSource.nextFloat();
                 double f = axis == Direction.Axis.Y ? 0.7 + 0.5625 * (double) direction.getStepY() : (double) randomSource.nextFloat();
                 double g = axis == Direction.Axis.Z ? 0.7 + 0.5625 * (double) direction.getStepZ() : (double) randomSource.nextFloat();
-                level.addParticle(ModParticles.CHARGE, (double) pos.getX() + e, (double) pos.getY() + f, (double) pos.getZ() + g, 0.0, 0.0, 0.0);
+                if (randomSource.nextInt(4) == 0) {
+                    level.addParticle(ModParticles.CHARGE, (double) pos.getX() + e, (double) pos.getY() + f, (double) pos.getZ() + g, 0.0, 0.0, 0.0);
+                }
             }
         }
     }
