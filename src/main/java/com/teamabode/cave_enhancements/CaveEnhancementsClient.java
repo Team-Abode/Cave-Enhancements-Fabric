@@ -50,7 +50,6 @@ public class CaveEnhancementsClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(ModParticles.SOOTHING_NOTE, SoothingNoteParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(ModParticles.ROSE_CHIME, RoseChimeParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(ModParticles.HARMONIC_WAVE, HarmonicWaveParticle.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(ModParticles.HARMONIC_NOTE, StagnantParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(ModParticles.GOOP_EXPLOSION, HugeExplosionParticle.Provider::new);
     }
 

@@ -21,7 +21,6 @@ public class ModParticles {
     public static final SimpleParticleType SOOTHING_NOTE = register("soothing_note", FabricParticleTypes.simple());
     public static final SimpleParticleType ROSE_CHIME = register("rose_chime", FabricParticleTypes.simple());
     public static final SimpleParticleType HARMONIC_WAVE = register("harmonic_wave", FabricParticleTypes.simple());
-    public static final SimpleParticleType HARMONIC_NOTE = register("harmonic_note", FabricParticleTypes.simple());
 
 
     public static void init() {
