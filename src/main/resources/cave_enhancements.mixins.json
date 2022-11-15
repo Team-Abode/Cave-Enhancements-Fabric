@@ -4,7 +4,6 @@
   "package": "com.teamabode.cave_enhancements.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "CreeperMixin",
     "DigDurabilityEnchantmentMixin",
     "EnchantmentMixin",
     "LivingEntityMixin",

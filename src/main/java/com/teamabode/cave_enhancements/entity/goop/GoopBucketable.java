@@ -16,89 +16,89 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
 public interface GoopBucketable {
-    boolean isFromBucket();
+    boolean fromBucket();
 
     void setFromBucket(boolean fromBucket);
 
-    void copyDataToStack(ItemStack stack);
+    void saveDefaultDataToBucketTag(ItemStack stack);
 
-    void copyDataFromNbt(CompoundTag nbt);
+    void loadDefaultDataFromBucketTag(CompoundTag nbt);
 
-    ItemStack getBucketItem();
+    ItemStack getBucketItemStack();
 
-    SoundEvent getBucketedSound();
+    SoundEvent getPickupSound();
 
-    static void copyDataToStack(Mob entity, ItemStack stack) {
-        CompoundTag nbtCompound = stack.getOrCreateTag();
-        if (entity.hasCustomName()) {
-            stack.setHoverName(entity.getCustomName());
+    static void saveDefaultDataToBucketTag(Mob mob, ItemStack bucket) {
+        CompoundTag compoundTag = bucket.getOrCreateTag();
+        if (mob.hasCustomName()) {
+            bucket.setHoverName(mob.getCustomName());
         }
 
-        if (entity.isNoAi()) {
-            nbtCompound.putBoolean("NoAI", entity.isNoAi());
+        if (mob.isNoAi()) {
+            compoundTag.putBoolean("NoAI", mob.isNoAi());
         }
 
-        if (entity.isSilent()) {
-            nbtCompound.putBoolean("Silent", entity.isSilent());
+        if (mob.isSilent()) {
+            compoundTag.putBoolean("Silent", mob.isSilent());
         }
 
-        if (entity.isNoGravity()) {
-            nbtCompound.putBoolean("NoGravity", entity.isNoGravity());
+        if (mob.isNoGravity()) {
+            compoundTag.putBoolean("NoGravity", mob.isNoGravity());
         }
 
-        if (entity.hasGlowingTag()) {
-            nbtCompound.putBoolean("Glowing", entity.hasGlowingTag());
+        if (mob.hasGlowingTag()) {
+            compoundTag.putBoolean("Glowing", mob.hasGlowingTag());
         }
 
-        if (entity.isInvulnerable()) {
-            nbtCompound.putBoolean("Invulnerable", entity.isInvulnerable());
+        if (mob.isInvulnerable()) {
+            compoundTag.putBoolean("Invulnerable", mob.isInvulnerable());
         }
 
-        nbtCompound.putFloat("Health", entity.getHealth());
+        compoundTag.putFloat("Health", mob.getHealth());
     }
 
-    static void copyDataFromNbt(Mob entity, CompoundTag nbt) {
-        if (nbt.contains("NoAI")) {
-            entity.setNoAi(nbt.getBoolean("NoAI"));
+    static void loadDefaultDataFromBucketTag(Mob mob, CompoundTag tag) {
+        if (tag.contains("NoAI")) {
+            mob.setNoAi(tag.getBoolean("NoAI"));
         }
 
-        if (nbt.contains("Silent")) {
-            entity.setSilent(nbt.getBoolean("Silent"));
+        if (tag.contains("Silent")) {
+            mob.setSilent(tag.getBoolean("Silent"));
         }
 
-        if (nbt.contains("NoGravity")) {
-            entity.setNoGravity(nbt.getBoolean("NoGravity"));
+        if (tag.contains("NoGravity")) {
+            mob.setNoGravity(tag.getBoolean("NoGravity"));
         }
 
-        if (nbt.contains("Glowing")) {
-            entity.setGlowingTag(nbt.getBoolean("Glowing"));
+        if (tag.contains("Glowing")) {
+            mob.setGlowingTag(tag.getBoolean("Glowing"));
         }
 
-        if (nbt.contains("Invulnerable")) {
-            entity.setInvulnerable(nbt.getBoolean("Invulnerable"));
+        if (tag.contains("Invulnerable")) {
+            mob.setInvulnerable(tag.getBoolean("Invulnerable"));
         }
 
-        if (nbt.contains("Health", 99)) {
-            entity.setHealth(nbt.getFloat("Health"));
+        if (tag.contains("Health", 99)) {
+            mob.setHealth(tag.getFloat("Health"));
         }
 
     }
 
-    static <T extends LivingEntity & GoopBucketable> Optional<InteractionResult> tryBucket(Player player, InteractionHand hand, T entity) {
+    static <T extends LivingEntity & GoopBucketable> Optional<InteractionResult> bucketMobPickup(Player player, InteractionHand hand, T livingEntity) {
         ItemStack itemStack = player.getItemInHand(hand);
-        if (itemStack.getItem() == Items.BUCKET && entity.isAlive()) {
-            entity.playSound(entity.getBucketedSound(), 1.0F, 1.0F);
-            ItemStack itemStack2 = entity.getBucketItem();
-            entity.copyDataToStack(itemStack2);
+        if (itemStack.getItem() == Items.BUCKET && livingEntity.isAlive()) {
+            livingEntity.playSound(livingEntity.getPickupSound(), 1.0F, 1.0F);
+            ItemStack itemStack2 = livingEntity.getBucketItemStack();
+            livingEntity.saveDefaultDataToBucketTag(itemStack2);
             ItemStack itemStack3 = ItemUtils.createFilledResult(itemStack, player, itemStack2, false);
             player.setItemInHand(hand, itemStack3);
-            Level world = entity.level;
-            if (!world.isClientSide) {
-                CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer)player, itemStack2);
+            Level level = livingEntity.level;
+            if (!level.isClientSide) {
+                CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer) player, itemStack2);
             }
 
-            entity.discard();
-            return Optional.of(InteractionResult.sidedSuccess(world.isClientSide));
+            livingEntity.discard();
+            return Optional.of(InteractionResult.sidedSuccess(level.isClientSide));
         } else {
             return Optional.empty();
         }

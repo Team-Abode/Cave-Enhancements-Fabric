@@ -30,7 +30,7 @@ public class GoopBucketItem extends Item {
     private void spawnGoop(ServerLevel level, ItemStack stack, BlockPos pos) {
         Goop goop = (Goop) ModEntities.GOOP.spawn(level, stack, null, pos, MobSpawnType.BUCKET, true, false);
         if (goop != null) {
-            ((GoopBucketable)goop).copyDataFromNbt(stack.getOrCreateTag());
+            ((GoopBucketable)goop).loadDefaultDataFromBucketTag(stack.getOrCreateTag());
             ((GoopBucketable)goop).setFromBucket(true);
         }
     }

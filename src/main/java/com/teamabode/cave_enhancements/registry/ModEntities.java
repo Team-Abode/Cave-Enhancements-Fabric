@@ -5,7 +5,7 @@ import com.teamabode.cave_enhancements.entity.HarmonicArrow;
 import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
 import com.teamabode.cave_enhancements.entity.dripstone_tortoise.DripstonePike;
 import com.teamabode.cave_enhancements.entity.dripstone_tortoise.DripstoneTortoise;
-import com.teamabode.cave_enhancements.entity.goop.BigGoopDripProjectile;
+import com.teamabode.cave_enhancements.entity.goop.BigGoopDrip;
 import com.teamabode.cave_enhancements.entity.goop.Goop;
 import com.teamabode.cave_enhancements.entity.goop.ThrownGoop;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -24,7 +24,7 @@ public class ModEntities {
 
     public static final EntityType<DripstoneTortoise> DRIPSTONE_TORTOISE = Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "dripstone_tortoise"), FabricEntityTypeBuilder.create(MobCategory.CREATURE, DripstoneTortoise::new).dimensions(EntityDimensions.scalable(1.3F, 0.8F)).build());
 
-    public static final EntityType<BigGoopDripProjectile> BIG_GOOP_DRIP = Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "big_goop_drip"), FabricEntityTypeBuilder.<BigGoopDripProjectile>create(MobCategory.MISC, BigGoopDripProjectile::new).dimensions(EntityDimensions.fixed(0.25F, 0.25F)).trackedUpdateRate(10).trackRangeBlocks(4).build());
+    public static final EntityType<BigGoopDrip> BIG_GOOP_DRIP = Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "big_goop_drip"), FabricEntityTypeBuilder.<BigGoopDrip>create(MobCategory.MISC, BigGoopDrip::new).dimensions(EntityDimensions.fixed(0.25F, 0.25F)).trackedUpdateRate(10).trackRangeBlocks(4).build());
 
     public static final EntityType<DripstonePike> DRIPSTONE_PIKE = Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(CaveEnhancements.MODID, "dripstone_pike"), FabricEntityTypeBuilder.<DripstonePike>create(MobCategory.MISC, DripstonePike::new).dimensions(EntityDimensions.fixed(0.3F, 0.3F)).build());
 

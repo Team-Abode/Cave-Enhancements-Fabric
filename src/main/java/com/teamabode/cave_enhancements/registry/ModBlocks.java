@@ -59,7 +59,7 @@ public class ModBlocks {
     }
 
     public static final Block GOOP_BLOCK = new Block(FabricBlockSettings.of(Material.CLAY).speedFactor(0.3F).strength(0.5F, 1.0F).sound(ModSounds.GOOP_BLOCK).jumpFactor(0.9F));
-    public static final Block GOOP_TRAP = new GoopTrapBlock(FabricBlockSettings.of(Material.VEGETABLE).strength(2.0F, 5.0F).sound(ModSounds.GOOP_BLOCK).speedFactor( 0.01F).jumpFactor(0.3F).friction(0.8F).color(MaterialColor.SAND));
+    public static final Block GOOP_TRAP = new GoopTrapBlock(FabricBlockSettings.of(Material.VEGETABLE).strength(2.0F, 5.0F).sound(ModSounds.GOOP_BLOCK).speedFactor( 0.1F).jumpFactor(0.3F).color(MaterialColor.SAND));
     public static final Block GOOP_SPLAT = new GoopSplatBlock(FabricBlockSettings.of(Material.CLAY).instabreak().sound(ModSounds.GOOP_DECORATION).noCollission().noOcclusion().color(MaterialColor.SAND));
     public static final Block DRIPPING_GOOP = new DrippingGoopBlock(FabricBlockSettings.of(Material.CLAY).sound(ModSounds.GOOP_DECORATION).noOcclusion().noCollission().lightLevel((state) -> 2).color(MaterialColor.SAND));
     public static final Block VOLATILE_GOOP = new VolatileGoopBlock(FabricBlockSettings.of(Material.CLAY).strength(2.0F, 5.0F).sound(ModSounds.GOOP_BLOCK).color(MaterialColor.SAND));

@@ -17,24 +17,25 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
-public class BigGoopDripProjectile extends ThrowableItemProjectile {
-    public BigGoopDripProjectile(EntityType<? extends ThrowableItemProjectile> entityType, Level world) {
+public class BigGoopDrip extends ThrowableItemProjectile {
+    public BigGoopDrip(EntityType<? extends ThrowableItemProjectile> entityType, Level world) {
         super(entityType, world);
     }
 
-    public BigGoopDripProjectile(Level world, LivingEntity owner) {
-        super(ModEntities.BIG_GOOP_DRIP, owner, world); // null will be changed later
+    public BigGoopDrip(Level world, LivingEntity owner) {
+        super(ModEntities.BIG_GOOP_DRIP, owner, world);
     }
 
-    public BigGoopDripProjectile(Level world, double x, double y, double z) {
-        super(ModEntities.BIG_GOOP_DRIP, x, y, z, world); // null will be changed later
+    public BigGoopDrip(Level world, double x, double y, double z) {
+        super(ModEntities.BIG_GOOP_DRIP, x, y, z, world);
     }
 
     //Item projectile is rendered as
-    @Override
     protected Item getDefaultItem() {
         return ModItems.BIG_GOOP_DRIP;
     }
@@ -74,18 +75,14 @@ public class BigGoopDripProjectile extends ThrowableItemProjectile {
     protected void onHit(HitResult hitResult) {
         super.onHit(hitResult);
         if (!this.level.isClientSide) {
+            BlockPos pos = new BlockPos(hitResult.getLocation());
             if (!hitEntity) {
-
-                BlockPos pos = new BlockPos(hitResult.getLocation());
-
-                if (level.getBlockState(pos).is(Blocks.AIR)) {
+                if (level.getBlockState(pos).getMaterial().isReplaceable()) {
                     level.setBlockAndUpdate(pos, ModBlocks.GOOP_TRAP.defaultBlockState());
                     level.playSound(null, pos, ModSounds.BLOCK_GOOP_BLOCK_PLACE, SoundSource.BLOCKS, 1F, 1F);
                 }
             }
-
             this.level.broadcastEntityEvent(this, (byte)3);
-
             this.discard();
         }
     }
