@@ -31,8 +31,6 @@ public class DripstonePike extends Entity {
     private LivingEntity owner;
     @Nullable
     private UUID ownerUUID;
-    public final AnimationState risingAnimationState = new AnimationState();
-
     public DripstonePike(EntityType<? extends DripstonePike> entityType, Level world) {
         super(entityType, world);
     }
@@ -68,9 +66,6 @@ public class DripstonePike extends Entity {
     }
 
     public void tick() {
-        if (this.level.isClientSide) {
-            risingAnimationState.startIfStopped(this.tickCount);
-        }
         if (this.tickCount % 4 == 0) {
             if (level.getBlockState(blockPosition().below()).is(ModTags.PIKE_DESTROYABLES)) {
                 if (random.nextInt(4) == 0) {

@@ -12,6 +12,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
@@ -29,8 +30,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -99,14 +102,11 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(0, new HurtByTargetGoal(this).setAlertOthers());
-        this.goalSelector.addGoal(1, new DripstoneTortoisePanicGoal(this));
-
         this.goalSelector.addGoal(1, new DripstoneTortoiseAttackGoal(this));
         this.goalSelector.addGoal(1, new DripstoneTortoiseBreedGoal(this, 1.0D));
         this.goalSelector.addGoal(1, new DripstoneTortoiseLayEggGoal(this, 1.0D));
         this.goalSelector.addGoal(2, new DripstoneTortoiseOccasionalStompGoal(this));
         this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1.5D));
-        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Monster.class, 7.0F, 1.5D, 1.5D, (entity) -> this.isBaby()));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
     }
@@ -158,7 +158,6 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
         return false;
     }
 
-    // Spawn Placement
     public static boolean isDarkEnoughToSpawn(ServerLevelAccessor serverLevelAccessor, BlockPos blockPos, RandomSource randomSource) {
         if (serverLevelAccessor.getBrightness(LightLayer.SKY, blockPos) > randomSource.nextInt(32)) {
             return false;
@@ -174,8 +173,15 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
         }
     }
 
-    public static boolean checkDripstoneTortoiseSpawnRules(EntityType<? extends DripstoneTortoise> entityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
-        return serverLevelAccessor.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(serverLevelAccessor, blockPos, randomSource) && checkMobSpawnRules(entityType, serverLevelAccessor, mobSpawnType, blockPos, randomSource);
+    public static boolean checkDripstoneTortoiseSpawnRules(EntityType<? extends Animal> entityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
+        return serverLevelAccessor.getRawBrightness(blockPos, 0) == 0;
+    }
+
+    public boolean checkSpawnRules(LevelAccessor pLevel, MobSpawnType pSpawnReason) {
+        if (pSpawnReason.equals(MobSpawnType.SPAWNER)) {
+            return true;
+        }
+        return pLevel.getRandom().nextBoolean();
     }
 
     public int getRemainingPersistentAngerTime() {

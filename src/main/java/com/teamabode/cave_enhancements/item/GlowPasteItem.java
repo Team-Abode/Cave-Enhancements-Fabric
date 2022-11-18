@@ -31,7 +31,6 @@ public class GlowPasteItem extends Item {
         super(properties);
     }
 
-    @Override
     public InteractionResult useOn(UseOnContext context) {
 
         BlockPlaceContext blockPlaceContext = new BlockPlaceContext(context);
@@ -70,9 +69,7 @@ public class GlowPasteItem extends Item {
         return InteractionResult.FAIL;
     }
 
-    @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
-
         ItemStack itemStack = player.getItemInHand(usedHand);
         ItemStack offHandItemStack = player.getOffhandItem();
         int itemDurability = itemStack.getDamageValue();
@@ -83,7 +80,10 @@ public class GlowPasteItem extends Item {
             offHandItemStack.shrink(1);
             return InteractionResultHolder.consume(itemStack);
         }
-
         return InteractionResultHolder.fail(itemStack);
+    }
+
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
     }
 }

@@ -39,6 +39,8 @@ public class CaveBiomes {
         builder.addCarver(GenerationStep.Carving.LIQUID, Carvers.CANYON);
         BiomeDefaultFeatures.addDefaultCrystalFormations(builder);
         BiomeDefaultFeatures.addDefaultOres(builder);
+        builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.ROSE_QUARTZ_PILLAR_FLOOR_PATCH);
+        builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.ROSE_QUARTZ_PILLAR_CEILING_PATCH);
     }
 
     // Goop Caves
@@ -47,7 +49,7 @@ public class CaveBiomes {
         // Mob Spawns
         MobSpawnSettings.Builder spawnSettings = new MobSpawnSettings.Builder();
         BiomeDefaultFeatures.commonSpawns(spawnSettings);
-        spawnSettings.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(ModEntities.GOOP, 50, 1, 1));
+        spawnSettings.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.GOOP, 80, 1, 1));
 
         // Features
         BiomeGenerationSettings.Builder genBuilder = new BiomeGenerationSettings.Builder();

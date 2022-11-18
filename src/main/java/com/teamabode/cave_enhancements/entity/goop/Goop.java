@@ -145,7 +145,7 @@ public class Goop extends Monster implements GoopBucketable {
     }
 
     public static boolean checkGoopSpawnRules(EntityType<? extends Monster> entityType, LevelAccessor levelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
-        return levelAccessor.getBlockState(blockPos.below()).is(ModTags.GOOP_SPAWNABLE_ON);
+        return levelAccessor.getRawBrightness(blockPos, 0) == 0;
     }
 
     public void aiStep() {
