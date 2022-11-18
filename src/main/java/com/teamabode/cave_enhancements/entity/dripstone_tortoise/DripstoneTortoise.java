@@ -36,6 +36,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
@@ -174,14 +175,14 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
     }
 
     public static boolean checkDripstoneTortoiseSpawnRules(EntityType<? extends Animal> entityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
-        return serverLevelAccessor.getRawBrightness(blockPos, 0) == 0;
+        return isDarkEnoughToSpawn(serverLevelAccessor, blockPos, randomSource);
     }
 
     public boolean checkSpawnRules(LevelAccessor pLevel, MobSpawnType pSpawnReason) {
         if (pSpawnReason.equals(MobSpawnType.SPAWNER)) {
             return true;
         }
-        return pLevel.getRandom().nextBoolean();
+        return this.getWalkTargetValue(this.blockPosition(), level) >= -0.5F && random.nextInt(3) == 0;
     }
 
     public int getRemainingPersistentAngerTime() {

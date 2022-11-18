@@ -314,7 +314,7 @@ public class Cruncher extends Animal {
         if (pSpawnReason.equals(MobSpawnType.SPAWNER)) {
             return true;
         }
-        return pLevel.getRandom().nextBoolean();
+        return this.getWalkTargetValue(this.blockPosition(), level) >= 0.0F;
     }
 
     // Attribute Builder
