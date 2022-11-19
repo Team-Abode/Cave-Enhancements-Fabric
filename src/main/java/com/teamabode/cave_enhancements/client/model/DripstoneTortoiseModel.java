@@ -24,6 +24,9 @@ public class DripstoneTortoiseModel<E extends Mob> extends HierarchicalModel<Dri
 	private final ModelPart right_front_leg;
 	private final ModelPart left_hind_leg;
 	private final ModelPart right_hind_leg;
+	private final ModelPart front_spike;
+	private final ModelPart middle_spike;
+	private final ModelPart hind_spike;
 
 
 	public DripstoneTortoiseModel(ModelPart root) {
@@ -34,6 +37,9 @@ public class DripstoneTortoiseModel<E extends Mob> extends HierarchicalModel<Dri
 		this.right_front_leg = this.body.getChild("right_front_leg");
 		this.left_hind_leg = this.body.getChild("left_hind_leg");
 		this.right_hind_leg = this.body.getChild("right_hind_leg");
+		this.front_spike = this.root.getChild("spike0");
+		this.middle_spike = this.root.getChild("spike1");
+		this.hind_spike = this.root.getChild("spike2");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -55,19 +61,19 @@ public class DripstoneTortoiseModel<E extends Mob> extends HierarchicalModel<Dri
 
 		PartDefinition head = root.addOrReplaceChild("head", CubeListBuilder.create().texOffs(28, 30).addBox(-3.0F, -2.0F, -5.0F, 6.0F, 6.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -8.0F, -10.0F));
 
-		PartDefinition spike0 = root.addOrReplaceChild("spike0", CubeListBuilder.create(), PartPose.offset(0.0F, -14.0F, -3.5F));
+		PartDefinition spike0 = root.addOrReplaceChild("spike0", CubeListBuilder.create(), PartPose.offset(1.0F, -14.0F, -3.5F));
 
 		PartDefinition cube_r1 = spike0.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(14, 58).addBox(-2.5F, -6.0F, 0.0F, 5.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
 
 		PartDefinition cube_r2 = spike0.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(14, 58).addBox(-2.5F, -6.0F, 0.0F, 5.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.7854F, 0.0F));
 
-		PartDefinition spike1 = root.addOrReplaceChild("spike1", CubeListBuilder.create(), PartPose.offset(0.0F, -14.0F, 3.5F));
+		PartDefinition spike1 = root.addOrReplaceChild("spike1", CubeListBuilder.create(), PartPose.offset(-1.0F, -14.0F, 3.5F));
 
 		PartDefinition cube_r3 = spike1.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(14, 65).addBox(-2.5F, -8.0F, 0.0F, 5.0F, 8.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
 
 		PartDefinition cube_r4 = spike1.addOrReplaceChild("cube_r4", CubeListBuilder.create().texOffs(14, 65).addBox(-2.5F, -8.0F, 0.0F, 5.0F, 8.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 0.7854F, 0.0F));
 
-		PartDefinition spike2 = root.addOrReplaceChild("spike2", CubeListBuilder.create(), PartPose.offset(0.0F, -14.0F, 10.25F));
+		PartDefinition spike2 = root.addOrReplaceChild("spike2", CubeListBuilder.create(), PartPose.offset(1.0F, -14.0F, 10.25F));
 
 		PartDefinition cube_r5 = spike2.addOrReplaceChild("cube_r5", CubeListBuilder.create().texOffs(14, 58).addBox(-2.5F, -6.0F, 0.25F, 5.0F, 6.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, -0.7854F, 0.0F));
 
@@ -94,6 +100,11 @@ public class DripstoneTortoiseModel<E extends Mob> extends HierarchicalModel<Dri
 
 	public void setupAnim(DripstoneTortoise entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root.getAllParts().forEach(ModelPart::resetPose);
+
+		this.front_spike.visible = !this.young;
+		this.middle_spike.visible = !this.young;
+		this.hind_spike.visible = !this.young;
+
 		this.head.xRot = headPitch * 0.017453292F;
 		this.head.yRot = netHeadYaw * 0.017453292F;
 		this.right_hind_leg.xRot = Mth.cos(limbSwing * 0.6F) * 1.4F * limbSwingAmount;
