@@ -23,7 +23,7 @@ import net.minecraft.util.Mth;
 
 public class RoseQuartzChimesBlockEntityRenderer implements BlockEntityRenderer<RoseQuartzChimesBlockEntity> {
 
-    public static final Material TEXTURE = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(CaveEnhancements.MODID, "entity/rose_quartz_chimes/chime"));
+    public static final ResourceLocation TEXTURE = new ResourceLocation(CaveEnhancements.MODID, "textures/entity/rose_quartz_chimes/chime.png");
 
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(CaveEnhancements.MODID, "rose_quartz_chimes"), "main");
     private final ModelPart chimes;
@@ -94,7 +94,7 @@ public class RoseQuartzChimesBlockEntityRenderer implements BlockEntityRenderer<
 
 
 
-        VertexConsumer vertexConsumer = TEXTURE.buffer(vertexConsumers, RenderType::entityCutout);
+        VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
         this.chimes.render(matrices, vertexConsumer, light, overlay);
     }
 }

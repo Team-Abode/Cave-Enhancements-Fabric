@@ -36,9 +36,6 @@ public class CaveEnhancementsClient implements ClientModInitializer {
         registerBlockRenderLayers();
         registerRenderers();
         registerModelLayer();
-
-        BlockEntityRendererRegistry.register(ModBlockEntities.ROSE_QUARTZ_CHIMES, RoseQuartzChimesBlockEntityRenderer::new);
-        ClientSpriteRegistryCallback.event(TextureAtlas.LOCATION_BLOCKS).register((atlasTexture, registry) -> registry.register(new ResourceLocation(MODID, "entity/rose_quartz_chimes/chime")));
     }
 
     public static void registerParticleFactories() {
@@ -61,8 +58,7 @@ public class CaveEnhancementsClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.BIG_GOOP_DRIP, ThrownItemRenderer::new);
         EntityRendererRegistry.register(ModEntities.HARMONIC_ARROW, HarmonicArrowRenderer::new);
         EntityRendererRegistry.register(ModEntities.THROWN_GOOP, ThrownItemRenderer::new);
-
-
+        BlockEntityRendererRegistry.register(ModBlockEntities.ROSE_QUARTZ_CHIMES, RoseQuartzChimesBlockEntityRenderer::new);
     }
 
     public static void registerModelLayer() {
