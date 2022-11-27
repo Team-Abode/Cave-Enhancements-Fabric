@@ -51,7 +51,7 @@ public class VolatileGoopBlock extends Block {
 
         if (stack.is(Items.FLINT_AND_STEEL) || stack.is(Items.FIRE_CHARGE)) {
 
-            activate(state, level, pos, true);
+            activate(state, level, pos);
             if (!player.isCreative()) {
                 if (stack.is(Items.FLINT_AND_STEEL)) {
                     stack.hurtAndBreak(1, player, (entity) -> entity.broadcastBreakEvent(hand));
@@ -66,25 +66,20 @@ public class VolatileGoopBlock extends Block {
 
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (level.hasNeighborSignal(pos)) {
-            activate(state, level, pos, false);
+            activate(state, level, pos);
         }
     }
 
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         if (level.hasNeighborSignal(pos)) {
-            activate(state, level, pos, false);
+            activate(state, level, pos);
         }
     }
 
-    public void activate(BlockState state, Level level, BlockPos pos, boolean interact) {
+    public void activate(BlockState state, Level level, BlockPos pos) {
         Direction direction = state.getValue(FACING);
         for (int i = 1; i < 7; i++) {
-
-            if (level.isClientSide() && interact) {
-                level.addParticle(ModParticles.GOOP_EXPLOSION, pos.relative(direction, i).getX() + 0.5, pos.relative(direction, i).getY() + 0.5, pos.relative(direction, i).getZ() + 0.5, 0, 0, 0);
-            }
-
-            if (level instanceof ServerLevel server && !interact) {
+            if (level instanceof ServerLevel server) {
                 server.playSound(null, pos.relative(direction, i), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1.0F, 1.0F);
                 server.sendParticles(ModParticles.GOOP_EXPLOSION, pos.relative(direction, i).getX() + 0.5, pos.relative(direction, i).getY() + 0.5, pos.relative(direction, i).getZ() + 0.5, 1, 0, 0, 0, 0);
             }

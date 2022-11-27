@@ -29,10 +29,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -178,11 +175,8 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
         return isDarkEnoughToSpawn(serverLevelAccessor, blockPos, randomSource);
     }
 
-    public boolean checkSpawnRules(LevelAccessor pLevel, MobSpawnType pSpawnReason) {
-        if (pSpawnReason.equals(MobSpawnType.SPAWNER)) {
-            return true;
-        }
-        return this.getWalkTargetValue(this.blockPosition(), level) >= -0.5F && random.nextInt(3) == 0;
+    public float getWalkTargetValue(BlockPos pos, LevelReader level) {
+        return 0.0F;
     }
 
     public int getRemainingPersistentAngerTime() {

@@ -34,10 +34,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
@@ -289,32 +286,13 @@ public class Cruncher extends Animal {
 
     }
 
-
-    public static boolean isDarkEnoughToSpawn(ServerLevelAccessor serverLevelAccessor, BlockPos blockPos, RandomSource randomSource) {
-        if (serverLevelAccessor.getBrightness(LightLayer.SKY, blockPos) > randomSource.nextInt(32)) {
-            return false;
-        } else {
-            DimensionType dimensionType = serverLevelAccessor.dimensionType();
-            int i = dimensionType.monsterSpawnBlockLightLimit();
-            if (i < 15 && serverLevelAccessor.getBrightness(LightLayer.BLOCK, blockPos) > i) {
-                return false;
-            } else {
-                int j = serverLevelAccessor.getLevel().isThundering() ? serverLevelAccessor.getMaxLocalRawBrightness(blockPos, 10) : serverLevelAccessor.getMaxLocalRawBrightness(blockPos);
-                return j <= dimensionType.monsterSpawnLightTest().sample(randomSource);
-            }
-        }
-    }
-
     // Spawn Rules
     public static boolean checkCruncherSpawnRules(EntityType<? extends Animal> entityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
         return serverLevelAccessor.getBlockState(blockPos.below()).is(ModTags.CRUNCHERS_SPAWNABLE_ON);
     }
 
-    public boolean checkSpawnRules(LevelAccessor pLevel, MobSpawnType pSpawnReason) {
-        if (pSpawnReason.equals(MobSpawnType.SPAWNER)) {
-            return true;
-        }
-        return this.getWalkTargetValue(this.blockPosition(), level) >= 0.0F;
+    public float getWalkTargetValue(BlockPos pos, LevelReader level) {
+        return 0.0F;
     }
 
     // Attribute Builder
