@@ -18,7 +18,6 @@ public class ModTags {
     public static final TagKey<EntityType<?>> GOOP_TRAP_IMMUNE = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "goop_trap_immune"));
     public static final TagKey<EntityType<?>> AMETHYST_FLUTE_IMMUNE = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "amethyst_flute_immune"));
 
-    public static final TagKey<Block> RECEIVERS = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "receivers"));
     public static final TagKey<Block> PIKE_DESTROYABLES = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "pike_destroyables"));
 
     public static final TagKey<Block> CRUNCHER_CONSUMABLES = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(CaveEnhancements.MODID, "cruncher_consumables"));
