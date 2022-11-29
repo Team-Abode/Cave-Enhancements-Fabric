@@ -4,7 +4,7 @@
       "cave_enhancements:item/glow_paste/place"
     ],
     "category": "block",
-    "subtitle": "item.glow_paste.place"
+    "subtitle": "subtitles.block.generic.place"
   },
   "item.amethyst_flute.use": {
     "sounds": [

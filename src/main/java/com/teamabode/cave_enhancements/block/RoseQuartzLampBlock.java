@@ -75,10 +75,9 @@ public class RoseQuartzLampBlock extends Block implements SimpleWaterloggedBlock
         return PushReaction.DESTROY;
     }
 
-    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         Direction direction = state.getValue(FACING);
-        BlockPos blockPos = pos.relative(direction.getOpposite());
-        return world.getBlockState(blockPos).isFaceSturdy(world, blockPos, direction);
+        return Block.canSupportCenter(level, pos.relative(direction.getOpposite()), direction);
     }
 
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {

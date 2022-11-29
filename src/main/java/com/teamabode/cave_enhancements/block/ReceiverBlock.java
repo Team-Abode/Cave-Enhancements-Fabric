@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -21,6 +22,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.ComparatorMode;
+import net.minecraft.world.ticks.TickPriority;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,16 +41,55 @@ public class ReceiverBlock extends DiodeBlock implements EntityBlock {
         builder.add(FACING, CAN_PASS, POWERED);
     }
 
-    protected boolean isAlternateInput(@NotNull BlockState state) {
-        return isDiode(state);
+    protected int getInputSignal(Level level, BlockPos pos, BlockState state) {
+        int i = super.getInputSignal(level, pos, state);
+        Direction direction = state.getValue(FACING);
+        BlockPos blockPos = pos.relative(direction);
+        BlockState blockState = level.getBlockState(blockPos);
+        if (blockState.hasAnalogOutputSignal()) {
+            i = blockState.getAnalogOutputSignal(level, blockPos);
+        } else if (i < 15 && blockState.isRedstoneConductor(level, blockPos)) {
+            blockPos = blockPos.relative(direction);
+            blockState = level.getBlockState(blockPos);
+            int j = Math.max(Integer.MIN_VALUE, blockState.hasAnalogOutputSignal() ? blockState.getAnalogOutputSignal(level, blockPos) : Integer.MIN_VALUE);
+            if (j != Integer.MIN_VALUE) {
+                i = j;
+            }
+        }
+        return i;
     }
 
-    @Override
-    protected int getOutputSignal(@NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull BlockState state) {
-        return this.getInputSignal((Level) world, pos, state);
+    public int getSignal(BlockState state, BlockGetter world, BlockPos pos, Direction direction) {
+        if (!state.getValue(CAN_PASS)) {
+            return 0;
+        } else {
+            return state.getValue(FACING) == direction ? 1 : 0;
+        }
     }
 
-    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        BlockState blockState = super.getStateForPlacement(ctx);
+        assert blockState != null;
+        return blockState.setValue(CAN_PASS, false).setValue(FACING, ctx.getHorizontalDirection().getOpposite());
+    }
+
+    public int getMaxPower() {
+        return switch (this.oxidationLevel) {
+            case UNAFFECTED -> 2;
+            case EXPOSED -> 5;
+            case WEATHERED -> 10;
+            case OXIDIZED -> 20;
+        };
+    }
+
+    public boolean isSignalSource(BlockState state) {
+        return state.getValue(CAN_PASS);
+    }
+
+    protected int getDelay(BlockState state) {
+        return 0;
+    }
+
     public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
         if (state.getValue(POWERED)) {
             Direction direction = state.getValue(FACING);
@@ -66,69 +108,16 @@ public class ReceiverBlock extends DiodeBlock implements EntityBlock {
         }
     }
 
-
-    public int getInputSignal(Level world, BlockPos pos, BlockState state) {
-        Direction direction = state.getValue(FACING);
-        BlockPos blockPos = pos.relative(direction);
-        int i = world.getSignal(blockPos, direction);
-        if (i >= 15) {
-            return i;
-        } else {
-            BlockState blockState = world.getBlockState(blockPos);
-            return Math.max(i, blockState.is(Blocks.REDSTONE_WIRE) ? blockState.getValue(RedStoneWireBlock.POWER) : 0);
-        }
-    }
-
-    @Override
-    public int getSignal(BlockState state, BlockGetter world, BlockPos pos, Direction direction) {
-        if (!state.getValue(CAN_PASS)) {
-            return 0;
-        } else {
-            return state.getValue(FACING) == direction ? this.getOutputSignal(world, pos, state) : 0;
-        }
-    }
-
-    @Override
-    public boolean isSignalSource(BlockState state) {
-        return state.getValue(CAN_PASS);
-    }
-
-    @Override
-    protected int getDelay(BlockState state) {
-        return 0;
-    }
-
-
-
-    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-        BlockState blockState = super.getStateForPlacement(ctx);
-        assert blockState != null;
-        return blockState.setValue(CAN_PASS, false).setValue(FACING, ctx.getHorizontalDirection().getOpposite());
-    }
-
-    public int getMaxPower() {
-        return switch (this.oxidationLevel) {
-            case UNAFFECTED -> 2;
-            case EXPOSED -> 5;
-            case WEATHERED -> 10;
-            case OXIDIZED -> 20;
-        };
-    }
-
-    @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
-    // Block Entity
     @Nullable
-    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new ReceiverBlockEntity(pos, state);
     }
 
     @Nullable
-    @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
         return (world1, pos, state1, blockEntity) -> {
             if (blockEntity instanceof ReceiverBlockEntity) {
