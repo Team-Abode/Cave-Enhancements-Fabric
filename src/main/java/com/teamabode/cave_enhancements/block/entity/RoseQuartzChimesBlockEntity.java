@@ -32,16 +32,12 @@ public class RoseQuartzChimesBlockEntity extends BlockEntity {
         AABB box = new AABB(pos).inflate(8);
 
         List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, box, (e) -> true);
-
-        LivingEntity otherEntity;
         for (LivingEntity livingEntity : list) {
-            otherEntity = livingEntity;
 
             long timeToChime = level.isRaining() ? 400L : 800L;
 
             if (level.getGameTime() % timeToChime == 0) {
-
-                applyEffects(level, otherEntity, otherEntity instanceof Monster ? MobEffects.WEAKNESS : MobEffects.REGENERATION);
+                applyEffects(level, livingEntity, livingEntity instanceof Monster ? MobEffects.WEAKNESS : MobEffects.REGENERATION);
                 level.addParticle(ModParticles.ROSE_CHIME, entity.getBlockPos().getX() + 0.5D, entity.getBlockPos().getY() + 0.3D, entity.getBlockPos().getZ() + 0.5D, 0D, 0D, 0D);
                 level.playSound(null, pos, ModSounds.BLOCK_ROSE_QUARTZ_CHIMES_CHIME, SoundSource.BLOCKS, 1.0F, 1.0F);
             }

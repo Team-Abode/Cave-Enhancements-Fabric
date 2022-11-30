@@ -1,11 +1,11 @@
 package com.teamabode.cave_enhancements;
 
-import com.teamabode.cave_enhancements.client.renderer.blockentity.RoseQuartzChimesBlockEntityRenderer;
-import com.teamabode.cave_enhancements.client.renderer.entity.*;
 import com.teamabode.cave_enhancements.client.model.CruncherModel;
 import com.teamabode.cave_enhancements.client.model.DripstonePikeModel;
 import com.teamabode.cave_enhancements.client.model.DripstoneTortoiseModel;
 import com.teamabode.cave_enhancements.client.model.GoopModel;
+import com.teamabode.cave_enhancements.client.renderer.block.RoseQuartzChimesRenderer;
+import com.teamabode.cave_enhancements.client.renderer.entity.*;
 import com.teamabode.cave_enhancements.particle.*;
 import com.teamabode.cave_enhancements.registry.ModBlockEntities;
 import com.teamabode.cave_enhancements.registry.ModBlocks;
@@ -19,14 +19,9 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.minecraft.client.particle.HugeExplosionParticle;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.resources.ResourceLocation;
-
-import static com.teamabode.cave_enhancements.CaveEnhancements.MODID;
 
 @Environment(EnvType.CLIENT)
 public class CaveEnhancementsClient implements ClientModInitializer {
@@ -58,7 +53,7 @@ public class CaveEnhancementsClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.BIG_GOOP_DRIP, ThrownItemRenderer::new);
         EntityRendererRegistry.register(ModEntities.HARMONIC_ARROW, HarmonicArrowRenderer::new);
         EntityRendererRegistry.register(ModEntities.THROWN_GOOP, ThrownItemRenderer::new);
-        BlockEntityRendererRegistry.register(ModBlockEntities.ROSE_QUARTZ_CHIMES, RoseQuartzChimesBlockEntityRenderer::new);
+        BlockEntityRendererRegistry.register(ModBlockEntities.ROSE_QUARTZ_CHIMES, RoseQuartzChimesRenderer::new);
     }
 
     public static void registerModelLayer() {
@@ -66,7 +61,7 @@ public class CaveEnhancementsClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(GoopModel.ENTITY_MODEL_LAYER, GoopModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(DripstoneTortoiseModel.LAYER_LOCATION, DripstoneTortoiseModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(DripstonePikeModel.LAYER_LOCATION, DripstonePikeModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(RoseQuartzChimesBlockEntityRenderer.LAYER_LOCATION, RoseQuartzChimesBlockEntityRenderer::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(RoseQuartzChimesRenderer.LAYER_LOCATION, RoseQuartzChimesRenderer::createLayer);
     }
 
     public static void registerBlockRenderLayers() {
@@ -85,5 +80,7 @@ public class CaveEnhancementsClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.WAXED_EXPOSED_REDSTONE_RECEIVER, RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.WAXED_WEATHERED_REDSTONE_RECEIVER, RenderType.cutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.WAXED_OXIDIZED_REDSTONE_RECEIVER, RenderType.cutout());
+
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ROSE_QUARTZ_CHIMES, RenderType.cutout());
     }
 }
