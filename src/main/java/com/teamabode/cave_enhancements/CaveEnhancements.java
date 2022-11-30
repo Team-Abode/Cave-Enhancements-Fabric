@@ -80,8 +80,8 @@ public class CaveEnhancements implements ModInitializer {
     }
 
     public static void registerBiomeModifications() {
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DRIPSTONE_CAVES), MobCategory.UNDERGROUND_WATER_CREATURE, ModEntities.DRIPSTONE_TORTOISE, 50, 2, 3);
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.LUSH_CAVES), MobCategory.AXOLOTLS, ModEntities.CRUNCHER, 5, 1, 1);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DRIPSTONE_CAVES), MobCategory.MONSTER, ModEntities.DRIPSTONE_TORTOISE, 50, 2, 3);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.LUSH_CAVES), MobCategory.MONSTER, ModEntities.CRUNCHER, 10, 1, 1);
     }
 
     public static void registerDispenserBehaviors() {

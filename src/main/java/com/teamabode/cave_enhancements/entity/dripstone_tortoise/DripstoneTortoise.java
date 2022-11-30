@@ -176,7 +176,7 @@ public class DripstoneTortoise extends Animal implements NeutralMob {
     }
 
     public float getWalkTargetValue(BlockPos pos, LevelReader level) {
-        return 0.0F;
+        return level.getBlockState(pos.below()).is(BlockTags.BASE_STONE_OVERWORLD) ? 10.0F : 0.0F;
     }
 
     public int getRemainingPersistentAngerTime() {
