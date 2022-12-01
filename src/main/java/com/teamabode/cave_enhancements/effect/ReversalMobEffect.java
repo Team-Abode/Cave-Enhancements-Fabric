@@ -16,11 +16,7 @@ public class ReversalMobEffect extends MobEffect {
         super(statusEffectCategory, color);
         this.addAttributeModifier(Attributes.ATTACK_DAMAGE, "b0675f38-b536-4dda-b068-dfc145c2016d", 0.0F, AttributeModifier.Operation.ADDITION);
     }
-
-    public MobEffect addAttributeModifier(Attribute attribute, String uuid, double amount, AttributeModifier.Operation operation) {
-        return super.addAttributeModifier(attribute, uuid, amount, operation);
-    }
-
+    
     public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMapIn, int amplifier) {
         if (!entity.level.isClientSide) {
 

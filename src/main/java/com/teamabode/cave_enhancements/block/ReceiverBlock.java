@@ -53,7 +53,6 @@ public class ReceiverBlock extends DiodeBlock implements EntityBlock {
         return blockState.setValue(CAN_PASS, false).setValue(FACING, ctx.getHorizontalDirection().getOpposite());
     }
 
-    @Override
     protected int getInputSignal(Level level, BlockPos pos, BlockState state) {
         int i = super.getInputSignal(level, pos, state);
         Direction direction = state.getValue(FACING);
@@ -69,16 +68,17 @@ public class ReceiverBlock extends DiodeBlock implements EntityBlock {
         return i;
     }
 
-    @Override
     protected int getOutputSignal(BlockGetter level, BlockPos pos, BlockState state) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         return blockEntity instanceof ReceiverBlockEntity ? ((ReceiverBlockEntity)blockEntity).output : 0;
     }
 
     public int getSignal(BlockState state, BlockGetter world, BlockPos pos, Direction direction) {
-        if (!state.getValue(CAN_PASS)) return 0;
-
-        return super.getSignal(state, world, pos, direction);
+        if (!state.getValue(CAN_PASS)) {
+            return 0;
+        } else {
+            return state.getValue(FACING) == direction ? this.getOutputSignal(world, pos, state) : 0;
+        }
     }
 
     public boolean isSignalSource(BlockState state) {
@@ -117,11 +117,9 @@ public class ReceiverBlock extends DiodeBlock implements EntityBlock {
     }
 
     @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return (world1, pos, state1, blockEntity) -> {
-            if (blockEntity instanceof ReceiverBlockEntity) {
-                ((ReceiverBlockEntity) blockEntity).tick(world1, pos, state1);
-            }
+            if (blockEntity instanceof ReceiverBlockEntity receiverBlockEntity) receiverBlockEntity.tick(world1, pos, state1);
         };
     }
 

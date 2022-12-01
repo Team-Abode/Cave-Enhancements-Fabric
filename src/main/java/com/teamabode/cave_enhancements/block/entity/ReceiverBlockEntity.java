@@ -17,36 +17,27 @@ public class ReceiverBlockEntity extends BlockEntity {
         super(ModBlockEntities.RECEIVER_BLOCK, pos, state);
     }
 
-    public void tick(Level world, BlockPos pos, BlockState state) {
+    public void tick(Level level, BlockPos pos, BlockState state) {
         int requiredPowerDurationTicks = ((ReceiverBlock) state.getBlock()).getRequiredPowerDurationTicks();
 
         if (state.getValue(ReceiverBlock.POWERED)) {
-            if(timePoweredTicks < requiredPowerDurationTicks) timePoweredTicks++;
-        }else{
+            if (timePoweredTicks < requiredPowerDurationTicks) timePoweredTicks++;
+        } else{
             timePoweredTicks = 0;
         }
-
-        world.setBlockAndUpdate(pos, state.setValue(ReceiverBlock.CAN_PASS, timePoweredTicks == requiredPowerDurationTicks));
+        level.setBlockAndUpdate(pos, state.setValue(ReceiverBlock.CAN_PASS, timePoweredTicks == requiredPowerDurationTicks));
     }
 
-    @Override
     protected void saveAdditional(CompoundTag nbt) {
         nbt.putInt("PoweredTicks", this.timePoweredTicks);
         nbt.putInt("OutputSignal", this.output);
-
-        setChanged();
-
+        this.setChanged();
         super.saveAdditional(nbt);
     }
 
-    @Override
     public void load(CompoundTag nbt) {
         timePoweredTicks = nbt.getInt("PoweredTicks");
         output = nbt.getInt("OutputSignal");
-
         super.load(nbt);
     }
-
-
-
 }
