@@ -4,7 +4,7 @@ import com.teamabode.cave_enhancements.CaveEnhancements;
 import com.teamabode.cave_enhancements.client.model.CruncherModel;
 import com.teamabode.cave_enhancements.client.renderer.entity.layers.CruncherHeldItemLayer;
 import com.teamabode.cave_enhancements.client.renderer.entity.layers.CruncherMossCapLayer;
-import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
+import com.teamabode.cave_enhancements.common.entity.cruncher.Cruncher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;

@@ -1,7 +1,7 @@
 package com.teamabode.cave_enhancements.client.model;
 
 import com.teamabode.cave_enhancements.CaveEnhancements;
-import com.teamabode.cave_enhancements.entity.goop.Goop;
+import com.teamabode.cave_enhancements.common.entity.goop.Goop;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.*;

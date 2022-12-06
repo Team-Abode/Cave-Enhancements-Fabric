@@ -3,7 +3,7 @@ package com.teamabode.cave_enhancements.client.renderer.entity.layers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.teamabode.cave_enhancements.CaveEnhancements;
 import com.teamabode.cave_enhancements.client.model.CruncherModel;
-import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
+import com.teamabode.cave_enhancements.common.entity.cruncher.Cruncher;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;

@@ -1,7 +1,7 @@
 package com.teamabode.cave_enhancements.client.model;
 
 import com.teamabode.cave_enhancements.CaveEnhancements;
-import com.teamabode.cave_enhancements.entity.dripstone_tortoise.DripstonePike;
+import com.teamabode.cave_enhancements.common.entity.dripstone_tortoise.DripstonePike;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;

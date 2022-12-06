@@ -1,0 +1,8 @@
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+package com.teamabode.cave_enhancements.common.entity.dripstone_tortoise.goals;
+
+import net.minecraft.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

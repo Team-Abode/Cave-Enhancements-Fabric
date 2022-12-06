@@ -26,10 +26,10 @@
       "com.teamabode.cave_enhancements.CaveEnhancements"
     ],
     "client": [
-      "com.teamabode.cave_enhancements.CaveEnhancementsClient"
+      "com.teamabode.cave_enhancements.client.CaveEnhancementsClient"
     ],
     "terrablender": [
-      "com.teamabode.cave_enhancements.terrablender.TerrablenderIntegration"
+      "com.teamabode.cave_enhancements.integration.terrablender.TerrablenderIntegration"
     ]
   },
   "mixins": [

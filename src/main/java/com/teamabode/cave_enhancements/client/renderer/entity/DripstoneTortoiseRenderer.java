@@ -2,7 +2,7 @@ package com.teamabode.cave_enhancements.client.renderer.entity;
 
 import com.teamabode.cave_enhancements.CaveEnhancements;
 import com.teamabode.cave_enhancements.client.model.DripstoneTortoiseModel;
-import com.teamabode.cave_enhancements.entity.dripstone_tortoise.DripstoneTortoise;
+import com.teamabode.cave_enhancements.common.entity.dripstone_tortoise.DripstoneTortoise;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;

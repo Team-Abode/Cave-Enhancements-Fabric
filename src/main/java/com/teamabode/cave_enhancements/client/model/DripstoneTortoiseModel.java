@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamabode.cave_enhancements.CaveEnhancements;
 import com.teamabode.cave_enhancements.client.animation.DripstoneTortoiseAnimation;
-import com.teamabode.cave_enhancements.entity.dripstone_tortoise.DripstoneTortoise;
+import com.teamabode.cave_enhancements.common.entity.dripstone_tortoise.DripstoneTortoise;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;

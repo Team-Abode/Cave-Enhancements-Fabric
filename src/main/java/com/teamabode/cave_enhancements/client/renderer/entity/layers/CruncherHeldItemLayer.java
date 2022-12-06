@@ -3,7 +3,7 @@ package com.teamabode.cave_enhancements.client.renderer.entity.layers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.teamabode.cave_enhancements.client.model.CruncherModel;
-import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
+import com.teamabode.cave_enhancements.common.entity.cruncher.Cruncher;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.ItemInHandRenderer;

@@ -1,17 +1,16 @@
 package com.teamabode.cave_enhancements;
 
-import com.teamabode.cave_enhancements.block.VolatileGoopBlock;
-import com.teamabode.cave_enhancements.entity.HarmonicArrow;
-import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
-import com.teamabode.cave_enhancements.entity.dripstone_tortoise.DripstoneTortoise;
-import com.teamabode.cave_enhancements.entity.goop.Goop;
-import com.teamabode.cave_enhancements.entity.goop.ThrownGoop;
-import com.teamabode.cave_enhancements.registry.*;
+import com.teamabode.cave_enhancements.common.block.VolatileGoopBlock;
+import com.teamabode.cave_enhancements.common.entity.HarmonicArrow;
+import com.teamabode.cave_enhancements.common.entity.cruncher.Cruncher;
+import com.teamabode.cave_enhancements.common.entity.dripstone_tortoise.DripstoneTortoise;
+import com.teamabode.cave_enhancements.common.entity.goop.Goop;
+import com.teamabode.cave_enhancements.common.entity.goop.ThrownGoop;
+import com.teamabode.cave_enhancements.core.registry.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
-import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.minecraft.Util;
 import net.minecraft.core.*;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
@@ -58,8 +57,6 @@ public class CaveEnhancements implements ModInitializer {
         registerSpawnPlacements();
         registerBiomeModifications();
         registerDispenserBehaviors();
-
-        if (!FabricLoaderImpl.INSTANCE.isModLoaded("terrablender")) LOGGER.info("Terrablender not found, skipping integration...");
     }
 
     public static void registerOxidizableBlockPairs() {

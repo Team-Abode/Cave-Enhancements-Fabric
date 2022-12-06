@@ -4,16 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.teamabode.cave_enhancements.CaveEnhancements;
 import com.teamabode.cave_enhancements.client.animation.CruncherAnimation;
-import com.teamabode.cave_enhancements.entity.cruncher.Cruncher;
-import net.minecraft.client.animation.definitions.FrogAnimation;
-import net.minecraft.client.model.AgeableListModel;
+import com.teamabode.cave_enhancements.common.entity.cruncher.Cruncher;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 
 public class CruncherModel extends HierarchicalModel<Cruncher> {
 
