@@ -1,0 +1,8 @@
+// 1.19.2	2022-12-14T17:41:10.8783282	Tags for minecraft:block
+20b83d0ff24a187022f83d5f5bbb0553d9be8abf data\minecraft\tags\blocks\candle_cakes.json
+2044ba3d4a38afa4d0891689d19acb9c374fe762 data\minecraft\tags\blocks\needs_stone_tool.json
+fe20a9c0b0334a056f86cd90e4d274961aee9544 data\minecraft\tags\blocks\fall_damage_resetting.json
+325c5d37b5ea1276470b7fa9d4afc42d4db1f99e data\minecraft\tags\blocks\walls.json
+e121334af0435e597240c76451ae452595c9b455 data\minecraft\tags\blocks\mineable\hoe.json
+2044ba3d4a38afa4d0891689d19acb9c374fe762 data\minecraft\tags\blocks\mineable\pickaxe.json
+c347314230a8447bd0b33df6d6c257e04d26a7e1 data\minecraft\tags\blocks\candles.json

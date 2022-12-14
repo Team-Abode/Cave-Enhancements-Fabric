@@ -29,7 +29,10 @@
       "com.teamabode.cave_enhancements.client.CaveEnhancementsClient"
     ],
     "terrablender": [
-      "com.teamabode.cave_enhancements.integration.terrablender.TerrablenderIntegration"
+      "com.teamabode.cave_enhancements.core.integration.terrablender.TerrablenderIntegration"
+    ],
+    "fabric-datagen": [
+      "com.teamabode.cave_enhancements.core.data.CaveEnhancementsData"
     ]
   },
   "mixins": [
