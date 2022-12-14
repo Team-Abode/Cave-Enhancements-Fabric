@@ -1,6 +1,6 @@
 package com.teamabode.cave_enhancements.common.effect;
 
-import com.teamabode.cave_enhancements.accessor.LivingEntityAccess;
+import com.teamabode.cave_enhancements.common.accessor.LivingEntityAccess;
 import com.teamabode.cave_enhancements.core.registry.ModEffects;
 import com.teamabode.cave_enhancements.core.registry.ModSounds;
 import net.minecraft.sounds.SoundSource;

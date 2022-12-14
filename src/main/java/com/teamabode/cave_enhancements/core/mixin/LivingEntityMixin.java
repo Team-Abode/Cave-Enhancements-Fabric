@@ -1,7 +1,6 @@
 package com.teamabode.cave_enhancements.core.mixin;
 
-import com.teamabode.cave_enhancements.accessor.LivingEntityAccess;
-import com.teamabode.cave_enhancements.common.effect.ReversalMobEffect;
+import com.teamabode.cave_enhancements.common.accessor.LivingEntityAccess;
 import com.teamabode.cave_enhancements.core.registry.ModEffects;
 import com.teamabode.cave_enhancements.core.registry.ModSounds;
 import net.minecraft.nbt.CompoundTag;
@@ -9,7 +8,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;

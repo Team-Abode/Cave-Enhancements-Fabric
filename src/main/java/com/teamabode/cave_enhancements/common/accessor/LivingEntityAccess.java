@@ -1,4 +1,4 @@
-package com.teamabode.cave_enhancements.accessor;
+package com.teamabode.cave_enhancements.common.accessor;
 
 public interface LivingEntityAccess {
 

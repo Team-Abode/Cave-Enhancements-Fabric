@@ -1,4 +1,4 @@
-package com.teamabode.cave_enhancements.integration.terrablender;
+package com.teamabode.cave_enhancements.core.integration.terrablender;
 
 import com.teamabode.cave_enhancements.core.registry.ModBiomes;
 import com.mojang.datafixers.util.Pair;
