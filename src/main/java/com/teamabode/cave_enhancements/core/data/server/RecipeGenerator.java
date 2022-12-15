@@ -90,7 +90,7 @@ public class RecipeGenerator extends FabricRecipeProvider {
             recipeBuilder.requires(ingredient)
             .unlockedBy(getHasName(ingredient), has(ingredient));
         }
-        recipeBuilder.save(exporter, getItemName(result));
+        recipeBuilder.save(exporter);
     }
 
     private void generateRoseQuartzRecipes(Consumer<FinishedRecipe> exporter) {
@@ -136,7 +136,7 @@ public class RecipeGenerator extends FabricRecipeProvider {
         .pattern("CCC")
         .unlockedBy("has_copper_block", has(Items.COPPER_BLOCK))
         .unlockedBy("has_rose_quartz", has(ModItems.ROSE_QUARTZ))
-        .save(exporter, getItemName(ModItems.LIGHTNING_ANCHOR));
+        .save(exporter);
 
         createRoseQuartzLamp(Items.TORCH, ModItems.ROSE_QUARTZ_LAMP, exporter);
         createRoseQuartzLamp(Items.SOUL_TORCH, ModItems.SOUL_ROSE_QUARTZ_LAMP, exporter);
@@ -144,7 +144,11 @@ public class RecipeGenerator extends FabricRecipeProvider {
     }
 
     private void createPackedRecipe(Item ingredient, Item result, Consumer<FinishedRecipe> exporter) {
-        ShapedRecipeBuilder.shaped(result).define('#', ingredient).pattern("##").pattern("##").unlockedBy(getHasName(ingredient), has(ingredient)).save(exporter, getItemName(result));
+        ShapedRecipeBuilder.shaped(result)
+        .define('#', ingredient)
+        .pattern("##").pattern("##")
+        .unlockedBy(getHasName(ingredient), has(ingredient))
+        .save(exporter);
     }
 
     private void stairs(Consumer<FinishedRecipe> exporter, Item stairs, Item material) {
@@ -158,7 +162,11 @@ public class RecipeGenerator extends FabricRecipeProvider {
     }
 
     private void polishRecipe(Item ingredient, Item result, Consumer<FinishedRecipe> exporter) {
-        ShapedRecipeBuilder.shaped(result, 4).define('#', ingredient).pattern("##").pattern("##").unlockedBy(getHasName(ingredient), has(ingredient)).save(exporter, getItemName(result));
+        ShapedRecipeBuilder.shaped(result, 4)
+        .define('#', ingredient)
+        .pattern("##")
+        .pattern("##")
+        .unlockedBy(getHasName(ingredient), has(ingredient)).save(exporter);
 
     }
 
@@ -172,7 +180,7 @@ public class RecipeGenerator extends FabricRecipeProvider {
         .pattern(" i ")
         .unlockedBy(getHasName(torchIngredient), has(torchIngredient))
         .unlockedBy("has_rose_quartz", has(ModItems.ROSE_QUARTZ))
-        .save(exporter, getItemName(result));
+        .save(exporter);
     }
 
     private void createRoseQuartzChimes(Consumer<FinishedRecipe> exporter) {
@@ -185,7 +193,7 @@ public class RecipeGenerator extends FabricRecipeProvider {
         .pattern("t t")
         .pattern("r r")
         .unlockedBy("has_rose_quartz", has(ModItems.ROSE_QUARTZ))
-        .save(exporter, getItemName(ModItems.ROSE_QUARTZ_CHIMES));
+        .save(exporter);
     }
 
     private void createRedstoneReceiver(Item copperBlock, Item result, Consumer<FinishedRecipe> exporter) {
@@ -198,7 +206,7 @@ public class RecipeGenerator extends FabricRecipeProvider {
         .unlockedBy("has_redstone", has(Items.REDSTONE))
         .unlockedBy(getHasName(copperBlock), has(copperBlock))
         .unlockedBy("has_redstone_torch", has(Items.REDSTONE_TORCH))
-        .save(exporter, getItemName(result));
+        .save(exporter);
     }
 
     private void createWaxedReceiver(Item receiverType, Item copperBlock, Item result, Consumer<FinishedRecipe> exporter) {
