@@ -19,8 +19,7 @@ public class CruncherRandomStrollGoal extends Goal {
 
     public boolean canUse() {
         if(cruncher.getRandom().nextInt(reducedTickDelay(120)) != 0) return false;
-
-        return Objects.equals(cruncher.getEatingState(), "none");
+        return cruncher.getEatingState() == 0;
     }
 
     public void start(){

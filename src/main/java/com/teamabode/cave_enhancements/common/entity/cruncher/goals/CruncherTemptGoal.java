@@ -17,7 +17,7 @@ public class CruncherTemptGoal extends TemptGoal {
     }
 
     public boolean canUse() {
-        if (!cruncher.getEatingState().equals("none")) return false;
+        if (!(cruncher.getEatingState() == 0)) return false;
         return super.canUse();
     }
 }

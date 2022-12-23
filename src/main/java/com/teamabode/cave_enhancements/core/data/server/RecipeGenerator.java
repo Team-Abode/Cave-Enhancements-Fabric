@@ -81,7 +81,6 @@ public class RecipeGenerator extends FabricRecipeProvider {
         createWaxedReceiver(ModItems.EXPOSED_REDSTONE_RECEIVER, Items.WAXED_EXPOSED_COPPER, ModItems.WAXED_EXPOSED_REDSTONE_RECEIVER, exporter);
         createWaxedReceiver(ModItems.WEATHERED_REDSTONE_RECEIVER, Items.WAXED_WEATHERED_COPPER, ModItems.WAXED_WEATHERED_REDSTONE_RECEIVER, exporter);
         createWaxedReceiver(ModItems.OXIDIZED_REDSTONE_RECEIVER, Items.WAXED_OXIDIZED_COPPER, ModItems.WAXED_OXIDIZED_REDSTONE_RECEIVER, exporter);
-
     }
 
     private void generateShapelessRecipe(Consumer<FinishedRecipe> exporter, Item[] ingredients, Item result) {
@@ -158,7 +157,7 @@ public class RecipeGenerator extends FabricRecipeProvider {
         .pattern("## ")
         .pattern("###")
         .unlockedBy(getHasName(material), has(material))
-        .save(exporter, getItemName(stairs));
+        .save(exporter);
     }
 
     private void polishRecipe(Item ingredient, Item result, Consumer<FinishedRecipe> exporter) {
@@ -166,8 +165,8 @@ public class RecipeGenerator extends FabricRecipeProvider {
         .define('#', ingredient)
         .pattern("##")
         .pattern("##")
-        .unlockedBy(getHasName(ingredient), has(ingredient)).save(exporter);
-
+        .unlockedBy(getHasName(ingredient), has(ingredient))
+        .save(exporter);
     }
 
     private void createRoseQuartzLamp(Item torchIngredient, Item result, Consumer<FinishedRecipe> exporter) {

@@ -18,32 +18,26 @@ import java.util.List;
 import java.util.Objects;
 
 public class CruncherOreSearchGoal extends Goal {
-
     private final Cruncher cruncher;
-
     boolean isFinished = false;
     boolean reachedPosition = false;
-
-    @Nullable BlockPos targetPos = null;
-
     int goalTickTime = 0;
+    @Nullable BlockPos targetPos = null;
 
     public CruncherOreSearchGoal(Cruncher cruncher) {
         this.cruncher = cruncher;
     }
 
     public boolean canUse() {
-        return Objects.equals(cruncher.getEatingState(), "searching");
+        return cruncher.getEatingState() == 1;
     }
 
     public void start(){
-        System.out.println("Started Ore Search Goal!");
-
         targetPos = getOrePosition(cruncher.getLevel(), 15, 150);
     }
 
     public boolean canContinueToUse() {
-        return Objects.equals(cruncher.getEatingState(), "searching") && !isFinished && targetPos != null && goalTickTime < 300 && cruncher.getLastHurtByMob() == null;
+        return cruncher.getEatingState() == 1 && !isFinished && targetPos != null && goalTickTime < 300 && cruncher.getLastHurtByMob() == null;
     }
 
     public void tick() {
@@ -63,20 +57,17 @@ public class CruncherOreSearchGoal extends Goal {
     }
 
     public void stop() {
-        System.out.println("Stopped Ore Search Goal!");
-
         if (reachedPosition) {
             cruncher.setDeltaMovement(0.0, 0.0, 0.0);
             cruncher.teleportToWithTicket(targetPos.getX() + 0.5D, targetPos.getY(), targetPos.getZ() + 0.5D);
-            cruncher.setEatingState("mining");
+            cruncher.setEatingState(2);
             System.out.println(cruncher.getEatingState());
             cruncher.setTargetPos(targetPos);
         } else {
             if (cruncher.getLevel() instanceof ServerLevel server) {
                 server.sendParticles(ParticleTypes.ANGRY_VILLAGER, cruncher.getX(), cruncher.getY(), cruncher.getZ(), 1, 0, 0, 0, 0);
             }
-
-            cruncher.setEatingState("none");
+            cruncher.setEatingState(0);
             cruncher.getNavigation().stop();
         }
         goalTickTime = 0;

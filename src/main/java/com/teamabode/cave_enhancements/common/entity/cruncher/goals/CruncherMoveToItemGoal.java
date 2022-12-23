@@ -19,7 +19,7 @@ public class CruncherMoveToItemGoal extends Goal {
 
     public boolean canUse() {
         if (!cruncher.getMainHandItem().isEmpty()) return false;
-        if (!Objects.equals(cruncher.getEatingState(), "none")) return false;
+        if (cruncher.getEatingState() != 0) return false;
         if (cruncher.getSearchCooldownTime() > 0) return false;
         return cruncher.getRandom().nextFloat() > 0.2F;
     }

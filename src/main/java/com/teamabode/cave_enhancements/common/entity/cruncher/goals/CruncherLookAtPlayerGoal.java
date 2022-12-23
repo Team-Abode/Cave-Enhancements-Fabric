@@ -17,12 +17,12 @@ public class CruncherLookAtPlayerGoal extends LookAtPlayerGoal {
     }
 
     public boolean canUse() {
-        if (!Objects.equals(cruncher.getEatingState(), "none")) return false;
+        if (cruncher.getEatingState() != 0) return false;
         return super.canUse();
     }
 
     public boolean canContinueToUse() {
-        if (!Objects.equals(cruncher.getEatingState(), "none")) return false;
+        if (cruncher.getEatingState() != 0) return false;
         return super.canContinueToUse();
     }
 }

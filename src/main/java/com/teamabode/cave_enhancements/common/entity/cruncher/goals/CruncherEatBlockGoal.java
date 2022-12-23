@@ -20,7 +20,7 @@ public class CruncherEatBlockGoal extends Goal {
     }
 
     public boolean canUse() {
-        return Objects.equals(cruncher.getEatingState(), "mining");
+        return cruncher.getEatingState() == 2;
     }
 
     public boolean canContinueToUse() {
@@ -30,7 +30,7 @@ public class CruncherEatBlockGoal extends Goal {
         if (cruncher.level.getBlockState(cruncher.blockPosition().below()).is(ModTags.CRUNCHER_SEARCHABLES)) return false;
         if (cruncher.getLastHurtByMob() == null) return true;
 
-        return Objects.equals(cruncher.getEatingState(), "mining");
+        return cruncher.getEatingState() == 2;
     }
 
     public void tick() {
@@ -65,7 +65,7 @@ public class CruncherEatBlockGoal extends Goal {
     }
 
     public void stop() {
-        cruncher.setEatingState("none");
+        cruncher.setEatingState(0);
         cruncher.setSearchCooldownTime(240);
     }
 
